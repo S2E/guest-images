@@ -1,0 +1,11 @@
+{
+    "os_name":    "{{ os_name }}",
+    "os_version": "{{ os_version }}",
+    "os_arch":    "{{ os_arch }}",
+    "os_build":   "{{ os_build }}",
+
+    "memory":     "{{ memory }}",
+    "qemu_extra_flags": "{{network}}",
+    "qemu_build": "{{ qemu_build }}",
+    "snapshot": "{{ snapshot }}"
+}

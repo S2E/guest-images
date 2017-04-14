@@ -1,0 +1,16 @@
+{
+  "images": {
+     "debian-8.7.1-i386": {
+       "name": "Debian i386 image",
+       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUeXNISHBSMmZuWUk"
+     },
+     "debian-8.7.1-x86_64": {
+       "name": "Debian x86_64 image",
+       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUWlhmZ05RVDhXaXM"
+     },
+     "cgc_debian-8.7.1-i386": {
+       "name": "Debian i386 image with CGC kernel and user-space packages",
+       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUaDdWanVVOWFFZ1k"
+    }
+  }
+}
