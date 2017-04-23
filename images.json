@@ -6,7 +6,8 @@
        "os_name": "debian",
        "os_version": "8.7.1",
        "os_arch": "i386",
-       "os_build": ""
+       "os_build": "",
+       "os_binary_formats": ["elf"]
      },
      "debian-8.7.1-x86_64": {
        "name": "Debian x86_64 image",
@@ -14,7 +15,8 @@
        "os_name": "debian",
        "os_version": "8.7.1",
        "os_arch": "x86_64",
-       "os_build": ""
+       "os_build": "",
+       "os_binary_formats": ["elf"]
      },
      "cgc_debian-8.7.1-i386": {
        "name": "Debian i386 image with CGC kernel and user-space packages",
@@ -22,7 +24,8 @@
        "os_name": "cgc_debian",
        "os_version": "8.7.1",
        "os_arch": "x86_64",
-       "os_build": ""
+       "os_build": "",
+       "os_binary_formats": ["decree"]
     }
   }
 }

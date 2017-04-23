@@ -143,12 +143,10 @@ define TAKE_SNAPSHOT
 	    -serial file:$(OUTPUT_DIR)/$2$1/serial_ready.txt -enable-serial-commands $(SNAPSHOT_NETWORK) \
 	    -m $(SNAPSHOT_MEMORY) $(GRAPHICS)
 
-  $(OUTPUT_DIR)/$2$1/image.json: $(OUTPUT_DIR)/$2$1/image.raw.s2e.ready $(SRC)/image.json.template $(SRC)/compile_template.py
+  $(OUTPUT_DIR)/$2$1/image.json: $(OUTPUT_DIR)/$2$1/image.raw.s2e.ready $(SRC)/images.json $(SRC)/compile_template.py
 	$(call INFO_MSG,[$$@] Creating image descriptor...)
-	$(SRC)/compile_template.py -i $(SRC)/image.json.template -o $$@ \
-		snapshot="ready" qemu_build="$(call ARCH,$2$1)" memory="$(SNAPSHOT_MEMORY)" network="$(SNAPSHOT_NETWORK)" \
-		os_name="$(call OS_NAME,$2$1)" os_version="$(call OS_VERSION,$2$1)" os_arch="$(call ARCH,$2$1)" \
-		os_build=""
+	$(SRC)/compile_template.py -i $(SRC)/images.json -o $$@ -n "$2$1" \
+		snapshot="ready" qemu_build="$(call ARCH,$2$1)" memory="$(SNAPSHOT_MEMORY)" qemu_extra_flags="$(SNAPSHOT_NETWORK)"
 endef
 
 ### Building Linux kernel ###
