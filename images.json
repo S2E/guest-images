@@ -2,15 +2,27 @@
   "images": {
      "debian-8.7.1-i386": {
        "name": "Debian i386 image",
-       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUeXNISHBSMmZuWUk"
+       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUeXNISHBSMmZuWUk",
+       "os_name": "debian",
+       "os_version": "8.7.1",
+       "os_arch": "i386",
+       "os_build": ""
      },
      "debian-8.7.1-x86_64": {
        "name": "Debian x86_64 image",
-       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUWlhmZ05RVDhXaXM"
+       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUWlhmZ05RVDhXaXM",
+       "os_name": "debian",
+       "os_version": "8.7.1",
+       "os_arch": "x86_64",
+       "os_build": ""
      },
      "cgc_debian-8.7.1-i386": {
        "name": "Debian i386 image with CGC kernel and user-space packages",
-       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUaDdWanVVOWFFZ1k"
+       "url": "https://drive.google.com/open?id=0B1gl8bdrSnRUaDdWanVVOWFFZ1k",
+       "os_name": "cgc_debian",
+       "os_version": "8.7.1",
+       "os_arch": "x86_64",
+       "os_build": ""
     }
   }
 }
