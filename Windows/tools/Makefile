@@ -1,5 +1,3 @@
-#!/bin/bash
-
 # Copyright (c) 2017, Cyberhaven
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -20,23 +18,13 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Runs command inside docker image
-# Usage: ./run-docker.sh docker-image working_dir [COMMAND]
-# To build a 32-bit linux package:
-#   ./run-docker.sh linux-build-32 ../decree-cgc-cfe ./make-kernel.sh $(pwd)/../include
+CC = i686-w64-mingw32-gcc
 
-DOCKER_IMAGE=$1
-shift
+timeout.exe: timeout.c
+	$(CC) -m32 -O4 -o $@ $<
 
-WORKING_DIR="$(cd $1 && echo $(pwd))"
-shift
+all: timeout.exe
+clean:
+	rm -rf timeout.exe
 
-COMMAND="$(readlink -f $1)"
-shift
-
-echo "Working dir: $WORKING_DIR"
-docker run --rm -i \
-  -v "$HOME:$HOME" -v "$(pwd):$(pwd)" -v "$WORKING_DIR:$WORKING_DIR" \
-  -w "$WORKING_DIR" \
-  $DOCKER_IMAGE:latest \
-  $COMMAND $*
+.DEFAULT_GOAL := all

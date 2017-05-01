@@ -55,22 +55,18 @@ def main():
     else:
         template = json.loads(sys.stdin.read())
 
-    template = template['images']
+    images = template['images']
 
-    if options.image_name not in template.keys():
+    if options.image_name not in images.keys():
         print('%s does not exist in %s' % (options.image_name, options.template))
         sys.exit(-1)
 
-    template = template[options.image_name]
+    image = images[options.image_name]
 
     descriptor = {
-        'os_name':    template['os_name'],
-        'os_version': template['os_version'],
-        'os_arch':    template['os_arch'],
-        'os_build':   template['os_build'],
-        'os_binary_formats': template['os_binary_formats'],
-
-        'memory':     context['memory'],
+        'version': template['version'],
+        'os': image['os'],
+        'memory': context['memory'],
         'qemu_extra_flags': context['qemu_extra_flags'],
         'qemu_build': context['qemu_build'],
         'snapshot': context['snapshot']

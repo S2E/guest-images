@@ -1,0 +1,335 @@
+# Copyright (c) 2017, Cyberhaven
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+###############################################################################
+# Download 3rd party tools to install in the guest
+
+# These apps are hosted in github
+WIN_APPS_REPO = 7z.exe 7z.dll devcon.exe ImDiskTk.exe ImDiskTk-x64.exe libeay32.dll msys.7z ssleay32.dll timeout.exe
+
+# These apps are hosted on 3rd party servers
+WIN_APPS = \
+  python-2.7.13.msi python-2.7.13.amd64.msi \
+  dotNetFx40_Full_x86_x64.exe \
+  vs2015_vcredist_x86.exe vs2015_vcredist_x64.exe vs2013_vcredist_x86.exe vs2013_vcredist_x64.exe \
+  vs2008_vcredist_x86.exe vs2008_vcredist_x64.exe \
+  $(WIN_APPS_REPO)
+
+
+WIN_APPS_PATH = $(addprefix $(WINDOWS_APPS_DIR)/,$(WIN_APPS))
+WIN_APPS_REPO_PATH = $(addprefix $(WINDOWS_APPS_DIR)/,$(WIN_APPS_REPO))
+
+$(WINDOWS_APPS_DIR)/dotNetFx40_Full_x86_x64.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe || rm -f $@
+
+$(WINDOWS_APPS_DIR)/vs2015_vcredist_x86.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe || rm -f $@
+
+$(WINDOWS_APPS_DIR)/vs2015_vcredist_x64.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe || rm -f $@
+
+$(WINDOWS_APPS_DIR)/vs2013_vcredist_x86.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe || rm -f $@
+
+$(WINDOWS_APPS_DIR)/vs2013_vcredist_x64.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe || rm -f $@
+
+# 2008 version is required for python
+$(WINDOWS_APPS_DIR)/vs2008_vcredist_x86.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ http://download.microsoft.com/download/1/1/1/1116b75a-9ec3-481a-a3c8-1777b5381140/vcredist_x86.exe || rm -f $@
+
+$(WINDOWS_APPS_DIR)/vs2008_vcredist_x64.exe: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ http://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/vcredist_x64.exe || rm -f $@
+
+$(WINDOWS_APPS_DIR)/python-2.7.13.amd64.msi: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi || rm -f $@
+
+$(WINDOWS_APPS_DIR)/python-2.7.13.msi: | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi || rm -f $@
+
+$(WIN_APPS_REPO_PATH): | $(WINDOWS_APPS_DIR)
+	$(WGET) $@ $(GUEST_IMAGES_RELEASE_URL)/$(notdir $@) || rm -f $@
+
+windows_clean:
+	rm -rf $(WINDOWS_APPS_DIR)
+
+###############################################################################
+# This macro instantitates rules to prepare the Windows XP install ISO
+#$1: image name
+#$2: iso name
+define PREPARE_WINXP_ISO
+  $(TMPDIR)/$1/install_files.iso: $2 $(SRC)/Windows/Winnt.sif.template $(WIN_APPS_PATH) | $(TMPDIR)/$1
+	@# Windows XP doesn't seem to pick up Winnt.sif from floppy, so we put it
+	@# on the installation ISO
+	@#
+	@# *** Prepare install_files.iso image
+	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
+
+	@# Extract intall CD
+	7z x $2 -o$(TMPDIR)/$1/install_files
+	chmod -R u+w $(TMPDIR)/$1/install_files
+	mkdir $(TMPDIR)/$1/install_files/cdboot
+	geteltorito -o $(TMPDIR)/$1/install_files/cdboot/boot.bin $2
+
+	@#
+	rsync -av $(SRC)/Windows/install_scripts $(TMPDIR)/$1/install_files/
+	rsync -av $(WIN_APPS_PATH) $(TMPDIR)/$1/install_files/install_scripts/inst/
+
+	$(SRC)/scripts/compile_template.py \
+	    -t $(SRC)/Windows/Winnt.sif.template \
+	    -o $(TMPDIR)/$1/install_files/$(if $(findstring x86_64,$1),AMD64,I386)/winnt.sif \
+	    -n $1 -d $(SRC)/images.json
+
+	@# WindowsXP also needs to be rebooted after first login
+	printf "timeout 60\nshutdown /r /t 0" > $(TMPDIR)/$1/install_files/s2e_startup.bat
+
+	@#
+	genisoimage -b cdboot/boot.bin -no-emul-boot -boot-load-seg 1984 -boot-load-size 4 \
+	            --iso-level 2 -JlDN -joliet-long -relaxed-filenames -V Custom -f \
+		    -o $$@ $(TMPDIR)/$1/install_files
+
+  $(TMPDIR)/$1/boot.iso: $(TMPDIR)/$1/install_files.iso
+	cd $(TMPDIR)/$1 && ln -sf install_files.iso boot.iso
+endef
+
+###############################################################################
+# This macro instantitates rules to prepare Windows installation files (>XP)
+#$1: image name
+#$2: iso name
+define PREPARE_WIN_ISO
+  $(TMPDIR)/$1/install_files.iso: $(SRC)/Windows/Autounattend.xml.template $(WIN_APPS_PATH) | $(TMPDIR)/$1
+	@#
+	@# *** Prepare install_files.iso image
+	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
+
+	$(SRC)/scripts/compile_template.py -t $(SRC)/Windows/Autounattend.xml.template \
+			-o $(TMPDIR)/$1/install_files/Autounattend.xml \
+			-n $1 -d $(SRC)/images.json
+
+	rsync -av $(SRC)/Windows/install_scripts $(TMPDIR)/$1/install_files/
+	rsync -av $(WIN_APPS_PATH) $(TMPDIR)/$1/install_files/install_scripts/inst/
+
+	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/install_files
+
+  $(TMPDIR)/$1/boot.iso: $2 | $(TMPDIR)/$1
+	cd $(TMPDIR)/$1 && ln -sf $$< boot.iso
+endef
+
+###############################################################################
+# This macro invokes QEMU for initial Windows installation
+# Note: windows xp install may get stuck because of the NIC, so we disable it here
+# $1: image name
+# $2: disk image name
+RUN_INITIAL_SETUP = $(QEMU64) \
+    -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G -net none\
+    $(if $(findstring xp,$1),,-net nic,model=$(call NIC,$(1))) \
+    $(call QEMU_HD,0,$(2)) \
+    $(call INITIAL_CD_DRIVES,$(1)) \
+    -serial file:/dev/null \
+    -periodic-screenshot $(3)
+
+POST_INSTALL_FILES = $(TMPDIR)/$(1)/post_install_files
+POST_INSTALL_ISO = $(POST_INSTALL_FILES).iso
+
+
+INITIAL_CD_DRIVES = \
+    $(call QEMU_CD,2,$(TMPDIR)/$(1)/boot.iso) \
+    $(call QEMU_CD,3,$(TMPDIR)/$(1)/install_files.iso)
+
+DEFAULT_CD_DRIVES = \
+    $(call QEMU_CD,2,$(TMPDIR)/$(1)/boot.iso) \
+    $(call QEMU_CD,3,$(call POST_INSTALL_ISO,$(1)))
+
+POST_INSTALL_DEPS = $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.sys) \
+                    $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.exe) \
+                    $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.inf)
+
+###############################################################################
+### Provisioning the initial image
+#$1: image name
+#$2: iso name
+define TEMPLATE_BASE_WINDOWS_IMAGE
+ $(OUTDIR)/$1 $(TMPDIR)/$1:
+	mkdir -p "$$@"
+
+  # Prepare the boot cd
+  $(if $(findstring xp,$1), \
+       $(eval $(call PREPARE_WINXP_ISO,$1,$2)), \
+       $(eval $(call PREPARE_WIN_ISO,$1,$2)) \
+  )
+
+  $(TMPDIR)/$1/reboot_files.iso: | $(TMPDIR)/$1
+	@#
+	@# *** Prepare reboot_files.iso image
+	rm -Rf $(TMPDIR)/$1/reboot_files && mkdir -p $(TMPDIR)/$1/reboot_files
+	printf "timeout 60\nshutdown /r /t 0" > $(TMPDIR)/$1/reboot_files/s2e_startup.bat
+	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/reboot_files
+
+  # The tmp image contains a fresh install of the system, without any post-install changes
+  $(TMPDIR)/$1/image.raw.tmp: $(TMPDIR)/$1/boot.iso $(TMPDIR)/$1/install_files.iso
+	rm -rf $(TMPDIR)/$1/initial_install_screenshots1 && mkdir -p $(TMPDIR)/$1/initial_install_screenshots1
+	rm -rf $(TMPDIR)/$1/initial_install_screenshots2 && mkdir -p $(TMPDIR)/$1/initial_install_screenshots2
+
+	@#
+	@# *** Create empty disk image
+	$(QEMU_IMG) create -f raw $$@ $(call DISK_SIZE,$1)
+
+	@#
+	@# *** Run the installation in QEMU
+	$(call INFO_MSG,[$1] Running initial setup...)
+	$(call RUN_INITIAL_SETUP,$1,$$@,$(TMPDIR)/$1/initial_install_screenshots1)
+
+	$(call INFO_MSG,[$1] Completing installation...)
+	$(call RUN_INITIAL_SETUP,$1,$$@,$(TMPDIR)/$1/initial_install_screenshots2)
+
+  # Create CD with extra install software
+  $(TMPDIR)/$1/post_install_files.iso: $(call POST_INSTALL_DEPS,$1) $(WIN_APPS_PATH) | $(TMPDIR)/$1
+	mkdir -p $(call POST_INSTALL_FILES,$1)
+	rsync -av $(SRC)/Windows/install_scripts $(call POST_INSTALL_FILES,$1)/
+	rsync -av $(WIN_APPS_PATH) $(call POST_INSTALL_FILES,$1)/install_scripts/inst/
+	rsync -av $(call POST_INSTALL_DEPS,$1) $(call POST_INSTALL_FILES,$1)/install_scripts/s2e/
+	genisoimage --iso-level 2 -flDJR -o $$@ $(call POST_INSTALL_FILES,$1)
+
+
+  # Install additional software and prepare the image for S2E
+  $(OUTDIR)/$1/image.raw.s2e: $(TMPDIR)/$1/image.raw.tmp $(TMPDIR)/$1/reboot_files.iso $(TMPDIR)/$1/post_install_files.iso | $(OUTDIR)/$1
+	cp $(TMPDIR)/$1/image.raw.tmp $(OUTDIR)/$1/image.raw.tmp
+	rm -rf $(TMPDIR)/$1/post_install_screenshots && mkdir -p $(TMPDIR)/$1/post_install_screenshots
+	rm -rf $(TMPDIR)/$1/final_install_screenshots && mkdir -p $(TMPDIR)/$1/final_install_screenshots
+	rm -rf $(TMPDIR)/$1/tcg_install_screenshots && mkdir -p $(TMPDIR)/$1/tcg_install_screenshots
+
+	@# *** Post installation adds additional software (e.g, Python, VC++ packages, etc.)
+	$(call INFO_MSG,[$1] Running post-install scripts...)
+	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
+	    $(call QEMU_NIC,$1) \
+	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
+	    $(call DEFAULT_CD_DRIVES,$(1)) \
+	    -serial file:$(OUTDIR)/$1/post_install_serial1.txt \
+	    -periodic-screenshot $(TMPDIR)/$1/post_install_screenshots
+
+
+	@# *** Post-install configuration
+	@# This must be done in the guest because the registry keys are protected
+	$(call INFO_MSG,[$1] Disabling Windows Defender...)
+	if [ -z "$(findstring xp,$(call OS_VERSION,$1))" ]; then \
+	  virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(call POST_INSTALL_FILES,$1)/install_scripts/disable_windefend.reg; \
+	fi
+
+	$(call INFO_MSG,[$1] Disabling Windows 8 start screen...)
+	if [ ! -z "$(findstring 8,$(call OS_VERSION,$1))" ]; then \
+	  virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(call POST_INSTALL_FILES,$1)/install_scripts/win8_desktop.reg; \
+	fi
+
+	@# *** Finalize installation
+	$(call INFO_MSG,[$1] Finalizing Windows installation...)
+	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
+	    $(call QEMU_NIC,$1) \
+	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
+	    -cdrom $(TMPDIR)/$1/reboot_files.iso \
+	    -serial file:$(OUTDIR)/$1/final_install_serial.txt \
+	    -periodic-screenshot $(TMPDIR)/$1/final_install_screenshots
+
+	@# *** Reboot in TCG mode to install the CPU driver
+	$(call INFO_MSG,[$1] Rebooting in TCG mode...)
+	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
+	        -enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
+		$(call QEMU_NIC,$1) \
+		$(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
+		-cdrom $(TMPDIR)/$1/reboot_files.iso \
+		-serial file:$(OUTDIR)/$1/tcg_install_serial.txt \
+		-periodic-screenshot $(TMPDIR)/$1/tcg_install_screenshots
+
+	@#
+	@# *** Cleanup
+	rm -Rf $(call POST_INSTALL_FILES,$1) $(OUTDIR)/$1/reboot_files*
+	mv $(OUTDIR)/$1/image.raw.tmp $$@
+
+	@# Dummy file to avoid rebuilding
+	touch $(OUTDIR)/$1/image.raw.tmp
+	$(call OK_MSG,[$1] Installation completed.)
+
+
+  # This rule extracts all executable files from the guest image into the guestfs folder.
+  # This is useful for S2E plugins that need access to the binaries in order to extract
+  # information from them (e.g., import or export tables).
+  $(OUTDIR)/$1/guestfs: $(OUTDIR)/$1/image.raw.s2e
+	rm -Rf $$@ && mkdir -p $$@
+	$(call INFO_MSG,[$1] Extracting guestfs...)
+
+	@# First copy out all the files from the image
+	@# Unmount any previous folders (e.g., if interrupted)
+	-fusermount -u $(OUTDIR)/$1/imagefs
+	mkdir -p $(OUTDIR)/$1/imagefs
+
+	cd $(OUTDIR)/$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
+	    guestmount --ro -i -a image.raw.s2e imagefs && \
+	    rsync -rt --exclude pagefile.sys --exclude swapfile.sys imagefs/* guestfs
+
+	@# Only keep executables (delete everything else)
+	cd $$@ && $(SRC)/scripts/filter_exe.py .
+
+	@# Convert the file names to lower case. This makes sure that the case
+	@# is uniform across all files and plugins can easily access them.
+	$(SRC)/scripts/lowercase.py "$$@"
+	$(call OK_MSG,[$1] Guestfs extraction completed.)
+
+
+  $(OUTDIR)/$1/image.raw.s2e.ready: $(OUTDIR)/$1/image.raw.s2e $(OUTDIR)/$1/guestfs
+	rm -rf $(TMPDIR)/$1/ready_screenshots && mkdir -p $(TMPDIR)/$1/ready_screenshots
+	@# Unmount any previous folders (e.g., if interrupted)
+	-fusermount -u $(OUTDIR)/$1/imagefs
+
+	@# *** Create ready snapshot
+	$(call INFO_MSG,[$1] Creating ready snapshot...)
+	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
+		-enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m $(call SNAPSHOT_SIZE,$1) \
+		$(call QEMU_NIC,$1) \
+		$(call QEMU_HD_S2E,0,$$<) \
+		-enable-serial-commands \
+		-serial file:$(OUTDIR)/$1/ready_serial.txt \
+		-periodic-screenshot $(TMPDIR)/$1/ready_screenshots
+
+	$(call OK_MSG,[$1] Installation completed.)
+
+  $(OUTDIR)/$1/image.json: $(OUTDIR)/$1/image.raw.s2e.ready $(SRC)/images.json $(SRC)/scripts/generate_image_descriptor.py
+	$(call INFO_MSG,[$$@] Creating image descriptor...)
+	$(SRC)/scripts/generate_image_descriptor.py -i $(SRC)/images.json -o $$@ -n "$1" \
+		snapshot="ready" qemu_build="$(call ARCH,$1)" \
+		memory="$(call SNAPSHOT_SIZE,$1)" \
+		qemu_extra_flags="$(call QEMU_NIC,$1)"
+
+endef
+
+###############################################################################
+# The entry points of the makefile start here
+
+WINDOWS_IMAGES = windows-8.1ent-x86_64 windows-7sp1ent-x86_64 windows-xpsp3pro-i386
+ISO_PATH = $(ISODIR)/$(call GET_SETTING,$(1),iso.name)
+WINDOWS_TARGETS = $(addsuffix /image.json,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
+WINDOWS_ARCHIVES=$(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
+
+$(foreach os,$(WINDOWS_IMAGES), \
+  $(eval $(call TEMPLATE_BASE_WINDOWS_IMAGE,$(os),$(call ISO_PATH,$(os)))) \
+  $(eval $(call IMAGE_RULE,$(os))) \
+)
+
+
+windows: $(WINDOWS_TARGETS)
+windows_archives: $(WINDOWS_ARCHIVES)
