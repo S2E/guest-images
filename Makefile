@@ -199,9 +199,9 @@ $(OUTPUT_DIR)/%.tar.xz: $(OUTPUT_DIR)/%/image.json
 
 debian-8.7.1-x86_64: $(OUTPUT_DIR)/debian-8.7.1-x86_64/image.json
 debian-8.7.1-i386: $(OUTPUT_DIR)/debian-8.7.1-i386/image.json
-debian-8.7.1-x86_64: $(OUTPUT_DIR)/cgc_debian-8.7.1-i386/image.json
+cgc_debian-8.7.1-i386: $(OUTPUT_DIR)/cgc_debian-8.7.1-i386/image.json
 
-all: debian-8.7.1-x86_64 debian-8.7.1-i386 debian-8.7.1-x86_64
+all: debian-8.7.1-x86_64 debian-8.7.1-i386 cgc_debian-8.7.1-i386
 
 archive: $(OUTPUT_DIR)/debian-8.7.1-x86_64.tar.xz $(OUTPUT_DIR)/debian-8.7.1-i386.tar.xz $(OUTPUT_DIR)/cgc_debian-8.7.1-i386.tar.xz
 
