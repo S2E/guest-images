@@ -26,12 +26,12 @@ FROM 32bit/debian
 
 MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.io>
 
-RUN \
-    apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
-    sudo apt-file texinfo flex bison patch python unzip git bc \
-    bzip2 wget less nano g++ gcc file libc6-dev  make \
-    fakeroot build-essential devscripts kernel-package libncurses5-dev && \
+RUN                                                                             \
+    apt-get update &&                                                           \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
+    sudo apt-file texinfo flex bison patch python unzip git bc                  \
+    bzip2 wget less nano g++ gcc file libc6-dev make                            \
+    fakeroot build-essential devscripts libncurses5-dev &&                      \
     apt-get clean && \
     apt-file update
 

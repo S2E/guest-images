@@ -66,9 +66,8 @@ else
     echo "Using existing .config"
 fi
 
-
 # NOTE: you have to run this inside special docker image (see run-docker.sh)
-make-kpkg --initrd --append-to-version s2e --jobs 8 --rootcmd fakeroot  kernel-image kernel-debug || err "Build failed"
+fakeroot make -j8 deb-pkg LOCALVERSION=-s2e || err "Build failed"
 
 # Restore access to files under version control
 chmod a+rw debian
