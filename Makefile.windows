@@ -318,14 +318,14 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(SRC)/scripts/generate_image_descriptor.py -i $(SRC)/images.json -o $$@ -n "$1" \
 		snapshot="ready" qemu_build="$(call ARCH,$1)" \
 		memory="$(call SNAPSHOT_SIZE,$1)" \
-		qemu_extra_flags="$(call QEMU_NIC,$1)"
+		qemu_extra_flags="$(call QEMU_NIC,$1) $(call QEMU_CPU,$1)"
 
 endef
 
 ###############################################################################
 # The entry points of the makefile start here
 
-WINDOWS_IMAGES = windows-8.1ent-x86_64 windows-7sp1ent-x86_64 windows-xpsp3pro-i386
+WINDOWS_IMAGES = windows-10ent1703-x86_64 windows-8.1ent-x86_64 windows-7sp1ent-x86_64 windows-xpsp3pro-i386
 ISO_PATH = $(ISODIR)/$(call GET_SETTING,$(1),iso.name)
 WINDOWS_TARGETS = $(addsuffix /image.json,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
 WINDOWS_ARCHIVES=$(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
