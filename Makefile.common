@@ -68,6 +68,7 @@ OS_NAME = $(call GET_SETTING,$(1),os.name)
 DISK_SIZE ?= $(call GET_SETTING,$(1),hw.default_disk_size)
 SNAPSHOT_SIZE ?= $(call GET_SETTING,$(1),hw.default_snapshot_size)
 NIC ?= $(call GET_SETTING,$(1),hw.nic)
+CPU ?= $(call GET_SETTING,$(1),hw.cpu)
 
 GETQEMU = $(S2E_INSTALL_ROOT)/bin/qemu-system-$(call OS_ARCH,$(1))
 GETLIBS2E = $(S2E_INSTALL_ROOT)/share/libs2e/libs2e-$(call OS_ARCH,$(1)).so
@@ -76,6 +77,7 @@ QEMU_HD = -drive if=ide,index=$(1),file=$(2),format=raw,cache=writeback
 QEMU_HD_S2E = -drive if=ide,index=$(1),file=$(2),format=s2e,cache=writeback
 QEMU_CD = -drive if=ide,index=$(1),file=$(2),media=cdrom
 QEMU_NIC = -net none -net nic,model=$(call NIC,$(1))
+QEMU_CPU = $(if $(call CPU,$(1)),-cpu $(call CPU,$(1)),)
 
 GUEST_TOOLS32_ROOT = $(S2E_INSTALL_ROOT)/bin/guest-tools32
 GUEST_TOOLS64_ROOT = $(S2E_INSTALL_ROOT)/bin/guest-tools64

@@ -60,6 +60,7 @@ define TEMPLATE_BASE_LINUX_IMAGE
 	$(call INFO_MSG,[$$@] Running initial setup...)
 	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
+	    $(call QEMU_CPU,$1) \
 	    -cdrom $(TMPDIR)/$1/install_files.iso \
 	    -serial file:$(TMPDIR)/$1/serial.txt
 endef
@@ -86,6 +87,7 @@ define BUILD_S2E_IMAGE
 	$(call INFO_MSG,[$$@] Booting disk image...)
 	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
+	    $(call QEMU_CPU,$2$1) \
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
 	virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
@@ -99,7 +101,7 @@ define TAKE_SNAPSHOT
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) -enable-kvm \
 	    $(call QEMU_HD_S2E,0,$$<) \
 	    -serial file:$(OUTDIR)/$2$1/serial_ready.txt -enable-serial-commands \
-	    $(call QEMU_NIC,$2$1) \
+	    $(call QEMU_NIC,$2$1) $(call QEMU_CPU,$2$1) \
 	    -m $(call SNAPSHOT_SIZE,$2$1) \
 	    $(GRAPHICS)
 
@@ -110,7 +112,7 @@ define TAKE_SNAPSHOT
 	$(SRC)/scripts/generate_image_descriptor.py -i $(SRC)/images.json -o $$@ -n "$2$1" \
 		snapshot="ready" qemu_build="$(call ARCH,$2$1)" \
 		memory="$(call SNAPSHOT_SIZE,$2$1)" \
-		qemu_extra_flags="$(call QEMU_NIC,$2$1)"
+		qemu_extra_flags="$(call QEMU_NIC,$2$1) $(call QEMU_CPU,$2$1)"
 endef
 
 ### Building Linux kernel ###
