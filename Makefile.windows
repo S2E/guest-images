@@ -140,6 +140,7 @@ endef
 RUN_INITIAL_SETUP = $(QEMU64) \
     -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G -net none\
     $(if $(findstring xp,$1),,-net nic,model=$(call NIC,$(1))) \
+    $(call QEMU_CPU,$(1)) \
     $(call QEMU_HD,0,$(2)) \
     $(call INITIAL_CD_DRIVES,$(1)) \
     -serial file:/dev/null \
@@ -219,6 +220,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call INFO_MSG,[$1] Running post-install scripts...)
 	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
 	    $(call QEMU_NIC,$1) \
+	    $(call QEMU_CPU,$1) \
 	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
 	    $(call DEFAULT_CD_DRIVES,$(1)) \
 	    -serial file:$(OUTDIR)/$1/post_install_serial1.txt \
@@ -241,6 +243,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call INFO_MSG,[$1] Finalizing Windows installation...)
 	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
 	    $(call QEMU_NIC,$1) \
+	    $(call QEMU_CPU,$1) \
 	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
 	    -cdrom $(TMPDIR)/$1/reboot_files.iso \
 	    -serial file:$(OUTDIR)/$1/final_install_serial.txt \
@@ -251,6 +254,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
 	        -enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
 		$(call QEMU_NIC,$1) \
+		$(call QEMU_CPU,$1) \
 		$(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
 		-cdrom $(TMPDIR)/$1/reboot_files.iso \
 		-serial file:$(OUTDIR)/$1/tcg_install_serial.txt \
@@ -301,6 +305,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
 		-enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m $(call SNAPSHOT_SIZE,$1) \
 		$(call QEMU_NIC,$1) \
+		$(call QEMU_CPU,$1) \
 		$(call QEMU_HD_S2E,0,$$<) \
 		-enable-serial-commands \
 		-serial file:$(OUTDIR)/$1/ready_serial.txt \
