@@ -38,7 +38,7 @@ if uname -a | grep -q x86_64; then
 fi
 
 # Install CGC tools if we have a CGC kernel
-if ! grep -q ckt32s2e /boot/grub/grub.cfg; then
+if ! grep -q ckt32-s2e /boot/grub/grub.cfg; then
     # QEMU will stop (-no-reboot)
     sudo reboot
 fi
@@ -46,6 +46,7 @@ fi
 set -ex
 
 APT_PACKAGES="
+python-apt
 python-crypto
 python-daemon
 python-lockfile
