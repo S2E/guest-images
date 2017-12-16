@@ -34,7 +34,7 @@ define TEMPLATE_BASE_LINUX_IMAGE
 
  $(TMPDIR)/$1/$1.iso: | $(TMPDIR)/$1
 	$(call INFO_MSG,[$$@] Downloading disk image...)
-	$(WGET) $$@ $(call ISO_URL,$(1))
+	cd $(TMPDIR)/$1 && $(GET_ISO) $(call ISO_URL,$(1)) $$@
 
  $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/bootcd/preseed.cfg
 	$(call INFO_MSG,[$$@] Creating installation disk...)

@@ -101,3 +101,4 @@ $(WINDOWS_APPS_DIR) $(OUTDIR) $(TMPDIR):
 	mkdir -p $@
 
 WGET = wget --no-use-server-timestamps -O
+GET_ISO = $(SRC)/scripts/get_iso.sh
