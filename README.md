@@ -7,7 +7,7 @@ is fully automated.
 # Installing dependencies
 
 ```
-sudo apt-get install libguestfs-tools genisoimage python-pip python-magic xz-utils docker.io p7zip-full pxz libhivex-bin fuse
+sudo apt-get install libguestfs-tools genisoimage python-pip python-magic xz-utils docker.io p7zip-full pxz libhivex-bin fuse jigdo-file
 sudo apt-get build-dep fakeroot linux-image$(uname -r)
 sudo pip install jinja2
 
