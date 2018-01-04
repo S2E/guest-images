@@ -1,5 +1,27 @@
 title Configuring system. Please wait...
 
+
+echo ==^> Installing updates
+:: This must be done before we disable windows update
+
+:: Apply updates for Windows 7
+ver | find "6.1" > nul
+if not %ERRORLEVEL% == 0 goto not7
+
+:: This update adds support for sha256 driver signatures, which
+:: is required in order to test recently built drivers.
+if exist "%SystemDrive%\Program Files (x86)" (
+    echo Installing %~dp0\inst\Windows6.1-KB3033929-x64.msu
+    wusa.exe %~dp0\inst\Windows6.1-KB3033929-x64.msu /quiet /norestart
+) else (
+    echo Installing %~dp0\inst\Windows6.1-KB3033929-x86.msu
+    wusa.exe %~dp0\inst\Windows6.1-KB3033929-x86.msu /quiet /norestart
+)
+
+:not7
+
+echo Done intalling updates
+
 echo ==^> Turning off User Account Control (UAC)
 :: see http://www.howtogeek.com/howto/windows-vista/enable-or-disable-uac-from-the-windows-vista-command-line/
 reg ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
