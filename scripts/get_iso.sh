@@ -70,7 +70,7 @@ download_jigdo()
     rm -f "$ISO_FILE"
     jigdo-lite --noask "$JIGDO_FILE"
 
-    if [ "$(realpath "$ISO_FILE")" != "$(realpath "$OUTPUT_FILE")" ]; then
+    if [ "$(readlink -f "$ISO_FILE")" != "$(readlink -f "$OUTPUT_FILE")" ]; then
         mv "$ISO_FILE" "$OUTPUT_FILE"
     fi
 }
