@@ -10,7 +10,7 @@ echo Installing .net 4.0
 goto end
 
 :notxp
-echo Installing .net 4.5
-%~dp0\inst\dotNetFx45_Full_x86_x64.exe /Q /norestart
+echo Installing .net 4.5.2
+%~dp0\inst\NDP452-KB2901907-x86-x64-AllOS-ENU.exe /Q /norestart
 
 :end
