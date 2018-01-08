@@ -96,7 +96,7 @@ windows_clean:
 #$1: image name
 #$2: iso name
 define PREPARE_WINXP_ISO
-  $(TMPDIR)/$1/install_files.iso: $2 $(SRC)/Windows/Winnt.sif.template $(WIN_APPS_PATH) | $(TMPDIR)/$1
+  $(TMPDIR)/$1/install_files.iso: $2 $(SRC)/Windows/Winnt.sif.template | $(TMPDIR)/$1
 	@# Windows XP doesn't seem to pick up Winnt.sif from floppy, so we put it
 	@# on the installation ISO
 	@#
@@ -109,9 +109,7 @@ define PREPARE_WINXP_ISO
 	mkdir $(TMPDIR)/$1/install_files/cdboot
 	geteltorito -o $(TMPDIR)/$1/install_files/cdboot/boot.bin $2
 
-	@#
 	rsync -av $(SRC)/Windows/install_scripts $(TMPDIR)/$1/install_files/
-	rsync -av $(WIN_APPS_PATH) $(TMPDIR)/$1/install_files/install_scripts/inst/
 
 	$(SRC)/scripts/compile_template.py \
 	    -t $(SRC)/Windows/Winnt.sif.template \
@@ -135,7 +133,7 @@ endef
 #$1: image name
 #$2: iso name
 define PREPARE_WIN_ISO
-  $(TMPDIR)/$1/install_files.iso: $(SRC)/Windows/Autounattend.xml.template $(WIN_APPS_PATH) | $(TMPDIR)/$1
+  $(TMPDIR)/$1/install_files.iso: $(SRC)/Windows/Autounattend.xml.template | $(TMPDIR)/$1
 	@#
 	@# *** Prepare install_files.iso image
 	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
@@ -143,9 +141,6 @@ define PREPARE_WIN_ISO
 	$(SRC)/scripts/compile_template.py -t $(SRC)/Windows/Autounattend.xml.template \
 			-o $(TMPDIR)/$1/install_files/Autounattend.xml \
 			-n $1 -d $(SRC)/images.json
-
-	rsync -av $(SRC)/Windows/install_scripts $(TMPDIR)/$1/install_files/
-	rsync -av $(WIN_APPS_PATH) $(TMPDIR)/$1/install_files/install_scripts/inst/
 
 	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/install_files
 
