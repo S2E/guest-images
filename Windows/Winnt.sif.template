@@ -74,6 +74,6 @@
 
 [Display]
     BitsPerPel=24
-    Xresolution=800
-    YResolution=600
+    Xresolution=1024
+    YResolution=768
     Vrefresh=60

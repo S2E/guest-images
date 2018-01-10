@@ -81,6 +81,12 @@
           <PlainText>true</PlainText>
         </Password>
       </AutoLogon>
+      <Display>
+        <ColorDepth>24</ColorDepth>
+        <HorizontalResolution>1024</HorizontalResolution>
+        <VerticalResolution>768</VerticalResolution>
+        <RefreshRate>60</RefreshRate>
+      </Display>
       <OOBE>
 	<NetworkLocation>Work</NetworkLocation>
 	<HideEULAPage>true</HideEULAPage>
