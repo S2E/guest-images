@@ -22,6 +22,11 @@ if exist "%SystemDrive%\Program Files (x86)" (
 
 echo Done intalling updates
 
+echo ==^> Increasing service startup timeout
+:: This is required when testing C# services that take a lot of time to start in S2E
+:: By default, the system kills them after 30s. We increase this to 300s here.
+reg add HKLM\SYSTEM\CurrentControlSet\Control /v ServicesPipeTimeout /t REG_DWORD /d 300000 /f
+
 echo ==^> Turning off User Account Control (UAC)
 :: see http://www.howtogeek.com/howto/windows-vista/enable-or-disable-uac-from-the-windows-vista-command-line/
 reg ADD HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System /v EnableLUA /t REG_DWORD /d 0 /f
