@@ -192,12 +192,19 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
        $(eval $(call PREPARE_WIN_ISO,$1,$2)) \
   )
 
-  $(TMPDIR)/$1/reboot_files.iso: | $(TMPDIR)/$1
+  $(TMPDIR)/$1/reboot_files.iso: $(SRC)/Windows/initial_install_reboot.bat | $(TMPDIR)/$1
 	@#
 	@# *** Prepare reboot_files.iso image
 	rm -Rf $(TMPDIR)/$1/reboot_files && mkdir -p $(TMPDIR)/$1/reboot_files
-	printf "timeout 60\nshutdown /r /t 0" > $(TMPDIR)/$1/reboot_files/s2e_startup.bat
+	cp "$(SRC)/Windows/initial_install_reboot.bat" "$(TMPDIR)/$1/reboot_files/s2e_startup.bat"
 	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/reboot_files
+
+  $(TMPDIR)/$1/tcg_reboot_files.iso: $(SRC)/Windows/tcg_install_reboot.bat | $(TMPDIR)/$1
+	@#
+	@# *** Prepare tcg_reboot_files.iso image
+	rm -Rf $(TMPDIR)/$1/tcg_reboot_files && mkdir -p $(TMPDIR)/$1/tcg_reboot_files
+	cp "$(SRC)/Windows/tcg_install_reboot.bat" "$(TMPDIR)/$1/tcg_reboot_files/s2e_startup.bat"
+	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/tcg_reboot_files
 
   # The tmp image contains a fresh install of the system, without any post-install changes
   $(TMPDIR)/$1/image.raw.tmp: $(TMPDIR)/$1/boot.iso $(TMPDIR)/$1/install_files.iso
@@ -226,7 +233,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 
 
   # Install additional software and prepare the image for S2E
-  $(OUTDIR)/$1/image.raw.s2e: $(TMPDIR)/$1/image.raw.tmp $(TMPDIR)/$1/reboot_files.iso $(TMPDIR)/$1/post_install_files.iso | $(OUTDIR)/$1
+  $(OUTDIR)/$1/image.raw.s2e: $(TMPDIR)/$1/image.raw.tmp $(TMPDIR)/$1/reboot_files.iso $(TMPDIR)/$1/tcg_reboot_files.iso $(TMPDIR)/$1/post_install_files.iso | $(OUTDIR)/$1
 	cp $(TMPDIR)/$1/image.raw.tmp $(OUTDIR)/$1/image.raw.tmp
 	rm -rf $(TMPDIR)/$1/post_install_screenshots && mkdir -p $(TMPDIR)/$1/post_install_screenshots
 	rm -rf $(TMPDIR)/$1/final_install_screenshots && mkdir -p $(TMPDIR)/$1/final_install_screenshots
@@ -272,13 +279,13 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 		$(call QEMU_NIC,$1) \
 		$(call QEMU_CPU,$1) \
 		$(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
-		-cdrom $(TMPDIR)/$1/reboot_files.iso \
+		-cdrom $(TMPDIR)/$1/tcg_reboot_files.iso \
 		-serial file:$(OUTDIR)/$1/tcg_install_serial.txt \
 		-periodic-screenshot $(TMPDIR)/$1/tcg_install_screenshots
 
 	@#
 	@# *** Cleanup
-	rm -Rf $(call POST_INSTALL_FILES,$1) $(OUTDIR)/$1/reboot_files*
+	rm -Rf $(call POST_INSTALL_FILES,$1) $(OUTDIR)/$1/*reboot_files*
 	mv $(OUTDIR)/$1/image.raw.tmp $$@
 
 	@# Dummy file to avoid rebuilding
