@@ -143,7 +143,7 @@ endef
 
 
 ### Instantiating all build configurations ###
-LINUX_IMAGES = debian-8.7.1-i386 debian-8.7.1-x86_64 cgc_debian-8.7.1-i386
+LINUX_IMAGES = debian-9.2.1-i386 debian-9.2.1-x86_64 cgc_debian-9.2.1-i386
 LINUX_ARCHIVES=$(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(LINUX_IMAGES)))
 
 # The cgc linux image uses an existing base image
@@ -159,14 +159,14 @@ $(eval $(call TEMPLATE_LINUX_KERNEL,linux-4.9.3,x86_64))
 
 # Rules for building different images
 # TODO: cgc image is treated in an adhoc manner, try to factor it out somehow
-$(eval $(call BUILD_S2E_IMAGE,debian-8.7.1-i386,cgc_,decree-cgc-cfe-i386))
-$(eval $(call TAKE_SNAPSHOT,debian-8.7.1-i386,cgc_))
+$(eval $(call BUILD_S2E_IMAGE,debian-9.2.1-i386,cgc_,decree-cgc-cfe-i386))
+$(eval $(call TAKE_SNAPSHOT,debian-9.2.1-i386,cgc_))
 
-$(eval $(call BUILD_S2E_IMAGE,debian-8.7.1-i386,,linux-4.9.3-i386))
-$(eval $(call TAKE_SNAPSHOT,debian-8.7.1-i386,))
+$(eval $(call BUILD_S2E_IMAGE,debian-9.2.1-i386,,linux-4.9.3-i386))
+$(eval $(call TAKE_SNAPSHOT,debian-9.2.1-i386,))
 
-$(eval $(call BUILD_S2E_IMAGE,debian-8.7.1-x86_64,,linux-4.9.3-x86_64))
-$(eval $(call TAKE_SNAPSHOT,debian-8.7.1-x86_64,))
+$(eval $(call BUILD_S2E_IMAGE,debian-9.2.1-x86_64,,linux-4.9.3-x86_64))
+$(eval $(call TAKE_SNAPSHOT,debian-9.2.1-x86_64,))
 
 ### Top level rules ###
 
