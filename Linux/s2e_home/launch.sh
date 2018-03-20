@@ -23,76 +23,126 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-sudo dpkg -i *.deb
-
-MENU_ENTRY="$(grep menuentry /boot/grub/grub.cfg  | grep s2e | cut -d "'" -f 2 | head -n 1)"
-echo "Default menu entry: $MENU_ENTRY"
-echo "GRUB_DEFAULT=\"1>$MENU_ENTRY\"" | sudo tee -a /etc/default/grub
-sudo update-grub
-
-# Install 32-bit user space for 64-bit kernels
-if uname -a | grep -q x86_64; then
-    sudo dpkg --add-architecture i386
-    sudo apt-get update
-    sudo apt-get -y install gcc-multilib g++-multilib libc6-dev-i386 lib32stdc++-4.8-dev libstdc++6:i386
-fi
-
-# Install CGC tools if we have a CGC kernel
-if ! grep -q ckt32-s2e /boot/grub/grub.cfg; then
-    # QEMU will stop (-no-reboot)
-    sudo reboot
-fi
-
 set -ex
 
-APT_PACKAGES="
-python-apt
-python-crypto
-python-daemon
-python-lockfile
-python-lxml
-python-matplotlib
-python-yaml
-tcpdump
-"
+# Install 32-bit user space for 64-bit kernels
+install_i386() {
+    if uname -a | grep -q x86_64; then
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get -y install gcc-multilib g++-multilib libc6-dev-i386 lib32stdc++-6-dev libstdc++6:i386
+    fi
+}
 
-CGC_PACKAGES="
-binutils-cgc-i386_2.24-10551-cfe-rc8_i386.deb
-cgc2elf_10551-cfe-rc8_i386.deb
-libcgcef0_10551-cfe-rc8_i386.deb
-libcgcdwarf_10551-cfe-rc8_i386.deb
-readcgcef_10551-cfe-rc8_i386.deb
-python-defusedxml_10551-cfe-rc8_all.deb
-libcgc_10551-cfe-rc8_i386.deb
-cgc-network-appliance_10551-cfe-rc8_all.deb
-cgc-service-launcher_10551-cfe-rc8_i386.deb
-poll-generator_10551-cfe-rc8_all.deb
-cb-testing_10551-cfe-rc8_all.deb
-cgc-release-documentation_10560-cfe-rc8_all.deb
-cgcef-verify_10551-cfe-rc8_all.deb
-cgc-pov-xml2c_10551-cfe-rc8_i386.deb
-strace-cgc_4.5.20-10551-cfe-rc8_i386.deb
-libpov_10551-cfe-rc8_i386.deb
-clang-cgc_3.4-10551-cfe-rc8_i386.deb
-cgc-virtual-competition_10551-cfe-rc8_all.deb
-magic-cgc_10551-cfe-rc8_all.deb
-services-cgc_10551-cfe-rc8_all.deb
-linux-image-3.13.11-ckt32-cgc_10551-cfe-rc8_i386.deb
-linux-libc-dev_10551-cfe-rc8_i386.deb
-"
 
-# Ensure that we are in the correct directory
-cd /tmp
+# Install systemtap from source
+# The one that's packaged does not support our kernel
+# Note: systemtap requires a lot of memory to compile, so we need swap
+install_systemtap() {
+    git clone git://sourceware.org/git/systemtap.git
+    cd systemtap
+    git checkout release-3.2
+    cd ..
 
-# Install the prerequisites
-sudo apt-get -y install ${APT_PACKAGES}
+    mkdir systemtap-build
+    cd systemtap-build
+    ../systemtap/configure --disable-docs
+    make -j2
+    sudo make install
+    cd ..
+}
 
-# Install the CGC packages
-for PACKAGE in ${CGC_PACKAGES}; do
-    wget --no-check-certificate https://cgcdist.s3.amazonaws.com/release-final/deb/${PACKAGE}
-    sudo dpkg -i --force-confnew ${PACKAGE}
-    rm -f ${PACKAGE}
-done
+# Install kernels last, the cause downgrade of libc,
+# which will cause issues when installing other packages
+install_kernel() {
+    sudo dpkg -i *.deb
+
+    MENU_ENTRY="$(grep menuentry /boot/grub/grub.cfg  | grep s2e | cut -d "'" -f 2 | head -n 1)"
+    echo "Default menu entry: $MENU_ENTRY"
+    echo "GRUB_DEFAULT=\"1>$MENU_ENTRY\"" | sudo tee -a /etc/default/grub
+    sudo update-grub
+}
+
+has_cgc_kernel() {
+    if ls *.deb | grep -q ckt32-s2e; then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
+# Install the prerequisites for cgc packages
+install_apt_packages() {
+    APT_PACKAGES="
+    python-apt
+    python-crypto
+    python-daemon
+    python-lockfile
+    python-lxml
+    python-matplotlib
+    python-yaml
+    tcpdump
+    "
+
+    sudo apt-get -y install ${APT_PACKAGES}
+
+    # This package no longer exists on recent debian version
+    wget http://ftp.us.debian.org/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
+    sudo dpkg -i python-support_1.0.15_all.deb
+}
+
+install_cgc_packages() {
+    CGC_PACKAGES="
+    binutils-cgc-i386_2.24-10551-cfe-rc8_i386.deb
+    cgc2elf_10551-cfe-rc8_i386.deb
+    libcgcef0_10551-cfe-rc8_i386.deb
+    libcgcdwarf_10551-cfe-rc8_i386.deb
+    readcgcef_10551-cfe-rc8_i386.deb
+    python-defusedxml_10551-cfe-rc8_all.deb
+    libcgc_10551-cfe-rc8_i386.deb
+    cgc-network-appliance_10551-cfe-rc8_all.deb
+    cgc-service-launcher_10551-cfe-rc8_i386.deb
+    poll-generator_10551-cfe-rc8_all.deb
+    cb-testing_10551-cfe-rc8_all.deb
+    cgc-release-documentation_10560-cfe-rc8_all.deb
+    cgcef-verify_10551-cfe-rc8_all.deb
+    cgc-pov-xml2c_10551-cfe-rc8_i386.deb
+    strace-cgc_4.5.20-10551-cfe-rc8_i386.deb
+    libpov_10551-cfe-rc8_i386.deb
+    clang-cgc_3.4-10551-cfe-rc8_i386.deb
+    cgc-virtual-competition_10551-cfe-rc8_all.deb
+    magic-cgc_10551-cfe-rc8_all.deb
+    services-cgc_10551-cfe-rc8_all.deb
+    linux-image-3.13.11-ckt32-cgc_10551-cfe-rc8_i386.deb
+    linux-libc-dev_10551-cfe-rc8_i386.deb
+    "
+
+    local CUR_DIR
+    CUR_DIR="$(pwd)"
+
+    # Download packages in temp folder
+    cd /tmp
+
+    # Install the CGC packages
+    for PACKAGE in ${CGC_PACKAGES}; do
+        wget --no-check-certificate https://cgcdist.s3.amazonaws.com/release-final/deb/${PACKAGE}
+        sudo dpkg -i --force-confnew ${PACKAGE}
+        rm -f ${PACKAGE}
+    done
+
+    cd "$CUR_DIR"
+}
+
+install_i386
+install_systemtap
+
+# Install CGC tools if we have a CGC kernel
+if [ $(has_cgc_kernel) -eq 1 ]; then
+    install_apt_packages
+    install_cgc_packages
+fi
+
+install_kernel
 
 # QEMU will stop (-no-reboot)
 sudo reboot
