@@ -91,7 +91,31 @@ define BUILD_S2E_IMAGE
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
 	virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
+
+  # This rule extracts all executable files from the guest image into the guestfs folder.
+  # This is useful for S2E plugins that need access to the binaries in order to extract
+  # information from them (e.g., import or export tables).
+  $(OUTDIR)/$2$1/guestfs: $(OUTDIR)/$2$1/image.raw.s2e
+	rm -Rf $$@ && mkdir -p $$@
+	$(call INFO_MSG,[$1] Extracting guestfs...)
+
+	@# First copy out all the files from the image
+	@# Unmount any previous folders (e.g., if interrupted)
+	-fusermount -u $(OUTDIR)/$2$1/imagefs
+	mkdir -p $(OUTDIR)/$2$1/imagefs
+
+	# TODO: rsync only executable files
+	cd $(OUTDIR)/$2$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
+	    guestmount --ro -i -a image.raw.s2e imagefs && \
+	    rsync --links -rt --exclude '*.deb' imagefs/* guestfs
+
+	# Some files might not have read privileges, add them here
+	chmod -R u+r $(OUTDIR)/$2$1/guestfs
+
+	$(call OK_MSG,[$1] Guestfs extraction completed.)
 endef
+
+
 
 ### Snapshot creation ###
 
@@ -105,7 +129,7 @@ define TAKE_SNAPSHOT
 	    -m $(call SNAPSHOT_SIZE,$2$1) \
 	    $(GRAPHICS)
 
-  $(OUTDIR)/$2$1/image.json: $(OUTDIR)/$2$1/image.raw.s2e.ready \
+  $(OUTDIR)/$2$1/image.json: $(OUTDIR)/$2$1/image.raw.s2e.ready $(OUTDIR)/$2$1/guestfs \
                              $(SRC)/images.json $(SRC)/scripts/generate_image_descriptor.py
 
 	$(call INFO_MSG,[$$@] Creating image descriptor...)
