@@ -113,6 +113,10 @@ define BUILD_S2E_IMAGE
 	chmod -R u+r $(OUTDIR)/$2$1/guestfs
 
 	$(call OK_MSG,[$1] Guestfs extraction completed.)
+
+  # Copy the kernel that has debug info into the guestfs
+  $(OUTDIR)/$2$1/guestfs/vmlinux: $(OUTDIR)/$2$1/guestfs
+	cp "$(TMPDIR)/$3/"*/vmlinux "$$@"
 endef
 
 
@@ -129,7 +133,7 @@ define TAKE_SNAPSHOT
 	    -m $(call SNAPSHOT_SIZE,$2$1) \
 	    $(GRAPHICS)
 
-  $(OUTDIR)/$2$1/image.json: $(OUTDIR)/$2$1/image.raw.s2e.ready $(OUTDIR)/$2$1/guestfs \
+  $(OUTDIR)/$2$1/image.json: $(OUTDIR)/$2$1/image.raw.s2e.ready $(OUTDIR)/$2$1/guestfs $(OUTDIR)/$2$1/guestfs/vmlinux \
                              $(SRC)/images.json $(SRC)/scripts/generate_image_descriptor.py
 
 	$(call INFO_MSG,[$$@] Creating image descriptor...)
