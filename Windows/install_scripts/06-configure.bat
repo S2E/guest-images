@@ -37,6 +37,12 @@ reg add "HKLM\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer" /v Hi
 echo ==^> Disabling Windows Security service
 sc config wscsvc start= disabled
 
+echo ==^> Disabling Windows Defender
+reg ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender" /v DisableAntiSpyware /t REG_DWORD /d 0x1 /f
+
+echo ==^> Disabling Windows Defender Realtime Protection
+reg ADD "HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows Defender\Real-Time Protection" /v DisableRealtimeMonitoring /t REG_DWORD /d 0x1 /f
+
 echo ==^> Turning off driver signature enforcement (test signing)
 Bcdedit.exe -set TESTSIGNING ON
 
