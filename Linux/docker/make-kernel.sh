@@ -56,6 +56,7 @@ useradd -u $MUID -g s2e s2e
 # Run the rest of the script with the uid/gid provided, otherwise
 # new files will be owned by root.
 exec sudo -u s2e /bin/bash - << EOF
+set -x
 
 export C_INCLUDE_PATH=${1}:${C_INCLUDE_PATH}
 
@@ -67,7 +68,14 @@ else
 fi
 
 # NOTE: you have to run this inside special docker image (see run-docker.sh)
-fakeroot make -j8 deb-pkg LOCALVERSION=-s2e || err "Build failed"
+TARGET=bindeb-pkg
+VERSION=$(fakeroot make kernelversion)
+if ! echo $VERSION | grep -q 3.13.11; then
+    # Older kernel versions use this target for binary only package
+    TARGET=deb-pkg
+fi
+
+fakeroot make -j8 \$TARGET LOCALVERSION=-s2e || err "Build failed"
 
 # Restore access to files under version control
 chmod a+rw debian

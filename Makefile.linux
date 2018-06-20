@@ -166,7 +166,7 @@ define TEMPLATE_LINUX_KERNEL
 	cd $(TMPDIR)/$1-$2/$1 && mv config-$2 .config
 
 	# Remove old builds
-	rm -rf $(TMPDIR)/$1-$2/$1-* $(TMPDIR)/$1-$2/*.deb
+	rm -rf $(TMPDIR)/$1-$2/*.deb
 
 	$(SRC)/Linux/docker/run-docker.sh linux-build-$2$(call CGCARCH,$1) \
 	    $(TMPDIR)/$1-$2/$1 \
