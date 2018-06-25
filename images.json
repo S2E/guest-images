@@ -115,6 +115,30 @@
     },
 
 
+    "windows-7sp1pro-i386": {
+      "name": "Windows 7 Professional SP1 i386",
+      "image_group": "windows",
+      "url": "",
+      "iso": {
+         "name": "en_windows_7_professional_with_sp1_x86_dvd_u_677056.iso",
+         "sha1": "d89937df3a9bc2ec1a1486195fd308cd3dade928"
+      },
+      "os": {
+       "family": "windows",
+       "name": "windows",
+       "version": "7sp1pro",
+       "arch": "i386",
+       "build": "7601.17514",
+       "binary_formats": ["pe"]
+      },
+      "hw": {
+        "default_disk_size": "20G",
+        "default_snapshot_size": "2G",
+        "nic": "e1000"
+      }
+    },
+
+
     "windows-8.1ent-x86_64": {
       "name": "Windows 8.1 Enterprise x86_64",
       "image_group": "windows",
