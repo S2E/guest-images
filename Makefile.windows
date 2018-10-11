@@ -254,12 +254,12 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	@# This must be done in the guest because the registry keys are protected
 	$(call INFO_MSG,[$1] Disabling Windows Defender...)
 	if [ -z "$(findstring xp,$(call OS_VERSION,$1))" ]; then \
-	  virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(call POST_INSTALL_FILES,$1)/install_scripts/disable_windefend.reg; \
+	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(call POST_INSTALL_FILES,$1)/install_scripts/disable_windefend.reg; \
 	fi
 
 	$(call INFO_MSG,[$1] Disabling Windows 8 start screen...)
 	if [ ! -z "$(findstring 8,$(call OS_VERSION,$1))" ]; then \
-	  virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(call POST_INSTALL_FILES,$1)/install_scripts/win8_desktop.reg; \
+	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(call POST_INSTALL_FILES,$1)/install_scripts/win8_desktop.reg; \
 	fi
 
 	@# *** Finalize installation
@@ -306,7 +306,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	mkdir -p $(OUTDIR)/$1/imagefs
 
 	cd $(OUTDIR)/$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
-	    guestmount --ro -i -a image.raw.s2e imagefs && \
+	    LIBGUESTFS_HV=$(SRC)/qemu.wrapper guestmount --ro -i -a image.raw.s2e imagefs && \
 	    rsync -rt --exclude pagefile.sys --exclude swapfile.sys imagefs/* guestfs
 
 	@# Only keep executables (delete everything else)
