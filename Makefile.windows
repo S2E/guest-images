@@ -234,7 +234,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 
   # Install additional software and prepare the image for S2E
   $(OUTDIR)/$1/image.raw.s2e: $(TMPDIR)/$1/image.raw.tmp $(TMPDIR)/$1/reboot_files.iso $(TMPDIR)/$1/tcg_reboot_files.iso $(TMPDIR)/$1/post_install_files.iso | $(OUTDIR)/$1
-	cp $(TMPDIR)/$1/image.raw.tmp $(OUTDIR)/$1/image.raw.tmp
+	cp --reflink=auto $(TMPDIR)/$1/image.raw.tmp $(OUTDIR)/$1/image.raw.tmp
 	rm -rf $(TMPDIR)/$1/post_install_screenshots && mkdir -p $(TMPDIR)/$1/post_install_screenshots
 	rm -rf $(TMPDIR)/$1/final_install_screenshots && mkdir -p $(TMPDIR)/$1/final_install_screenshots
 	rm -rf $(TMPDIR)/$1/tcg_install_screenshots && mkdir -p $(TMPDIR)/$1/tcg_install_screenshots

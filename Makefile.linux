@@ -73,7 +73,7 @@ define BUILD_S2E_IMAGE
                                 $(SRC)/Linux/override.conf
 
 	mkdir -p $$(shell dirname $$@)
-	cp "$$<" "$$@"
+	cp --reflink=auto "$$<" "$$@"
 
 	$(call INFO_MSG,[$$@] Installing kernels...)
 	LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-copy-in -a "$$@" $(TMPDIR)/$3/*.deb /home/s2e
