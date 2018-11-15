@@ -25,59 +25,56 @@ SOFTWARE.
 from __future__ import print_function
 
 import argparse
-import magic
 import os
+import re
+import shutil
 import sys
 
-g_m = None
 
-# Accomodate older versions of magic (ubuntu 14.04)
-def detect_magic():
-    global g_m
-    if hasattr(magic, 'open'):
-        g_m = magic.open(magic.MAGIC_SYMLINK)
-        g_m.load()
+def is_executable(filename):
+    with open(filename, 'rb') as fp:
+        header = fp.read(4)
+        if header == '.ELF':
+            return True
+        elif header[0:2] == 'MZ':
+            return True
+    return False
 
-def get_magic(filename):
-    if g_m:
-        return g_m.file(filename)
-    else:
-        return magic.from_file(filename)
 
-def main():
+def copy_executables():
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', type=str, nargs=1, help='Path to folder')
+    parser.add_argument('source', type=str, nargs=1, help='Path to source folder')
+    parser.add_argument('dest', type=str, nargs=1, help='Path to dest folder')
 
     args = parser.parse_args()
-    path = args.path[0]
+    source = args.source[0]
+    dest = args.dest[0]
 
-    detect_magic()
-
-    if not os.path.isdir(path):
-        print('Path %s is not a directory' % output)
+    if not os.path.isdir(source):
+        print('Path %s is not a directory' % source)
         sys.exit(-1)
 
-    for root, dirs, files in os.walk(path, topdown=False):
-        hasfiles = False
+    if not os.path.isdir(dest):
+        print('Path %s is not a directory' % dest)
+        sys.exit(-1)
 
-        # Delete all non-executable files in this dir
+    for root, dirs, files in os.walk(source, topdown=False):
         for fname in files:
             fpath = os.path.join(root, fname)
-            if os.path.isfile(fpath):
-                m = get_magic(fpath)
-                if 'executable' in m:
-                    hasfiles = True
-                    continue
-            os.remove(fpath)
+            if not os.path.isfile(fpath):
+                continue
 
-        if not hasfiles and root != path:
-            # Check if we still have subdirs that we
-            # haven't deleted before
-            for dname in dirs:
-                if os.path.exists(os.path.join(root, dname)):
-                    break
-            else:
-                os.rmdir(root)
+            if not is_executable(fpath):
+                continue
+
+            source_dir_suffix = root[len(source)+1:]
+            dest_dir = os.path.join(dest, source_dir_suffix)
+
+            if not os.path.exists(dest_dir):
+                os.makedirs(dest_dir)
+
+            shutil.copy(fpath, dest_dir)
+
 
 if __name__ == '__main__':
-    main()
+    copy_executables()
