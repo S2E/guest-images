@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "images": {
     "debian-9.2.1-i386": {
       "name": "Debian i386 image",
