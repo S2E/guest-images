@@ -24,46 +24,49 @@ SOFTWARE.
 
 from __future__ import print_function
 
-import optparse
+import argparse
 import json
 import sys
 
 
 def main():
-    usage = 'usage: %prog [options] [var1=value1 [var2=value2 ...]]'
-    parser = optparse.OptionParser(usage=usage)
-    parser.add_option('-i', dest='template', metavar='FILE',
-                      help='Input template')
-    parser.add_option('-o', dest='output', metavar='FILE',
-                      help='Output file')
-    parser.add_option('-n', dest='image_name',
-                      help='Image name')
+    usage = '%(prog)s [options] [var1=value1 [var2=value2 ...]]'
+    parser = argparse.ArgumentParser(usage=usage)
 
-    (options, args) = parser.parse_args()
+    parser.add_argument('--input-template', '-i', dest='template',
+                        metavar='FILE', help='Input template path')
+    parser.add_argument('--output', '-o', dest='output', metavar='FILE',
+                        help='Output file path')
+    parser.add_argument('--image-name', '-n', dest='image_name', required=True,
+                        help='Image name')
+    parser.add_argument('vars', nargs='*', help='Additional key=value pairs')
+
+    args = parser.parse_args()
 
     context = {}
-    for arg in args:
-        if '=' not in arg:
-            parser.error('cannot parse var %s' % arg)
-        k, v = arg.split('=', 1)
+    for var in args.vars:
+        if '=' not in var:
+            parser.error('cannot parse var %s' % var)
+        k, v = var.split('=', 1)
         context[k] = v
 
     # Get image descriptor template
-    if options.template:
-        with open(options.template, 'r') as f:
+    if args.template:
+        with open(args.template, 'r') as f:
             template = json.loads(f.read())
     else:
         template = json.loads(sys.stdin.read())
 
     images = template['images']
-
-    if options.image_name not in images.keys():
-        print('%s does not exist in %s' % (options.image_name, options.template))
+    if args.image_name not in images.keys():
+        print('%s does not exist in %s' % (args.image_name, args.template))
         sys.exit(-1)
 
-    image = images[options.image_name]
+    image = images[args.image_name]
 
     descriptor = {
+        'name': image['name'],
+        'image_group': image['image_group'],
         'version': template['version'],
         'os': image['os'],
         'memory': context['memory'],
@@ -74,8 +77,8 @@ def main():
 
     output = json.dumps(descriptor, indent=4, sort_keys=True)
 
-    if options.output:
-        with open(options.output, 'w') as f:
+    if args.output:
+        with open(args.output, 'w') as f:
             f.write(output)
     else:
         sys.stdout.write(output)
