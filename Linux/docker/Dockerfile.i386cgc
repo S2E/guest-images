@@ -20,7 +20,11 @@
 
 # This is an i386 image of debian
 # Use it to compile the cgc kernel, which needs an older debian image
-# docker build -t linux-build-i386 -f Dockerfile.i386 .
+# docker build -t linux-build-i386cgc -f Dockerfile.i386cgc .
+#
+# You can run commands in the docker image using the host's user id like this:
+# docker run -ti --rm -w $(pwd) -v $HOME:$HOME linux-build-i386cgc /run_as.sh $(id -u) $(id -g) /bin/bash
+# Changes in $HOME will be persisted.
 
 FROM 32bit/debian
 
@@ -31,9 +35,14 @@ RUN                                                                             
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
     sudo apt-file texinfo flex bison patch python unzip git bc                  \
     bzip2 wget less nano g++ gcc file libc6-dev make                            \
-    fakeroot build-essential devscripts libncurses5-dev &&                      \
+    fakeroot build-essential devscripts libncurses5-dev ca-certificates &&      \
     apt-get clean && \
     apt-file update
 
+COPY install-cgc.sh /root
+RUN cd /root && /root/install-cgc.sh
+RUN touch /etc/decree_version
+
+COPY run_as.sh /
 
 ENTRYPOINT ["/bin/bash"]
