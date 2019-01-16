@@ -22,7 +22,7 @@
 # Download 3rd party tools to install in the guest
 
 # These apps are hosted in github
-WIN_APPS_REPO = 7z.exe 7z.dll devcon.exe ImDiskTk.exe ImDiskTk-x64.exe libeay32.dll msys.7z ssleay32.dll timeout.exe
+WIN_APPS_REPO = 7z.exe 7z.dll devcon.exe ImDiskTk.exe ImDiskTk-x64.exe libeay32.dll msys.7z ssleay32.dll timeout.exe resolution.exe
 
 # These apps are hosted on 3rd party servers
 WIN_APPS = \

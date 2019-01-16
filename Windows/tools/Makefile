@@ -23,8 +23,11 @@ CC = i686-w64-mingw32-gcc
 timeout.exe: timeout.c
 	$(CC) -m32 -O4 -o $@ $<
 
-all: timeout.exe
+resolution.exe: resolution.c
+	$(CC) -m32 -O4 -o $@ $<
+
+all: timeout.exe resolution.exe
 clean:
-	rm -rf timeout.exe
+	rm -rf timeout.exe resolution.exe
 
 .DEFAULT_GOAL := all
