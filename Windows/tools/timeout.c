@@ -33,7 +33,7 @@ int getch_noblock() {
 // Implements timeout.exe for Windows versions where this tool is missing
 int main(int argc, char **argv) {
     if (argc != 2) {
-        printf("Usage: %0 timeout\n", argv[0]);
+        printf("Usage: %s timeout\n", argv[0]);
         return -1;
     }
 
