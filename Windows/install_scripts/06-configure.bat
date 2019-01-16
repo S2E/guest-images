@@ -1,5 +1,10 @@
 title Configuring system. Please wait...
 
+echo ==^> Setting resolution
+
+copy %~dp0\inst\resolution.exe %windir%\system32
+resolution.exe 1024 768 24 0
+
 
 echo ==^> Installing updates
 :: This must be done before we disable windows update
