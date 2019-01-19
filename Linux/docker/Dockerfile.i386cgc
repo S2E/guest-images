@@ -33,7 +33,7 @@ MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.io>
 RUN                                                                             \
     apt-get update &&                                                           \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
-    sudo apt-file texinfo flex bison patch python unzip git bc                  \
+    sudo apt-file texinfo flex bison patch python unzip git bc parallel         \
     bzip2 wget less nano g++ gcc file libc6-dev make                            \
     fakeroot build-essential devscripts libncurses5-dev ca-certificates &&      \
     apt-get clean && \
