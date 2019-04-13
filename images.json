@@ -18,7 +18,8 @@
       "hw": {
         "default_disk_size": "4G",
         "default_snapshot_size": "256M",
-        "nic": "e1000"
+        "nic": "e1000",
+        "cpu": "pentium,-mmx"
       }
     },
 
@@ -40,7 +41,8 @@
       "hw": {
         "default_disk_size": "4G",
         "default_snapshot_size": "256M",
-        "nic": "e1000"
+        "nic": "e1000",
+        "cpu": "pentium,-mmx"
       }
     },
 
@@ -86,7 +88,8 @@
       "hw": {
         "default_disk_size": "8G",
         "default_snapshot_size": "256M",
-        "nic": "pcnet"
+        "nic": "pcnet",
+        "cpu": "pentium,-mmx"
       }
     },
 
