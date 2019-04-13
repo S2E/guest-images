@@ -24,10 +24,10 @@ devcon enable *"PCI\VEN_1022&DEV_2000"
 :: services.exe eats up 100% cpu for several minutes.
 devcon disable *"PCI\VEN_1022&DEV_2000"
 
-:: Wait for services.exe to calm down
-timeout 600
 :notxp
 
+:: Wait for various services to calm down
+timeout 600
 
 :: ###########################################################################
 :: Save the ready snapshot
