@@ -58,9 +58,11 @@ define TEMPLATE_BASE_LINUX_IMAGE
 	$(QEMU_IMG) create -f raw $$@ $(call DISK_SIZE,$1)
 
 	$(call INFO_MSG,[$$@] Running initial setup...)
+	# Note: install the image using default KVM CPU because the stock
+	# kernel may not support the required CPU flags (e.g., pentium,-nommx).
+	# The custom S2E kernel will work though.
 	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
-	    $(call QEMU_CPU,$1) \
 	    -cdrom $(TMPDIR)/$1/install_files.iso \
 	    -serial file:$(TMPDIR)/$1/serial.txt
 endef
@@ -87,7 +89,6 @@ define BUILD_S2E_IMAGE
 	$(call INFO_MSG,[$$@] Booting disk image...)
 	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
-	    $(call QEMU_CPU,$2$1) \
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
 	LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
