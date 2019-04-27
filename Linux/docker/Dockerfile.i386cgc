@@ -26,7 +26,7 @@
 # docker run -ti --rm -w $(pwd) -v $HOME:$HOME linux-build-i386cgc /run_as.sh $(id -u) $(id -g) /bin/bash
 # Changes in $HOME will be persisted.
 
-FROM 32bit/debian
+FROM i386/debian:jessie
 
 MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.io>
 
