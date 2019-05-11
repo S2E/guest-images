@@ -133,6 +133,7 @@ install_cgc_packages() {
     cd "$CUR_DIR"
 }
 
+sudo apt-get update
 install_i386
 install_systemtap
 
