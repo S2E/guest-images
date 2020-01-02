@@ -30,7 +30,10 @@ install_i386() {
     if uname -a | grep -q x86_64; then
         sudo dpkg --add-architecture i386
         sudo apt-get update
-        sudo apt-get -y install gcc-multilib g++-multilib libc6-dev-i386 lib32stdc++-6-dev libstdc++6:i386
+
+        # libelf is required for s2e.so
+        sudo apt-get -y install gcc-multilib g++-multilib libc6-dev-i386 lib32stdc++-6-dev libstdc++6:i386 \
+            libelf1:i386
     fi
 }
 
