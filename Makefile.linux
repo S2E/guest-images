@@ -169,7 +169,7 @@ define TEMPLATE_LINUX_KERNEL
 	# Remove old builds
 	rm -rf $(TMPDIR)/$1-$2/*.deb
 
-	$(SRC)/Linux/docker/run-docker.sh linux-build-$2$(call CGCARCH,$1) \
+	$(SRC)/Linux/docker/run-docker.sh $(SRC) $(S2E_LINUX_KERNELS_ROOT) linux-build-$2$(call CGCARCH,$1) \
 	    $(TMPDIR)/$1-$2/$1 \
 	    $(SRC)/Linux/docker/make-kernel.sh \
 	       $(S2E_LINUX_KERNELS_ROOT)/include $(shell id -u) $(shell id -g)

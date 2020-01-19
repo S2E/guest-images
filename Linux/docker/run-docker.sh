@@ -21,9 +21,15 @@
 # SOFTWARE.
 
 # Runs command inside docker image
-# Usage: ./run-docker.sh docker-image working_dir [COMMAND]
+# Usage: ./run-docker.sh /path/to/guest-images/src /path/to/s2e-linux-kernel docker-image working_dir [COMMAND]
 # To build a 32-bit linux package:
-#   ./run-docker.sh linux-build-32 ../decree-cgc-cfe ./make-kernel.sh $(pwd)/../include
+#   ./run-docker.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-32 ../decree-cgc-cfe ./make-kernel.sh $(pwd)/../include
+
+SRC_DIR=$1
+shift
+
+S2E_LINUX_KERNEL=$1
+shift
 
 DOCKER_IMAGE=$1
 shift
@@ -36,7 +42,9 @@ shift
 
 echo "Working dir: $WORKING_DIR"
 docker run --rm -i \
-  -v "$HOME:$HOME" -v "$(pwd):$(pwd)" -v "$WORKING_DIR:$WORKING_DIR" \
+  -v "$(pwd):$(pwd)" \
+  -v "$WORKING_DIR:$WORKING_DIR" -v "$SRC_DIR:$SRC_DIR" \
+  -v "$S2E_LINUX_KERNEL:$S2E_LINUX_KERNEL" \
   -w "$WORKING_DIR" \
   $DOCKER_IMAGE:latest \
   $COMMAND $*
