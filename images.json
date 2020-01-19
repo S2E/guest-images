@@ -6,7 +6,7 @@
       "image_group": "linux",
       "url": "https://drive.google.com/open?id=1RltZ99RXk4dnP8XHAldVyCgUcliDTplY",
       "iso": {
-        "url": "https://cdimage.debian.org/cdimage/archive/9.2.1/i386/jigdo-cd/debian-9.2.1-i386-netinst.jigdo"
+        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/i386/iso-cd/debian-9.2.1-i386-netinst.iso"
       },
       "os": {
         "name": "debian",
@@ -28,7 +28,7 @@
       "image_group": "linux",
       "url": "https://drive.google.com/open?id=1vexW3emZ5-jQ2hohelCfM3iAdFmcFqbq",
       "iso": {
-        "url": "https://cdimage.debian.org/cdimage/archive/9.2.1/i386/jigdo-cd/debian-9.2.1-i386-netinst.jigdo"
+        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/i386/iso-cd/debian-9.2.1-i386-netinst.iso"
       },
       "os": {
         "name": "cgc_debian",
@@ -50,7 +50,7 @@
       "image_group": "linux",
       "url": "https://drive.google.com/open?id=1fybAk4Qb-0Ig8W3immpwBLc-SZoN7UUh",
       "iso": {
-        "url": "https://cdimage.debian.org/cdimage/archive/9.2.1/amd64/jigdo-cd/debian-9.2.1-amd64-netinst.jigdo"
+        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/amd64/iso-cd/debian-9.2.1-amd64-netinst.iso"
       },
       "os": {
         "name": "debian",
