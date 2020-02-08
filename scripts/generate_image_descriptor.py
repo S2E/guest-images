@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Copyright (c) 2017, Cyberhaven
@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from __future__ import print_function
+
 
 import argparse
 import json
@@ -58,7 +58,7 @@ def main():
         template = json.loads(sys.stdin.read())
 
     images = template['images']
-    if args.image_name not in images.keys():
+    if args.image_name not in list(images.keys()):
         print('%s does not exist in %s' % (args.image_name, args.template))
         sys.exit(-1)
 

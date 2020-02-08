@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 Copyright (c) 2017, Cyberhaven
@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from __future__ import print_function
+
 
 import argparse
 import os
@@ -51,8 +51,6 @@ def main():
         sys.exit(-1)
 
     for root, dirs, files in os.walk(path, topdown=False):
-        hasfiles = False
-
         # Delete all non-executable files in this dir
         for fname in files:
             rename(root, fname)
