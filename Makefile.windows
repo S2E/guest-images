@@ -315,7 +315,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call OK_MSG,[$1] Guestfs extraction completed.)
 
 
-  $(OUTDIR)/$1/image.raw.s2e.ready: $(OUTDIR)/$1/image.raw.s2e $(OUTDIR)/$1/guestfs
+  $(OUTDIR)/$1/image.raw.s2e.ready: $(OUTDIR)/$1/image.raw.s2e
 	rm -rf $(TMPDIR)/$1/ready_screenshots && mkdir -p $(TMPDIR)/$1/ready_screenshots
 	@# Unmount any previous folders (e.g., if interrupted)
 	-fusermount -u $(OUTDIR)/$1/imagefs
@@ -333,7 +333,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 
 	$(call OK_MSG,[$1] Installation completed.)
 
-  $(OUTDIR)/$1/image.json: $(OUTDIR)/$1/image.raw.s2e.ready $(SRC)/images.json $(SRC)/scripts/generate_image_descriptor.py
+  $(OUTDIR)/$1/image.json: $(OUTDIR)/$1/guestfs $(OUTDIR)/$1/image.raw.s2e.ready $(SRC)/images.json $(SRC)/scripts/generate_image_descriptor.py
 	$(call INFO_MSG,[$$@] Creating image descriptor...)
 	$(SRC)/scripts/generate_image_descriptor.py -i $(SRC)/images.json -o $$@ -n "$1" \
 		snapshot="ready" qemu_build="$(call ARCH,$1)" \
