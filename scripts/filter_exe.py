@@ -23,7 +23,6 @@ SOFTWARE.
 """
 
 
-
 import argparse
 import os
 import re
@@ -34,9 +33,9 @@ import sys
 def is_executable(filename):
     with open(filename, 'rb') as fp:
         header = fp.read(4)
-        if header == '.ELF':
+        if header == b'.ELF':
             return True
-        elif header[0:2] == 'MZ':
+        elif header[0:2] == b'MZ':
             return True
     return False
 
