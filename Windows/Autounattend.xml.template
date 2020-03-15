@@ -35,8 +35,13 @@
                 <OSImage>
                     <InstallFrom>
                         <MetaData wcm:action="add">
+                            {% if os.image_name %}
+                            <Key>/IMAGE/NAME</Key>
+                            <Value>Windows 10 Pro</Value>
+                            {% else %}
                             <Key>/IMAGE/INDEX</Key>
                             <Value>1</Value>
+                            {% endif %}
                         </MetaData>
                     </InstallFrom>
                     <InstallTo>
@@ -47,6 +52,12 @@
                 </OSImage>
             </ImageInstall>
             <UserData>
+                {% if os.product_key %}
+                <ProductKey>
+                    <WillShowUI>Never</WillShowUI>
+                    <Key>{{ os.product_key }}</Key>
+                </ProductKey>
+                {% endif %}
                 <AcceptEula>true</AcceptEula>
             </UserData>
         </component>
