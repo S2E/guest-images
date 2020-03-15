@@ -224,7 +224,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call RUN_INITIAL_SETUP,$1,$$@,$(TMPDIR)/$1/initial_install_screenshots2)
 
   # Create CD with extra install software
-  $(TMPDIR)/$1/post_install_files.iso: $(call POST_INSTALL_DEPS,$1) $(WIN_APPS_PATH) | $(TMPDIR)/$1
+  $(TMPDIR)/$1/post_install_files.iso: $(call POST_INSTALL_DEPS,$1) $(WIN_APPS_PATH) $(shell find $(SRC)/Windows/install_scripts) | $(TMPDIR)/$1
 	mkdir -p $(call POST_INSTALL_FILES,$1)
 	rsync -av $(SRC)/Windows/install_scripts $(call POST_INSTALL_FILES,$1)/
 	rsync -av $(WIN_APPS_PATH) $(call POST_INSTALL_FILES,$1)/install_scripts/inst/
