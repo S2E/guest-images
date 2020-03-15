@@ -184,6 +184,32 @@
         "nic": "e1000",
         "cpu": "core2duo"
       }
+    },
+
+    "windows-10pro1909-x86_64": {
+      "name": "Windows 10 Pro 1909 x86_64",
+      "image_group": "windows",
+      "url": "",
+      "iso": {
+        "name": "Win10_1909_English_x64.iso",
+        "sha1": "9dc9cd4d956c51fdaa9ecd0f86fdf0a1e35526d9"
+      },
+      "os": {
+        "product_key": "VK7JG-NPHTM-C97JM-9MPGT-3V66T",
+        "family": "windows",
+        "name": "windows",
+        "image_name": "Windows 10 Pro",
+        "version": "10pro1909",
+        "arch": "x86_64",
+        "build": "1909",
+        "binary_formats": ["pe"]
+      },
+      "hw": {
+        "default_disk_size": "20G",
+        "default_snapshot_size": "2G",
+        "nic": "e1000",
+        "cpu": "core2duo"
+      }
     }
   }
 }

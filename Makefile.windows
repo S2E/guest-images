@@ -345,7 +345,14 @@ endef
 ###############################################################################
 # The entry points of the makefile start here
 
-WINDOWS_IMAGES = windows-10ent1703-x86_64 windows-8.1ent-x86_64 windows-7sp1ent-x86_64 windows-7sp1pro-i386 windows-xpsp3pro-i386
+WINDOWS_IMAGES = \
+    windows-xpsp3pro-i386 \
+    windows-8.1ent-x86_64 \
+    windows-7sp1ent-x86_64 \
+    windows-7sp1pro-i386 \
+    windows-10ent1703-x86_64 \
+    windows-10pro1909-x86_64
+
 ISO_PATH = $(ISODIR)/$(call GET_SETTING,$(1),iso.name)
 WINDOWS_TARGETS = $(addsuffix /image.json,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
 WINDOWS_ARCHIVES=$(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
