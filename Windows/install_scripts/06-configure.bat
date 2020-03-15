@@ -25,7 +25,19 @@ if exist "%SystemDrive%\Program Files (x86)" (
 
 :not7
 
-echo Done intalling updates
+:: Apply updates for Windows 10
+ver | find "10.0" > nul
+if not %ERRORLEVEL% == 0 goto not10
+
+PowerShell.exe -ExecutionPolicy Unrestricted -File Debloat-Windows-10\scripts\remove-default-apps.ps1
+PowerShell.exe -ExecutionPolicy Unrestricted -File Debloat-Windows-10\scripts\experimental_unfuckery.ps1
+PowerShell.exe -ExecutionPolicy Unrestricted -File Debloat-Windows-10\scripts\disable-services.ps1
+PowerShell.exe -ExecutionPolicy Unrestricted -File Debloat-Windows-10\scripts\disable-windows-defender.ps1
+PowerShell.exe -ExecutionPolicy Unrestricted -File Debloat-Windows-10\scripts\optimize-user-interface.ps1
+
+:not10
+
+echo Done installing updates
 
 echo ==^> Increasing service startup timeout
 :: This is required when testing C# services that take a lot of time to start in S2E
