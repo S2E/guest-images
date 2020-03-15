@@ -246,7 +246,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	    $(call QEMU_CPU,$1) \
 	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
 	    $(call DEFAULT_CD_DRIVES,$(1)) \
-	    -serial file:$(OUTDIR)/$1/post_install_serial1.txt \
+	    -serial file:$(TMPDIR)/$1/post_install_serial1.txt \
 	    -periodic-screenshot $(TMPDIR)/$1/post_install_screenshots
 
 
