@@ -86,7 +86,8 @@
       "hw": {
         "default_disk_size": "8G",
         "default_snapshot_size": "256M",
-        "nic": "pcnet"
+        "nic": "pcnet",
+        "cpu": "core2duo"
       }
     },
 
@@ -110,7 +111,8 @@
       "hw": {
         "default_disk_size": "20G",
         "default_snapshot_size": "2G",
-        "nic": "e1000"
+        "nic": "e1000",
+        "cpu": "core2duo"
       }
     },
 
@@ -134,7 +136,8 @@
       "hw": {
         "default_disk_size": "20G",
         "default_snapshot_size": "2G",
-        "nic": "e1000"
+        "nic": "e1000",
+        "cpu": "core2duo"
       }
     },
 
@@ -158,7 +161,8 @@
       "hw": {
         "default_disk_size": "20G",
         "default_snapshot_size": "2G",
-        "nic": "e1000"
+        "nic": "e1000",
+        "cpu": "core2duo"
       }
     },
 
