@@ -92,7 +92,7 @@ windows_clean:
 	rm -rf $(WINDOWS_APPS_DIR)
 
 ###############################################################################
-# This macro instantitates rules to prepare the Windows XP install ISO
+# This macro instantiates rules to prepare the Windows XP install ISO
 #$1: image name
 #$2: iso name
 define PREPARE_WINXP_ISO
@@ -129,7 +129,7 @@ define PREPARE_WINXP_ISO
 endef
 
 ###############################################################################
-# This macro instantitates rules to prepare Windows installation files (>XP)
+# This macro instantiates rules to prepare Windows installation files (>XP)
 #$1: image name
 #$2: iso name
 define PREPARE_WIN_ISO
@@ -224,7 +224,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call RUN_INITIAL_SETUP,$1,$$@,$(TMPDIR)/$1/initial_install_screenshots2)
 
   # Create CD with extra install software
-  $(TMPDIR)/$1/post_install_files.iso: $(call POST_INSTALL_DEPS,$1) $(WIN_APPS_PATH) | $(TMPDIR)/$1
+  $(TMPDIR)/$1/post_install_files.iso: $(call POST_INSTALL_DEPS,$1) $(WIN_APPS_PATH) $(shell find $(SRC)/Windows/install_scripts) | $(TMPDIR)/$1
 	mkdir -p $(call POST_INSTALL_FILES,$1)
 	rsync -av $(SRC)/Windows/install_scripts $(call POST_INSTALL_FILES,$1)/
 	rsync -av $(WIN_APPS_PATH) $(call POST_INSTALL_FILES,$1)/install_scripts/inst/
@@ -246,7 +246,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	    $(call QEMU_CPU,$1) \
 	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
 	    $(call DEFAULT_CD_DRIVES,$(1)) \
-	    -serial file:$(OUTDIR)/$1/post_install_serial1.txt \
+	    -serial file:$(TMPDIR)/$1/post_install_serial1.txt \
 	    -periodic-screenshot $(TMPDIR)/$1/post_install_screenshots
 
 
@@ -345,7 +345,14 @@ endef
 ###############################################################################
 # The entry points of the makefile start here
 
-WINDOWS_IMAGES = windows-10ent1703-x86_64 windows-8.1ent-x86_64 windows-7sp1ent-x86_64 windows-7sp1pro-i386 windows-xpsp3pro-i386
+WINDOWS_IMAGES = \
+    windows-xpsp3pro-i386 \
+    windows-8.1ent-x86_64 \
+    windows-7sp1ent-x86_64 \
+    windows-7sp1pro-i386 \
+    windows-10ent1703-x86_64 \
+    windows-10pro1909-x86_64
+
 ISO_PATH = $(ISODIR)/$(call GET_SETTING,$(1),iso.name)
 WINDOWS_TARGETS = $(addsuffix /image.json,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
 WINDOWS_ARCHIVES=$(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(WINDOWS_IMAGES)))
