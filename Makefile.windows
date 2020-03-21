@@ -92,7 +92,7 @@ windows_clean:
 	rm -rf $(WINDOWS_APPS_DIR)
 
 ###############################################################################
-# This macro instantitates rules to prepare the Windows XP install ISO
+# This macro instantiates rules to prepare the Windows XP install ISO
 #$1: image name
 #$2: iso name
 define PREPARE_WINXP_ISO
@@ -129,7 +129,7 @@ define PREPARE_WINXP_ISO
 endef
 
 ###############################################################################
-# This macro instantitates rules to prepare Windows installation files (>XP)
+# This macro instantiates rules to prepare Windows installation files (>XP)
 #$1: image name
 #$2: iso name
 define PREPARE_WIN_ISO
