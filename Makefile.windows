@@ -251,7 +251,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 
 
 	@# *** Post-install configuration
-	@# This must be done in the guest because the registry keys are protected
+	@# This must be done here because the registry keys are protected in the guest
 	$(call INFO_MSG,[$1] Disabling Windows Defender...)
 	if [ -z "$(findstring xp,$(call OS_VERSION,$1))" ]; then \
 	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
@@ -319,6 +319,12 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	rm -rf $(TMPDIR)/$1/ready_screenshots && mkdir -p $(TMPDIR)/$1/ready_screenshots
 	@# Unmount any previous folders (e.g., if interrupted)
 	-fusermount -u $(OUTDIR)/$1/imagefs
+
+	@# This must be done here because the registry keys are protected in the guest
+	$(call INFO_MSG,[$1] Disabling Windows Defender (again)...)
+	if [ -z "$(findstring xp,$(call OS_VERSION,$1))" ]; then \
+	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
+	fi
 
 	@# *** Create ready snapshot
 	$(call INFO_MSG,[$1] Creating ready snapshot...)
