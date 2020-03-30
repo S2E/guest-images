@@ -118,7 +118,7 @@
                 <SynchronousCommand wcm:action="add">
                     <Order>1</Order>
                     <Description>Run all prepare scripts</Description>
-                    <CommandLine>cmd /C e:\install_scripts\00-run-all-scripts.cmd</CommandLine>
+                    <CommandLine>cmd /C e:\launch.bat</CommandLine>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
