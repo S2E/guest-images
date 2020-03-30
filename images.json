@@ -109,7 +109,7 @@
        "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -135,7 +135,7 @@
        "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -160,7 +160,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -184,7 +184,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -210,7 +210,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
