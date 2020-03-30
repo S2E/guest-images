@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <updatelist
         product="Windows 7"
         servicepack="Service Pack 1"
@@ -10,10 +10,11 @@
     <!-- Windows 7 SP1 Update List x64 - by www.raymond.cc -->
 
     <categories>
-        <category id="1">Convenience Rollup Update and Prerequisites</category>
+        <category id="1">Convenience Rollup Update and Prerequisites Part 1</category>
+        <category id="2">Convenience Rollup Update and Prerequisites Part 2</category>
         <category id="5">Security Updates</category>
+        <category id="6">Security Updates .net 3.5</category>
         <category id="10">Optional Updates</category>
-        -->
         <category id="15">Internet Explorer 11</category>
         <category id="20">Remote Desktop Protocol (RDP) Updates</category>
         <category id="25">Windows 10 and Telemetry Updates</category>
@@ -23,6 +24,22 @@
     <updates>
 
         <!-- Convenience Rollup Update and Prerequisites -->
+        <update id="KB2533552" category="1" publishdate="2011-05-10" article="http://support.microsoft.com/kb/2533552">
+            <title>KB2533552 - Update for Windows 7 SP1 x64</title>
+            <description></description>
+            <filename>Windows6.1-KB2533552-x64.msu</filename>
+            <url>http://download.microsoft.com/download/B/6/F/B6F95B10-8B74-42F2-B57A-2C559D43BC28/Windows6.1-KB2533552-x64.msu</url>
+        </update>
+
+        <update id="KB3020369" category="1" publishdate="2015-04-01"
+                article="https://support.microsoft.com/en-us/help/3020369">
+            <title>KB3020369 - April 2015 servicing stack update for Windows 7 and Windows Server 2008 R2</title>
+            <description></description>
+            <filename>Windows6.1-KB3020369-x64.msu</filename>
+            <url>
+                https://download.microsoft.com/download/5/D/0/5D0821EB-A92D-4CA2-9020-EC41D56B074F/Windows6.1-KB3020369-x64.msu
+            </url>
+        </update>
 
         <update id="KB3125574" category="1" publishdate="2016-05-16" article="http://support.microsoft.com/kb/3125574">
             <title>KB3125574 - Convenience rollup update for Windows 7 SP1 x64</title>
@@ -33,14 +50,6 @@
             </url>
         </update>
 
-        <update id="KB2533552" category="1" publishdate="2011-05-10" article="http://support.microsoft.com/kb/2533552">
-            <title>KB2533552 - Update for Windows 7 SP1 x64</title>
-            <description></description>
-            <filename>Windows6.1-KB2533552-x64.msu</filename>
-            <url>
-                http://download.microsoft.com/download/B/6/F/B6F95B10-8B74-42F2-B57A-2C559D43BC28/Windows6.1-KB2533552-x64.msu
-            </url>
-        </update>
         <!--
         <update id="KB3177467" category="1" publishdate="2018-10-08" article="http://support.microsoft.com/kb/3177467">
            <title>KB3177467 - October 2018 servicing stack update for Windows 7 SP1 x64</title>
@@ -49,6 +58,7 @@
            <url>http://download.windowsupdate.com/d/msdownload/update/software/crup/2018/09/windows6.1-kb3177467-v2-x64_b9df2405e7e034e3ffda160fff99a36ab96ba187.msu</url>
         </update>
         -->
+
         <update id="KB4490628" category="1" publishdate="2019-03-11"
                 article="https://support.microsoft.com/en-us/help/4490628">
             <title>KB4490628 - March 2019 servicing stack update for Windows 7 SP1 x64</title>
@@ -69,7 +79,7 @@
             </url>
         </update>
 
-        <update id="KB4474419" category="1" publishdate="2019-09-09"
+        <update id="KB4474419" category="2" publishdate="2019-09-09"
                 article="https://support.microsoft.com/en-us/help/4474419">
             <title>KB4474419 - SHA-2 code signing support update for Windows 7 SP1 x64</title>
             <description></description>
@@ -191,15 +201,6 @@
             <filename>Windows6.1-KB2912390-x64.msu</filename>
             <url>
                 http://download.microsoft.com/download/A/E/D/AEDDD34E-EB10-4D54-9B68-250667EF7A8B/Windows6.1-KB2912390-x64.msu
-            </url>
-        </update>
-
-        <update id="KB3020393" category="10" publishdate="2015-01-13" article="http://support.microsoft.com/kb/3020393">
-            <title>KB3020393 - Update for Windows 7 SP1 x64</title>
-            <description></description>
-            <filename>Windows6.1-KB3020393-x64.msu</filename>
-            <url>
-                http://download.windowsupdate.com/c/msdownload/update/software/secu/2014/12/windows6.1-kb3020393-x64_2d98b41288b8791dd2656fcef96b0b6055aa2aa0.msu
             </url>
         </update>
 
@@ -412,6 +413,16 @@
         </update>
 
         <!-- Optional Updates -->
+
+        <update id="KB3020393" category="10" publishdate="2015-01-13" article="http://support.microsoft.com/kb/3020393">
+            <title>KB3020393 - Update for Windows 7 SP1 x64</title>
+            <description></description>
+            <filename>Windows6.1-KB3020393-x64.msu</filename>
+            <url>
+                http://download.windowsupdate.com/c/msdownload/update/software/secu/2014/12/windows6.1-kb3020393-x64_2d98b41288b8791dd2656fcef96b0b6055aa2aa0.msu
+            </url>
+        </update>
+
 
         <update id="KB2547666" category="10" publishdate="2011-06-27" article="http://support.microsoft.com/kb/2547666">
             <title>KB2547666 - Update for Windows 7 SP1 x64</title>
@@ -707,7 +718,7 @@
 
         <!-- .NET Framework 3.5 Updates -->
 
-        <update id="KB2894844" category="5" publishdate="2014-09-10" article="http://support.microsoft.com/kb/2894844">
+        <update id="KB2894844" category="6" publishdate="2014-09-10" article="http://support.microsoft.com/kb/2894844">
             <title>KB2894844 - Update for Microsoft .NET Framework 3.5.1 for Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-KB2894844-x64.msu</filename>
@@ -716,7 +727,7 @@
             </url>
         </update>
 
-        <update id="KB2446710" category="5" publishdate="2011-12-04" article="http://support.microsoft.com/kb/2446710">
+        <update id="KB2446710" category="6" publishdate="2011-12-04" article="http://support.microsoft.com/kb/2446710">
             <title>KB2446710 - Security update for .NET Framework 3.5.1 on Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-KB2446710-x64.msu</filename>
@@ -725,7 +736,7 @@
             </url>
         </update>
 
-        <update id="KB2478662" category="5" publishdate="2011-06-14" article="http://support.microsoft.com/kb/2478662">
+        <update id="KB2478662" category="6" publishdate="2011-06-14" article="http://support.microsoft.com/kb/2478662">
             <title>KB2478662 - Security update for .NET Framework 3.5.1 on Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-KB2478662-x64.msu</filename>
@@ -734,7 +745,7 @@
             </url>
         </update>
 
-        <update id="KB4480063" category="5" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4480063">
+        <update id="KB4480063" category="6" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4480063">
             <title>KB4480063 - January 2019 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4480063-x64.msu</filename>
@@ -743,7 +754,7 @@
             </url>
         </update>
 
-        <update id="KB4507004" category="5" publishdate="2019-07-08" article="http://support.microsoft.com/kb/4507004">
+        <update id="KB4507004" category="6" publishdate="2019-07-08" article="http://support.microsoft.com/kb/4507004">
             <title>KB4507004 - July 2019 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4507004-x64.msu</filename>
@@ -752,7 +763,7 @@
             </url>
         </update>
 
-        <update id="KB4049016" category="5" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4049016">
+        <update id="KB4049016" category="6" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4049016">
             <title>KB4049016 - November 2017 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4049016-x64.msu</filename>
@@ -761,7 +772,7 @@
             </url>
         </update>
 
-        <update id="KB4019990" category="5" publishdate="2017-09-12" article="http://support.microsoft.com/kb/4019990">
+        <update id="KB4019990" category="6" publishdate="2017-09-12" article="http://support.microsoft.com/kb/4019990">
             <title>KB4019990 - Update for Microsoft .NET Framework 3.5.1 for Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-kb4019990-x64.msu</filename>
@@ -770,7 +781,7 @@
             </url>
         </update>
 
-        <update id="KB4095874" category="5" publishdate="2018-05-17" article="http://support.microsoft.com/kb/4095874">
+        <update id="KB4095874" category="6" publishdate="2018-05-17" article="http://support.microsoft.com/kb/4095874">
             <title>KB4095874 - Update for Microsoft .NET Framework 3.5.1 for Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-kb4095874-x64.msu</filename>
@@ -779,7 +790,7 @@
             </url>
         </update>
 
-        <update id="KB4532945" category="5" publishdate="2020-01-09" article="http://support.microsoft.com/kb/4532945">
+        <update id="KB4532945" category="6" publishdate="2020-01-09" article="http://support.microsoft.com/kb/4532945">
             <title>KB4532945 - January 2020 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-KB4532945-x64.msu</filename>
@@ -791,6 +802,7 @@
 
         <!-- Optional Software -->
 
+        <!--
         <update id="KB890830" category="30" publishdate="2020-01-14" article="http://support.microsoft.com/kb/890830">
             <title>KB890830 - Malicious Software Removal Tool (January 2020)</title>
             <description></description>
@@ -799,6 +811,7 @@
                 https://download.microsoft.com/download/2/C/5/2C563B99-54D9-4D85-A82B-45D3CD2F53CE/Windows-KB890830-x64-V5.79.exe
             </url>
         </update>
+        -->
 
         <update id="KB4503548" category="30" publishdate="2019-11-09" article="http://support.microsoft.com/kb/4503548">
             <title>KB4503548 - Microsoft .NET Framework 4.8 for Windows 7</title>
@@ -827,6 +840,7 @@
             </url>
         </update>
 
+        <!--
         <update id="KB958559" category="30" publishdate="2011-02-14" article="http://support.microsoft.com/kb/958559">
             <title>KB958559 - Windows Virtual PC</title>
             <description></description>
@@ -835,6 +849,8 @@
                 http://download.microsoft.com/download/0/5/5/0554AE99-785F-45CB-B1F2-0E3ED1E6117D/Windows6.1-KB958559-x64-RefreshPkg.msu
             </url>
         </update>
+        -->
+
         <!--
         <update id="KB3191566" category="30" publishdate="2017-01-19" article="https://msdn.microsoft.com/en-us/powershell/wmf/5.1/release-notes">
             <title>KB3191566 - Windows Management Framework (WMF) 5.1 (Requires .NET 4.6.2+)</title>

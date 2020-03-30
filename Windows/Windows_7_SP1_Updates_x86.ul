@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <updatelist
         product="Windows 7"
         servicepack="Service Pack 1"
@@ -10,10 +10,11 @@
     <!-- Windows 7 SP1 Update List x86 - by www.raymond.cc -->
 
     <categories>
-        <category id="1">Convenience Rollup Update and Prerequisites</category>
+        <category id="1">Convenience Rollup Update and Prerequisites Part 1</category>
+        <category id="2">Convenience Rollup Update and Prerequisites Part 2</category>
         <category id="5">Security Updates</category>
+        <category id="6">Security Updates .net 3.5</category>
         <category id="10">Optional Updates</category>
-        -->
         <category id="15">Internet Explorer 11</category>
         <category id="20">Remote Desktop Protocol (RDP) Updates</category>
         <category id="25">Windows 10 and Telemetry Updates</category>
@@ -21,8 +22,25 @@
     </categories>
 
     <updates>
-
         <!-- Convenience Rollup Update and Prerequisites -->
+        <update id="KB2533552" category="1" publishdate="2011-05-10" article="http://support.microsoft.com/kb/2533552">
+            <title>KB2533552 - Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>Windows6.1-KB2533552-x86.msu</filename>
+            <url>
+                http://download.microsoft.com/download/8/0/C/80CCB26A-2267-40A7-A898-1D2F7C233A6A/Windows6.1-KB2533552-x86.msu
+            </url>
+        </update>
+
+        <update id="KB3020369" category="1" publishdate="2015-04-01"
+                article="https://support.microsoft.com/en-us/help/3020369">
+            <title>KB3020369 - April 2015 servicing stack update for Windows 7 and Windows Server 2008 R2</title>
+            <description></description>
+            <filename>Windows6.1-KB3020369-x86.msu</filename>
+            <url>
+                https://download.microsoft.com/download/C/0/8/C0823F43-BFE9-4147-9B0A-35769CBBE6B0/Windows6.1-KB3020369-x86.msu
+            </url>
+        </update>
 
         <update id="KB3125574" category="1" publishdate="2016-05-16" article="http://support.microsoft.com/kb/3125574">
             <title>KB3125574 - Convenience rollup update for Windows 7 SP1 x86</title>
@@ -30,15 +48,6 @@
             <filename>Windows6.1-KB3125574-v4-x86.msu</filename>
             <url>
                 http://download.windowsupdate.com/d/msdownload/update/software/updt/2016/05/windows6.1-kb3125574-v4-x86_ba1ff5537312561795cc04db0b02fbb0a74b2cbd.msu
-            </url>
-        </update>
-
-        <update id="KB2533552" category="1" publishdate="2011-05-10" article="http://support.microsoft.com/kb/2533552">
-            <title>KB2533552 - Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB2533552-x86.msu</filename>
-            <url>
-                http://download.microsoft.com/download/8/0/C/80CCB26A-2267-40A7-A898-1D2F7C233A6A/Windows6.1-KB2533552-x86.msu
             </url>
         </update>
 
@@ -63,7 +72,7 @@
             </url>
         </update>
 
-        <update id="KB4474419" category="1" publishdate="2019-09-09"
+        <update id="KB4474419" category="2" publishdate="2019-09-09"
                 article="https://support.microsoft.com/en-us/help/4474419">
             <title>KB4474419 - SHA-2 code signing support update for Windows 7 SP1 x86</title>
             <description></description>
@@ -125,33 +134,6 @@
             </url>
         </update>
 
-        <update id="KB2676562" category="5" publishdate="2014-08-12" article="http://support.microsoft.com/kb/2676562">
-            <title>KB2676562 - Security Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB2676562-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/msdownload/update/software/secu/2012/04/windows6.1-kb2676562-x86_16ce9be3400bc75c415b1a90518c150d1927b8df.msu
-            </url>
-        </update>
-
-        <update id="KB2719033" category="10" publishdate="2012-11-13" article="http://support.microsoft.com/kb/2719033">
-            <title>KB2719033 - Security Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB2719033-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/msdownload/update/software/secu/2012/07/windows6.1-kb2719033-x86_d7583551cba5213afe8f35bcf8e19901f118348e.msu
-            </url>
-        </update>
-
-        <update id="KB2716513" category="10" publishdate="2012-11-13" article="http://support.microsoft.com/kb/2716513">
-            <title>KB2716513 - Security Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB2716513-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/msdownload/update/software/secu/2012/07/windows6.1-kb2716513-x86_25905fae996724a3d2528204fdea493caa560b11.msu
-            </url>
-        </update>
-
         <update id="KB2900986" category="5" publishdate="2013-11-13" article="http://support.microsoft.com/kb/2900986">
             <title>KB2900986 - Cumulative Security Update for ActiveX Killbits for Windows 7 SP1 x86</title>
             <description></description>
@@ -171,6 +153,15 @@
             </url>
         </update>
 
+        <update id="KB2676562" category="5" publishdate="2014-08-12" article="http://support.microsoft.com/kb/2676562">
+            <title>KB2676562 - Security Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>Windows6.1-KB2676562-x86.msu</filename>
+            <url>
+                http://download.windowsupdate.com/msdownload/update/software/secu/2012/04/windows6.1-kb2676562-x86_16ce9be3400bc75c415b1a90518c150d1927b8df.msu
+            </url>
+        </update>
+
         <update id="KB2984972" category="5" publishdate="2014-10-14" article="http://support.microsoft.com/kb/2984972">
             <title>KB2984972 - Security Update for Windows 7 SP1 x86</title>
             <description></description>
@@ -186,15 +177,6 @@
             <filename>Windows6.1-KB2912390-x86.msu</filename>
             <url>
                 http://download.microsoft.com/download/A/2/E/A2E67704-D00D-4769-B448-537E3A71D909/Windows6.1-KB2912390-x86.msu
-            </url>
-        </update>
-
-        <update id="KB3020393" category="10" publishdate="2015-01-13" article="http://support.microsoft.com/kb/3020393">
-            <title>KB3020393 - Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB3020393-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/c/msdownload/update/software/secu/2014/12/windows6.1-kb3020393-x86_35d02bdf66b857877a64e797eacfa13f301ac0ef.msu
             </url>
         </update>
 
@@ -351,59 +333,30 @@
             </url>
         </update>
 
-        <!-- RDP -->
-
-        <update id="KB2813347" category="20" publishdate="2013-04-09" article="http://support.microsoft.com/kb/2813347">
-            <title>KB2813347 - Security Update for Windows 7 SP1 x86</title>
+        <update id="KB2719033" category="10" publishdate="2012-11-13" article="http://support.microsoft.com/kb/2719033">
+            <title>KB2719033 - Security Update for Windows 7 SP1 x86</title>
             <description></description>
-            <filename>RDP-Windows6.1-KB2813347-x86.msu</filename>
+            <filename>Windows6.1-KB2719033-x86.msu</filename>
             <url>
-                http://download.microsoft.com/download/3/3/6/33643971-3DAB-4962-BCF4-FF142018E33C/Windows6.1-KB2813347-x86.msu
+                http://download.windowsupdate.com/msdownload/update/software/secu/2012/07/windows6.1-kb2719033-x86_d7583551cba5213afe8f35bcf8e19901f118348e.msu
             </url>
         </update>
 
-        <update id="KB2592687" category="20" publishdate="2013-09-10" article="http://support.microsoft.com/kb/2592687">
-            <title>KB2592687 - Update for Windows 7 SP1 x86</title>
+        <update id="KB2716513" category="10" publishdate="2012-11-13" article="http://support.microsoft.com/kb/2716513">
+            <title>KB2716513 - Security Update for Windows 7 SP1 x86</title>
             <description></description>
-            <filename>RDP-Windows6.1-KB2592687-x86.msu</filename>
+            <filename>Windows6.1-KB2716513-x86.msu</filename>
             <url>
-                http://download.microsoft.com/download/1/E/2/1E2A08C9-B87B-4808-94A6-30BC9D65775E/Windows6.1-KB2592687-x86.msu
+                http://download.windowsupdate.com/msdownload/update/software/secu/2012/07/windows6.1-kb2716513-x86_25905fae996724a3d2528204fdea493caa560b11.msu
             </url>
         </update>
 
-        <update id="KB2574819" category="20" publishdate="2013-09-10" article="http://support.microsoft.com/kb/2574819">
-            <title>KB2574819 - Update for Windows 7 SP1 x86</title>
+         <update id="KB3020393" category="10" publishdate="2015-01-13" article="http://support.microsoft.com/kb/3020393">
+            <title>KB3020393 - Update for Windows 7 SP1 x86</title>
             <description></description>
-            <filename>RDP-Windows6.1-KB2574819-v2-x86.msu</filename>
+            <filename>Windows6.1-KB3020393-x86.msu</filename>
             <url>
-                http://download.microsoft.com/download/A/D/4/AD4875AF-38B3-42C7-9915-16C7505C15DE/Windows6.1-KB2574819-v2-x86.msu
-            </url>
-        </update>
-
-        <update id="KB2830477" category="20" publishdate="2014-02-12" article="http://support.microsoft.com/kb/2830477">
-            <title>KB2830477 - Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>RDP-Windows6.1-KB2830477-x86.msu</filename>
-            <url>
-                http://download.microsoft.com/download/2/B/2/2B280EDD-FDA9-4044-9FB4-A3BE7CBF9AB1/Windows6.1-KB2830477-x86.msu
-            </url>
-        </update>
-
-        <update id="KB3075226" category="20" publishdate="2015-08-10" article="http://support.microsoft.com/kb/3075226">
-            <title>KB3075226 - Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB3075226-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/d/msdownload/update/software/secu/2015/07/windows6.1-kb3075226-x86_4ac94a6fd2b0038520d9bdab3d98d3779f557f7f.msu
-            </url>
-        </update>
-
-        <update id="KB2923545" category="20" publishdate="2014-02-24" article="http://support.microsoft.com/kb/2923545">
-            <title>KB2923545 - Update for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>Windows6.1-KB2923545-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/c/msdownload/update/software/updt/2014/02/windows6.1-kb2923545-x86_fff0876feea186260e48879a68791bcdaacd74f7.msu
+                http://download.windowsupdate.com/c/msdownload/update/software/secu/2014/12/windows6.1-kb3020393-x86_35d02bdf66b857877a64e797eacfa13f301ac0ef.msu
             </url>
         </update>
 
@@ -587,6 +540,62 @@
             </url>
         </update>
 
+        <!-- RDP -->
+
+        <update id="KB2813347" category="20" publishdate="2013-04-09" article="http://support.microsoft.com/kb/2813347">
+            <title>KB2813347 - Security Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>RDP-Windows6.1-KB2813347-x86.msu</filename>
+            <url>
+                http://download.microsoft.com/download/3/3/6/33643971-3DAB-4962-BCF4-FF142018E33C/Windows6.1-KB2813347-x86.msu
+            </url>
+        </update>
+
+        <update id="KB2592687" category="20" publishdate="2013-09-10" article="http://support.microsoft.com/kb/2592687">
+            <title>KB2592687 - Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>RDP-Windows6.1-KB2592687-x86.msu</filename>
+            <url>
+                http://download.microsoft.com/download/1/E/2/1E2A08C9-B87B-4808-94A6-30BC9D65775E/Windows6.1-KB2592687-x86.msu
+            </url>
+        </update>
+
+        <update id="KB2574819" category="20" publishdate="2013-09-10" article="http://support.microsoft.com/kb/2574819">
+            <title>KB2574819 - Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>RDP-Windows6.1-KB2574819-v2-x86.msu</filename>
+            <url>
+                http://download.microsoft.com/download/A/D/4/AD4875AF-38B3-42C7-9915-16C7505C15DE/Windows6.1-KB2574819-v2-x86.msu
+            </url>
+        </update>
+
+        <update id="KB2830477" category="20" publishdate="2014-02-12" article="http://support.microsoft.com/kb/2830477">
+            <title>KB2830477 - Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>RDP-Windows6.1-KB2830477-x86.msu</filename>
+            <url>
+                http://download.microsoft.com/download/2/B/2/2B280EDD-FDA9-4044-9FB4-A3BE7CBF9AB1/Windows6.1-KB2830477-x86.msu
+            </url>
+        </update>
+
+        <update id="KB3075226" category="20" publishdate="2015-08-10" article="http://support.microsoft.com/kb/3075226">
+            <title>KB3075226 - Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>Windows6.1-KB3075226-x86.msu</filename>
+            <url>
+                http://download.windowsupdate.com/d/msdownload/update/software/secu/2015/07/windows6.1-kb3075226-x86_4ac94a6fd2b0038520d9bdab3d98d3779f557f7f.msu
+            </url>
+        </update>
+
+        <update id="KB2923545" category="20" publishdate="2014-02-24" article="http://support.microsoft.com/kb/2923545">
+            <title>KB2923545 - Update for Windows 7 SP1 x86</title>
+            <description></description>
+            <filename>Windows6.1-KB2923545-x86.msu</filename>
+            <url>
+                http://download.windowsupdate.com/c/msdownload/update/software/updt/2014/02/windows6.1-kb2923545-x86_fff0876feea186260e48879a68791bcdaacd74f7.msu
+            </url>
+        </update>
+
         <!-- Windows 10 Upgrade and Telemetry updates -->
 
         <update id="KB3021917" category="25" publishdate="2015-02-10" article="http://support.microsoft.com/kb/3021917">
@@ -643,6 +652,7 @@
             </url>
         </update>
 
+        <!-- IE11 -->
         <update id="KB3185319" category="15" publishdate="2016-09-12" article="http://support.microsoft.com/kb/3185319">
             <title>Cumulative Security Update Internet Explorer 11 English for Windows 7 SP1 x86</title>
             <description></description>
@@ -651,7 +661,6 @@
                 http://download.windowsupdate.com/c/msdownload/update/software/secu/2016/09/ie11-windows6.1-kb3185319-x86_cd4081249bd098b0244fef6e9dfb8ee5674f1fcd.msu
             </url>
         </update>
-        <!-- IE11 -->
 
         <update id="IE11 (KB2841134)" category="15" publishdate="2013-11-06"
                 article="http://support.microsoft.com/kb/2841134">
@@ -681,24 +690,6 @@
             </url>
         </update>
 
-        <update id="KB3185319" category="15" publishdate="2016-09-12" article="http://support.microsoft.com/kb/3185319">
-            <title>Cumulative Security Update Internet Explorer 11 English for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>IE11-Windows6.1-KB3185319-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/c/msdownload/update/software/secu/2016/09/ie11-windows6.1-kb3185319-x86_cd4081249bd098b0244fef6e9dfb8ee5674f1fcd.msu
-            </url>
-        </update>
-
-        <update id="KB4511872" category="15" publishdate="2019-08-10" article="http://support.microsoft.com/kb/4511872">
-            <title>Cumulative Security Update Internet Explorer 11 English for Windows 7 SP1 x86</title>
-            <description></description>
-            <filename>IE11-Windows6.1-KB4511872-x86.msu</filename>
-            <url>
-                http://download.windowsupdate.com/d/msdownload/update/software/secu/2019/08/ie11-windows6.1-kb4511872-x86_c3fb6c63c8c8b182559232b9bffcfb8d1d9c3830.msu
-            </url>
-        </update>
-
         <update id="KB4511872" category="15" publishdate="2019-08-10" article="http://support.microsoft.com/kb/4511872">
             <title>Cumulative Security Update Internet Explorer 11 English for Windows 7 SP1 x86</title>
             <description></description>
@@ -710,7 +701,7 @@
 
         <!-- .NET Framework 3.5 Updates -->
 
-        <update id="KB2894844" category="5" publishdate="2014-09-10" article="http://support.microsoft.com/kb/2894844">
+        <update id="KB2894844" category="6" publishdate="2014-09-10" article="http://support.microsoft.com/kb/2894844">
             <title>KB2894844 - Update for Microsoft .NET Framework 3.5.1 for Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-KB2894844-x86.msu</filename>
@@ -719,7 +710,7 @@
             </url>
         </update>
 
-        <update id="KB2446710" category="5" publishdate="2011-12-04" article="http://support.microsoft.com/kb/2446710">
+        <update id="KB2446710" category="6" publishdate="2011-12-04" article="http://support.microsoft.com/kb/2446710">
             <title>KB2446710 - Security update for .NET Framework 3.5.1 on Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-KB2446710-x86.msu</filename>
@@ -728,7 +719,7 @@
             </url>
         </update>
 
-        <update id="KB2478662" category="5" publishdate="2011-06-14" article="http://support.microsoft.com/kb/2478662">
+        <update id="KB2478662" category="6" publishdate="2011-06-14" article="http://support.microsoft.com/kb/2478662">
             <title>KB2478662 - Security update for .NET Framework 3.5.1 on Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-KB2478662-x86.msu</filename>
@@ -737,7 +728,7 @@
             </url>
         </update>
 
-        <update id="KB34014565" category="5" publishdate="2017-04-10" article="http://support.microsoft.com/kb/4014565">
+        <update id="KB34014565" category="6" publishdate="2017-04-10" article="http://support.microsoft.com/kb/4014565">
             <title>KB4014565 - April 2017 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4014565-x86.msu</filename>
@@ -746,7 +737,7 @@
             </url>
         </update>
 
-        <update id="KB4480063" category="5" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4480063">
+        <update id="KB4480063" category="6" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4480063">
             <title>KB4480063 - January 2019 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4480063-x86.msu</filename>
@@ -755,7 +746,7 @@
             </url>
         </update>
 
-        <update id="KB4049016" category="5" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4049016">
+        <update id="KB4049016" category="6" publishdate="2019-01-04" article="http://support.microsoft.com/kb/4049016">
             <title>KB4049016 - November 2017 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4049016-x86.msu</filename>
@@ -764,7 +755,7 @@
             </url>
         </update>
 
-        <update id="KB4019990" category="5" publishdate="2017-09-12" article="http://support.microsoft.com/kb/4019990">
+        <update id="KB4019990" category="6" publishdate="2017-09-12" article="http://support.microsoft.com/kb/4019990">
             <title>KB4019990 - Update for Microsoft .NET Framework 3.5.1 for Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-kb4019990-x86.msu</filename>
@@ -773,7 +764,7 @@
             </url>
         </update>
 
-        <update id="KB4095874" category="5" publishdate="2018-05-17" article="http://support.microsoft.com/kb/4095874">
+        <update id="KB4095874" category="6" publishdate="2018-05-17" article="http://support.microsoft.com/kb/4095874">
             <title>KB4095874 - Update for Microsoft .NET Framework 3.5.1 for Windows 7 SP1</title>
             <description></description>
             <filename>Windows6.1-kb4095874-x86.msu</filename>
@@ -782,7 +773,7 @@
             </url>
         </update>
 
-        <update id="KB4507004" category="5" publishdate="2019-07-08" article="http://support.microsoft.com/kb/4507004">
+        <update id="KB4507004" category="6" publishdate="2019-07-08" article="http://support.microsoft.com/kb/4507004">
             <title>KB4507004 - July 2019 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-kb4507004-x86.msu</filename>
@@ -791,7 +782,7 @@
             </url>
         </update>
 
-        <update id="KB4532945" category="5" publishdate="2020-01-09" article="http://support.microsoft.com/kb/4532945">
+        <update id="KB4532945" category="6" publishdate="2020-01-09" article="http://support.microsoft.com/kb/4532945">
             <title>KB4532945 - January 2020 Security and Quality Rollup for .NET Framework 3.5.1 for Windows 7</title>
             <description></description>
             <filename>Windows6.1-KB4532945-x86.msu</filename>
@@ -803,6 +794,7 @@
 
         <!-- Optional Software -->
 
+        <!--
         <update id="KB890830" category="30" publishdate="2020-01-14" article="http://support.microsoft.com/kb/890830">
             <title>KB890830 - Malicious Software Removal Tool (January 2020)</title>
             <description></description>
@@ -811,6 +803,7 @@
                 https://download.microsoft.com/download/4/A/A/4AA524C6-239D-47FF-860B-5B397199CBF8/Windows-KB890830-V5.79.exe
             </url>
         </update>
+        -->
 
         <update id="KB4503548" category="30" publishdate="2019-11-09" article="http://support.microsoft.com/kb/4503548">
             <title>KB4503548 - Microsoft .NET Framework 4.8 for Windows 7</title>
@@ -833,12 +826,13 @@
         <update id="KB4481252" category="30" publishdate="2019-01-16" article="http://support.microsoft.com/kb/4481252">
             <title>KB4481252 - Microsoft Silverlight</title>
             <description></description>
-            <filename>Silverlight.exe</filename>
+            <filename>Silverlight-x86.exe</filename>
             <url>
                 https://download.microsoft.com/download/D/D/F/DDF23DF4-0186-495D-AA35-C93569204409/50918.00/Silverlight.exe
             </url>
         </update>
 
+        <!--
         <update id="KB958559" category="30" publishdate="2011-02-14" article="http://support.microsoft.com/kb/958559">
             <title>KB958559 - Windows Virtual PC</title>
             <description></description>
@@ -847,6 +841,8 @@
                 http://download.microsoft.com/download/0/5/5/0554AE99-785F-45CB-B1F2-0E3ED1E6117D/Windows6.1-KB958559-x86-RefreshPkg.msu
             </url>
         </update>
+        -->
+
         <!--
          <update id="KB3191566" category="30" publishdate="2017-01-19" article="https://msdn.microsoft.com/en-us/powershell/wmf/5.1/release-notes">
              <title>KB3191566 - Windows Management Framework (WMF) 5.1 (Requires .NET 4.6.2+)</title>
