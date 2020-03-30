@@ -1,29 +1,9 @@
 title Configuring system. Please wait...
 
 echo ==^> Setting resolution
-
-copy %~dp0\inst\resolution.exe %windir%\system32
+copy d:\resolution.exe %windir%\system32
 resolution.exe 1024 768 24 0
 
-
-echo ==^> Installing updates
-:: This must be done before we disable windows update
-
-:: Apply updates for Windows 7
-ver | find "6.1" > nul
-if not %ERRORLEVEL% == 0 goto not7
-
-:: This update adds support for sha256 driver signatures, which
-:: is required in order to test recently built drivers.
-if exist "%SystemDrive%\Program Files (x86)" (
-    echo Installing %~dp0\inst\Windows6.1-KB3033929-x64.msu
-    wusa.exe %~dp0\inst\Windows6.1-KB3033929-x64.msu /quiet /norestart
-) else (
-    echo Installing %~dp0\inst\Windows6.1-KB3033929-x86.msu
-    wusa.exe %~dp0\inst\Windows6.1-KB3033929-x86.msu /quiet /norestart
-)
-
-:not7
 
 :: Apply updates for Windows 10
 ver | find "10.0" > nul
@@ -121,7 +101,6 @@ sc config Nla start= disabled
 sc config RemoteRegistry start= disabled
 sc config Schedule start= disabled
 sc config SharedAccess start= disabled
-sc config Wuauserv start= disabled
 sc config wzcsvc start= disabled
 
 
