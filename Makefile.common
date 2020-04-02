@@ -23,6 +23,12 @@ SRC?=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 ### Beginning of user-adjustable variables ###
 
+# Set this to 1 in order to build intermediate images.
+# This is useful to debug image building as it makes building more granular
+# and an error in one step does not force to restart from scratch. For example,
+# a mistake in a final script would not force re-intalling all windows updates.
+DEBUG_INTERMEDIATE_RULES ?=
+
 # Override these two variables with your actual settings
 S2E_INSTALL_ROOT ?=
 S2E_LINUX_KERNELS_ROOT ?=
@@ -76,8 +82,19 @@ GETLIBS2E = $(S2E_INSTALL_ROOT)/share/libs2e/libs2e-$(call OS_ARCH,$(1)).so
 QEMU_HD = -drive if=ide,index=$(1),file=$(2),format=raw,cache=writeback
 QEMU_HD_S2E = -drive if=ide,index=$(1),file=$(2),format=s2e,cache=writeback
 QEMU_CD = -drive if=ide,index=$(1),file=$(2),media=cdrom
-QEMU_NIC = -net none -net nic,model=$(call NIC,$(1))
-QEMU_CPU = $(if $(call CPU,$(1)),-cpu $(call CPU,$(1)),)
+QEMU_NIC = -net none -net nic,model=$(1)
+QEMU_CPU = $(if $(1),-cpu $(1))
+
+# This is used to create a variable name out of an image name and a suffix
+# We need to replace the - with _ and assume that the image name does not contain
+# any special characters that would be illegal for a variable name.
+TO_VAR = $(subst -,_,$(1))_$(2)
+
+TO_VAR_CPU = $(call QEMU_CPU,$($(call TO_VAR,$(1),CPU)))
+TO_VAR_NIC = $(call QEMU_NIC,$($(call TO_VAR,$(1),NIC)))
+TO_VAR_DISK_SIZE = $($(call TO_VAR,$(1),DISK_SIZE))
+TO_VAR_OS_VERSION = $($(call TO_VAR,$(1),OS_VERSION))
+TO_VAR_SNAPSHOT_SIZE = $($(call TO_VAR,$(1),SNAPSHOT_SIZE))
 
 GUEST_TOOLS32_ROOT = $(S2E_INSTALL_ROOT)/bin/guest-tools32
 GUEST_TOOLS64_ROOT = $(S2E_INSTALL_ROOT)/bin/guest-tools64
