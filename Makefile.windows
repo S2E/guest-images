@@ -19,74 +19,12 @@
 # SOFTWARE.
 
 ###############################################################################
-# Download 3rd party tools to install in the guest
 
-# These apps are hosted in github
-WIN_APPS_REPO = 7z.exe 7z.dll devcon.exe ImDiskTk.exe ImDiskTk-x64.exe libeay32.dll msys.7z ssleay32.dll timeout.exe resolution.exe
+WINDOWS_UPDATES :=
 
-# These apps are hosted on 3rd party servers
-WIN_APPS = \
-  python-2.7.13.msi python-2.7.13.amd64.msi \
-  dotNetFx40_Full_x86_x64.exe NDP452-KB2901907-x86-x64-AllOS-ENU.exe \
-  vs2015_vcredist_x86.exe vs2015_vcredist_x64.exe vs2013_vcredist_x86.exe vs2013_vcredist_x64.exe \
-  vs2008_vcredist_x86.exe vs2008_vcredist_x64.exe Windows6.1-KB3033929-x64.msu Windows6.1-KB3033929-x86.msu sysinternals.zip \
-  $(WIN_APPS_REPO)
-
-
-WIN_APPS_PATH = $(addprefix $(WINDOWS_APPS_DIR)/,$(WIN_APPS))
-WIN_APPS_REPO_PATH = $(addprefix $(WINDOWS_APPS_DIR)/,$(WIN_APPS_REPO))
-
-$(WINDOWS_APPS_DIR)/dotNetFx40_Full_x86_x64.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/dotNetFx45_Full_x86_x64.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ http://download.microsoft.com/download/b/a/4/ba4a7e71-2906-4b2d-a0e1-80cf16844f5f/dotnetfx45_full_x86_x64.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/NDP452-KB2901907-x86-x64-AllOS-ENU.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ http://download.microsoft.com/download/E/2/1/E21644B5-2DF2-47C2-91BD-63C560427900/NDP452-KB2901907-x86-x64-AllOS-ENU.exe || rm -f $@
-
-# TODO: version 4.7.1 requires hacking the certificate store, so it won't work now
-# https://blogs.msdn.microsoft.com/vsnetsetup/2016/03/28/a-certificate-chain-could-not-be-built-to-a-trusted-root-authority-2/
-$(WINDOWS_APPS_DIR)/NDP471-KB4033342-x86-x64-AllOS-ENU.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/9/E/6/9E63300C-0941-4B45-A0EC-0008F96DD480/NDP471-KB4033342-x86-x64-AllOS-ENU.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/vs2015_vcredist_x86.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x86.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/vs2015_vcredist_x64.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/9/3/F/93FCF1E7-E6A4-478B-96E7-D4B285925B00/vc_redist.x64.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/vs2013_vcredist_x86.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x86.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/vs2013_vcredist_x64.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/2/E/6/2E61CFA4-993B-4DD4-91DA-3737CD5CD6E3/vcredist_x64.exe || rm -f $@
-
-# 2008 version is required for python
-$(WINDOWS_APPS_DIR)/vs2008_vcredist_x86.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ http://download.microsoft.com/download/1/1/1/1116b75a-9ec3-481a-a3c8-1777b5381140/vcredist_x86.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/vs2008_vcredist_x64.exe: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ http://download.microsoft.com/download/d/2/4/d242c3fb-da5a-4542-ad66-f9661d0a8d19/vcredist_x64.exe || rm -f $@
-
-$(WINDOWS_APPS_DIR)/python-2.7.13.amd64.msi: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://www.python.org/ftp/python/2.7.13/python-2.7.13.amd64.msi || rm -f $@
-
-$(WINDOWS_APPS_DIR)/python-2.7.13.msi: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://www.python.org/ftp/python/2.7.13/python-2.7.13.msi || rm -f $@
-
-# Driver signature update, required for Windows 7 in order to load recent drivers
-$(WINDOWS_APPS_DIR)/Windows6.1-KB3033929-x64.msu: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/C/8/7/C87AE67E-A228-48FB-8F02-B2A9A1238099/Windows6.1-KB3033929-x64.msu || rm -f $@
-
-$(WINDOWS_APPS_DIR)/Windows6.1-KB3033929-x86.msu: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.microsoft.com/download/3/7/4/37473F39-5728-4153-9A25-64C09DE9ED52/Windows6.1-KB3033929-x86.msu || rm -f $@
-
-$(WINDOWS_APPS_DIR)/sysinternals.zip: | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ https://download.sysinternals.com/files/SysinternalsSuite.zip || rm -f $@
-
-$(WIN_APPS_REPO_PATH): | $(WINDOWS_APPS_DIR)
-	$(WGET) $@ $(GUEST_IMAGES_RELEASE_URL)/$(notdir $@) || rm -f $@
+include $(SRC)/Makefile.windows.apps
+include $(SRC)/Makefile.windows.updates32
+include $(SRC)/Makefile.windows.updates64
 
 windows_clean:
 	rm -rf $(WINDOWS_APPS_DIR)
@@ -156,64 +94,126 @@ endef
 RUN_INITIAL_SETUP = $(QEMU64) \
     -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G -net none\
     $(if $(findstring xp,$1),,-net nic,model=$(call NIC,$(1))) \
-    $(call QEMU_CPU,$(1)) \
+    $(call TO_VAR_CPU,$(1)) \
     $(call QEMU_HD,0,$(2)) \
     $(call INITIAL_CD_DRIVES,$(1)) \
     -serial file:/dev/null \
     -periodic-screenshot $(3)
 
-POST_INSTALL_FILES = $(TMPDIR)/$(1)/post_install_files
-POST_INSTALL_ISO = $(POST_INSTALL_FILES).iso
-
-
 INITIAL_CD_DRIVES = \
     $(call QEMU_CD,2,$(TMPDIR)/$(1)/boot.iso) \
     $(call QEMU_CD,3,$(TMPDIR)/$(1)/install_files.iso)
 
-DEFAULT_CD_DRIVES = \
-    $(call QEMU_CD,2,$(TMPDIR)/$(1)/boot.iso) \
-    $(call QEMU_CD,3,$(call POST_INSTALL_ISO,$(1)))
+GUEST_TOOLS = $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.sys) \
+              $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.exe) \
+              $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.inf)
 
-POST_INSTALL_DEPS = $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.sys) \
-                    $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.exe) \
-                    $(wildcard $(call GET_GUEST_TOOLS,$(1))/*.inf)
+# $1: image name
+# $2: disk image name
+# $3: cd drive d:
+# $4: cd drive e:
+# $5: serial and screenshot prefix
+RUN_QEMU_KVM = \
+	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
+	$(call TO_VAR_NIC,$(1)) \
+	$(call TO_VAR_CPU,$(1)) \
+	$(call QEMU_HD,0,$(2)) \
+	$(call QEMU_CD,2,$(3)) \
+	$(call QEMU_CD,3,$(4)) \
+	-serial file:$(5)_serial.txt \
+	-smp cores=4,threads=1,sockets=1 \
+	-periodic-screenshot $(5)_screenshots
+
+# This is a hack to inject guest tools into the 07_install_software.iso image.
+# TODO: figure out how to do it better
+GUEST_TOOLS_DEPS = $(if $(findstring 07_install_software,$1),$(call GUEST_TOOLS,$2))
+
+define CREATE_UPDATE_CD
+  $(TMPDIR)/$1/$2.iso: $(shell find $(SRC)/Windows/install_scripts/$2) $(call GUEST_TOOLS_DEPS,$2,$1) | $(TMPDIR)/$1
+	genisoimage --iso-level 2 -flDJR -o $$@ $(SRC)/Windows/install_scripts/$2/ $(call GUEST_TOOLS_DEPS,$2,$1)
+endef
+
+# $1: image name
+# $2: cd with updates (also used as target image name)
+# $3: disk image name that we depend on
+# $4: message
+ifeq ($(DEBUG_INTERMEDIATE_RULES), 1)
+GET_FINAL_IMAGE_DEP = $(TMPDIR)/$1/$2
+define APPLY_UPDATES
+  $(TMPDIR)/$1/image.raw.$2: $(TMPDIR)/$1/image.raw.$3 $(TMPDIR)/$1/00_software.iso $(TMPDIR)/$1/$2.iso | $(OUTDIR)/$1
+	$(call INFO_MSG,[$1] $4)
+	cp --reflink=auto $$< $$@
+	rm -rf $$@_screenshots && mkdir -p $$@_screenshots
+
+	$(call RUN_QEMU_KVM,$1,$$@,$(TMPDIR)/$1/00_software.iso,$(TMPDIR)/$1/$2.iso,$$@)
+endef
+else
+GET_FINAL_IMAGE_DEP = $(TMPDIR)/$1/$2.stamp
+GET_DEP_STAMP_SUFFX = $(if $(findstring 1.fresh,$1),,.stamp)
+GET_ORDER_ONLY = $(if $(findstring 1.fresh,$1),$1,)
+GET_UPD_IMG = $(if $(findstring 1.fresh,$1),,$1)
+define APPLY_UPDATES
+  $(TMPDIR)/$1/image.raw.$2.stamp: $(call GET_UPD_IMG,$(TMPDIR)/$1/image.raw.$3$(call GET_DEP_STAMP_SUFFX,$3)) \
+   $(TMPDIR)/$1/00_software.iso $(TMPDIR)/$1/$2.iso | $(OUTDIR)/$1 $(call GET_ORDER_ONLY,$(TMPDIR)/$1/image.raw.$3)
+	$(call INFO_MSG,[$1] $4)
+	rm -rf $(TMPDIR)/$1/image.raw.$2_screenshots && mkdir -p $(TMPDIR)/$1/image.raw.$2_screenshots
+
+	$(call RUN_QEMU_KVM,$1,$(TMPDIR)/$1/image.raw.1.fresh,$(TMPDIR)/$1/00_software.iso,$(TMPDIR)/$1/$2.iso,$(TMPDIR)/$1/image.raw.$2)
+	touch $$@
+endef
+endif
+
+# TODO: find these folders instead of hard-coding them?
+UPDATE_CDS := 01_post_install 02_updates1 03_updates2 04_ie 05_dotnet
+SOFTWARE_CDS := 07_install_software 10_setup_finalize 20_tcg_reboot
+ALL_CDS := $(UPDATE_CDS) $(SOFTWARE_CDS)
+
+UPDATE_CDS_PATHS = $(addprefix $(TMPDIR)/$1/,$(addsuffix .iso,$(UPDATE_CDS)))
+SOFTWARE_CDS_PATHS = $(addprefix $(TMPDIR)/$1/,$(addsuffix .iso,$(SOFTWARE_CDS)))
+ALL_CDS_PATHS = $(UPDATE_CDS_PATHS) $(SOFTWARE_CDS_PATHS)
 
 ###############################################################################
 ### Provisioning the initial image
 #$1: image name
 #$2: iso name
 define TEMPLATE_BASE_WINDOWS_IMAGE
- $(OUTDIR)/$1 $(TMPDIR)/$1:
+  # These variables cache various values from images.json.
+  # It is expensive to call shell get_setting.py... so we minimize it here.
+  # The variable's name is constructed like this: image_name_{CPU|NIC...}:=...
+  $(eval $(call TO_VAR,$1,NIC):=$(call NIC,$1))
+  $(eval $(call TO_VAR,$1,CPU):=$(call CPU,$1))
+  $(eval $(call TO_VAR,$1,DISK_SIZE):=$(call DISK_SIZE,$1))
+  $(eval $(call TO_VAR,$1,OS_VERSION):=$(call OS_VERSION,$1))
+  $(eval $(call TO_VAR,$1,SNAPSHOT_SIZE):=$(call SNAPSHOT_SIZE,$1))
+
+  $(OUTDIR)/$1 $(TMPDIR)/$1:
 	mkdir -p "$$@"
 
-  # Prepare the boot cd
+  # Prepare the boot CD
   $(if $(findstring xp,$1), \
        $(eval $(call PREPARE_WINXP_ISO,$1,$2)), \
        $(eval $(call PREPARE_WIN_ISO,$1,$2)) \
   )
 
-  $(TMPDIR)/$1/reboot_files.iso: $(SRC)/Windows/initial_install_reboot.bat | $(TMPDIR)/$1
-	@#
-	@# *** Prepare reboot_files.iso image
-	rm -Rf $(TMPDIR)/$1/reboot_files && mkdir -p $(TMPDIR)/$1/reboot_files
-	cp "$(SRC)/Windows/initial_install_reboot.bat" "$(TMPDIR)/$1/reboot_files/s2e_startup.bat"
-	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/reboot_files
+  # Prepare CDs for each installation step
+  $(foreach cd,$(ALL_CDS), \
+	$(eval $(call CREATE_UPDATE_CD,$1,$(cd))) \
+  )
 
-  $(TMPDIR)/$1/tcg_reboot_files.iso: $(SRC)/Windows/tcg_install_reboot.bat | $(TMPDIR)/$1
-	@#
-	@# *** Prepare tcg_reboot_files.iso image
-	rm -Rf $(TMPDIR)/$1/tcg_reboot_files && mkdir -p $(TMPDIR)/$1/tcg_reboot_files
-	cp "$(SRC)/Windows/tcg_install_reboot.bat" "$(TMPDIR)/$1/tcg_reboot_files/s2e_startup.bat"
-	genisoimage --iso-level 2 -flDJR -o $$@ $(TMPDIR)/$1/tcg_reboot_files
+  # Create CD with all extra software. This CD does not have any installation scripts and is mounted
+  # on most installations steps.
+  $(TMPDIR)/$1/00_software.iso: $(WIN_APPS_PATH) $(WINDOWS_UPDATES) | $(TMPDIR)/$1
+	genisoimage --iso-level 2 -flDJR -o $$@ $(WINDOWS_APPS_DIR)
 
-  # The tmp image contains a fresh install of the system, without any post-install changes
-  $(TMPDIR)/$1/image.raw.tmp: $(TMPDIR)/$1/boot.iso $(TMPDIR)/$1/install_files.iso
+
+  # The tmp image contains a fresh install of the system, including any Windows updates
+  $(TMPDIR)/$1/image.raw.1.fresh: $(TMPDIR)/$1/boot.iso $(TMPDIR)/$1/install_files.iso
 	rm -rf $(TMPDIR)/$1/initial_install_screenshots1 && mkdir -p $(TMPDIR)/$1/initial_install_screenshots1
 	rm -rf $(TMPDIR)/$1/initial_install_screenshots2 && mkdir -p $(TMPDIR)/$1/initial_install_screenshots2
 
 	@#
 	@# *** Create empty disk image
-	$(QEMU_IMG) create -f raw $$@ $(call DISK_SIZE,$1)
+	$(QEMU_IMG) create -f raw $$@ $(call TO_VAR_DISK_SIZE,$1)
 
 	@#
 	@# *** Run the installation in QEMU
@@ -223,75 +223,50 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call INFO_MSG,[$1] Completing installation...)
 	$(call RUN_INITIAL_SETUP,$1,$$@,$(TMPDIR)/$1/initial_install_screenshots2)
 
-  # Create CD with extra install software
-  $(TMPDIR)/$1/post_install_files.iso: $(call POST_INSTALL_DEPS,$1) $(WIN_APPS_PATH) $(shell find $(SRC)/Windows/install_scripts) | $(TMPDIR)/$1
-	mkdir -p $(call POST_INSTALL_FILES,$1)
-	rsync -av $(SRC)/Windows/install_scripts $(call POST_INSTALL_FILES,$1)/
-	rsync -av $(WIN_APPS_PATH) $(call POST_INSTALL_FILES,$1)/install_scripts/inst/
-	rsync -av $(call POST_INSTALL_DEPS,$1) $(call POST_INSTALL_FILES,$1)/install_scripts/s2e/
-	genisoimage --iso-level 2 -flDJR -o $$@ $(call POST_INSTALL_FILES,$1)
+  $(eval $(call APPLY_UPDATES,$1,01_post_install,1.fresh,"Applying post-install config"))
 
+  $(if $(findstring 7sp1,$1), \
+	  $(eval $(call APPLY_UPDATES,$1,02_updates1,01_post_install,"Applying updates 1")) \
+	  $(eval $(call APPLY_UPDATES,$1,03_updates2,02_updates1,"Applying updates 2")) \
+	  $(eval $(call APPLY_UPDATES,$1,04_ie,03_updates2,"Installing IE 11")) \
+  )
 
-  # Install additional software and prepare the image for S2E
-  $(OUTDIR)/$1/image.raw.s2e: $(TMPDIR)/$1/image.raw.tmp $(TMPDIR)/$1/reboot_files.iso $(TMPDIR)/$1/tcg_reboot_files.iso $(TMPDIR)/$1/post_install_files.iso | $(OUTDIR)/$1
-	cp --reflink=auto $(TMPDIR)/$1/image.raw.tmp $(OUTDIR)/$1/image.raw.tmp
-	rm -rf $(TMPDIR)/$1/post_install_screenshots && mkdir -p $(TMPDIR)/$1/post_install_screenshots
-	rm -rf $(TMPDIR)/$1/final_install_screenshots && mkdir -p $(TMPDIR)/$1/final_install_screenshots
-	rm -rf $(TMPDIR)/$1/tcg_install_screenshots && mkdir -p $(TMPDIR)/$1/tcg_install_screenshots
+  $(eval $(call APPLY_UPDATES,$1,05_dotnet,$(if $(findstring 7sp1,$1),04_ie,01_post_install),"Installing .net"))
+  $(eval $(call APPLY_UPDATES,$1,07_install_software,05_dotnet,"Installing additional software"))
+  $(eval $(call APPLY_UPDATES,$1,10_setup_finalize,07_install_software,"Finalizing installation"))
 
-	@# *** Post installation adds additional software (e.g, Python, VC++ packages, etc.)
-	$(call INFO_MSG,[$1] Running post-install scripts...)
-	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
-	    $(call QEMU_NIC,$1) \
-	    $(call QEMU_CPU,$1) \
-	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
-	    $(call DEFAULT_CD_DRIVES,$(1)) \
-	    -serial file:$(TMPDIR)/$1/post_install_serial1.txt \
-	    -periodic-screenshot $(TMPDIR)/$1/post_install_screenshots
-
-
-	@# *** Post-install configuration
-	@# This must be done here because the registry keys are protected in the guest
-	$(call INFO_MSG,[$1] Disabling Windows Defender...)
-	if [ -z "$(findstring xp,$(call OS_VERSION,$1))" ]; then \
-	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
+  # Reboot in TCG mode
+  $(OUTDIR)/$1/image.raw.s2e: $(call GET_FINAL_IMAGE_DEP,$1,image.raw.10_setup_finalize) $(TMPDIR)/$1/20_tcg_reboot.iso
+	if [ "x$(DEBUG_INTERMEDIATE_RULES)" = "x" ]; then \
+		cp --reflink=auto $(TMPDIR)/$1/image.raw.1.fresh $$@; \
+	else \
+		cp --reflink=auto $$< $$@; \
 	fi
 
-	$(call INFO_MSG,[$1] Disabling Windows 8 start screen...)
-	if [ ! -z "$(findstring 8,$(call OS_VERSION,$1))" ]; then \
-	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(TMPDIR)/$1/image.raw.tmp --merge $(SRC)/Windows/install_scripts/win8_desktop.reg; \
-	fi
+	rm -rf $(TMPDIR)/$1/tcg_screenshots && mkdir -p $(TMPDIR)/$1/tcg_screenshots
 
-	@# *** Finalize installation
-	$(call INFO_MSG,[$1] Finalizing Windows installation...)
-	$(QEMU64) -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
-	    $(call QEMU_NIC,$1) \
-	    $(call QEMU_CPU,$1) \
-	    $(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
-	    -cdrom $(TMPDIR)/$1/reboot_files.iso \
-	    -serial file:$(OUTDIR)/$1/final_install_serial.txt \
-	    -periodic-screenshot $(TMPDIR)/$1/final_install_screenshots
+	if [ "x$(findstring 8.1,$(call TO_VAR_OS_VERSION,$1))" != "x" ]; then \
+		LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/win8_desktop.reg; \
+	fi
 
 	@# *** Reboot in TCG mode to install the CPU driver
 	$(call INFO_MSG,[$1] Rebooting in TCG mode...)
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
 	        -enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
-		$(call QEMU_NIC,$1) \
-		$(call QEMU_CPU,$1) \
-		$(call QEMU_HD,0,$(OUTDIR)/$1/image.raw.tmp) \
-		-cdrom $(TMPDIR)/$1/tcg_reboot_files.iso \
-		-serial file:$(OUTDIR)/$1/tcg_install_serial.txt \
-		-periodic-screenshot $(TMPDIR)/$1/tcg_install_screenshots
+		$(call TO_VAR_NIC,$1) \
+		$(call TO_VAR_CPU,$1) \
+		$(call QEMU_HD,0,$$@) \
+		-cdrom $(TMPDIR)/$1/20_tcg_reboot.iso \
+		-serial file:$(TMPDIR)/$1/tcg_serial.txt \
+		-periodic-screenshot $(TMPDIR)/$1/tcg_screenshots
 
-	@#
-	@# *** Cleanup
-	rm -Rf $(call POST_INSTALL_FILES,$1) $(OUTDIR)/$1/*reboot_files*
-	mv $(OUTDIR)/$1/image.raw.tmp $$@
+	@# This must be done here because the registry keys are protected in the guest
+	$(call INFO_MSG,[$1] Disabling Windows Defender...)
+	if [ -z "$(findstring xp,$(call TO_VAR_OS_VERSION,$1))" ]; then \
+	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
+	fi
 
-	@# Dummy file to avoid rebuilding
-	touch $(OUTDIR)/$1/image.raw.tmp
 	$(call OK_MSG,[$1] Base installation completed.)
-
 
   # This rule extracts all executable files from the guest image into the guestfs folder.
   # This is useful for S2E plugins that need access to the binaries in order to extract
@@ -320,22 +295,23 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	@# Unmount any previous folders (e.g., if interrupted)
 	-fusermount -u $(OUTDIR)/$1/imagefs
 
-	@# This must be done here because the registry keys are protected in the guest
-	$(call INFO_MSG,[$1] Disabling Windows Defender (again)...)
-	if [ -z "$(findstring xp,$(call OS_VERSION,$1))" ]; then \
-	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
-	fi
-
 	@# *** Create ready snapshot
 	$(call INFO_MSG,[$1] Creating ready snapshot...)
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
-		-enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m $(call SNAPSHOT_SIZE,$1) \
-		$(call QEMU_NIC,$1) \
-		$(call QEMU_CPU,$1) \
+		-enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m $(call TO_VAR_SNAPSHOT_SIZE,$1) \
+		$(call TO_VAR_NIC,$1) \
+		$(call TO_VAR_CPU,$1) \
 		$(call QEMU_HD_S2E,0,$$<) \
 		-enable-serial-commands \
-		-serial file:$(OUTDIR)/$1/ready_serial.txt \
+		-serial file:$(TMPDIR)/$1/ready_serial.txt \
 		-periodic-screenshot $(TMPDIR)/$1/ready_screenshots
+
+	@# In case there are blue screens, fail installation
+	if [ ! -f "$(OUTDIR)/$1/image.raw.s2e.ready" ]; then \
+		echo "Failed to create $(OUTDIR)/$1/image.raw.s2e.ready snapshot."; \
+		echo "Please check $(TMPDIR)/$1/ready_screenshots and logs for details"; \
+		exit 1; \
+	fi
 
 	$(call OK_MSG,[$1] Installation completed.)
 
@@ -343,8 +319,8 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	$(call INFO_MSG,[$$@] Creating image descriptor...)
 	$(SRC)/scripts/generate_image_descriptor.py -i $(SRC)/images.json -o $$@ -n "$1" \
 		snapshot="ready" qemu_build="$(call ARCH,$1)" \
-		memory="$(call SNAPSHOT_SIZE,$1)" \
-		qemu_extra_flags="$(call QEMU_NIC,$1) $(call QEMU_CPU,$1)"
+		memory="$(call TO_VAR_SNAPSHOT_SIZE,$1)" \
+		qemu_extra_flags="$(call TO_VAR_NIC,$1) $(call TO_VAR_CPU,$1)"
 
 endef
 

@@ -48,7 +48,7 @@
     Mode = 0
 
 [GUIRunOnce]
-    "cmd /C e:\install_scripts\00-run-all-scripts.cmd"
+    "cmd /C e:\launch.bat"
 
 [Components]
     msmsgs=off

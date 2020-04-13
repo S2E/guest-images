@@ -109,7 +109,7 @@
        "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -128,13 +128,14 @@
       "os": {
        "family": "windows",
        "name": "windows",
+       "image_name": "Windows 7 Professional",
        "version": "7sp1pro",
        "arch": "i386",
        "build": "7601.17514",
        "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -159,7 +160,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -183,7 +184,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"
@@ -209,7 +210,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "20G",
+        "default_disk_size": "30G",
         "default_snapshot_size": "2G",
         "nic": "e1000",
         "cpu": "core2duo"

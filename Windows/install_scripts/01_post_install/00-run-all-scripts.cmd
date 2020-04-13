@@ -11,7 +11,9 @@ echo.|time|findstr "current" > com1
 echo %0: started. > com1
 title Running %0, please wait...
 
-dir /b /on %~dp0\*.bat %~dp0\*.cmd | findstr /v "^_" | findstr /i /v %~nx0 >"%TEMP%\runlist.txt"
+dir %~dp0 > com1
+
+dir /b /on *.cmd | findstr /v "^_" | findstr /i /v %~nx0 >"%TEMP%\runlist.txt"
 
 type "%TEMP%\runlist.txt" > com1
 
@@ -28,3 +30,9 @@ del "%TEMP%\runlist.txt"
 
 echo.|time|findstr "current" > com1
 echo %0: finished. > com1
+
+:: Manually shutdown on xp
+ver | find "5.1" > nul
+if not %ERRORLEVEL% == 0 goto notxp
+shutdown /s /t 0
+:notxp
