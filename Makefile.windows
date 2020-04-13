@@ -124,9 +124,13 @@ RUN_QEMU_KVM = \
 	-smp cores=4,threads=1,sockets=1 \
 	-periodic-screenshot $(5)_screenshots
 
+# This is a hack to inject guest tools into the 07_install_software.iso image.
+# TODO: figure out how to do it better
+GUEST_TOOLS_DEPS = $(if $(findstring 07_install_software,$1),$(call GUEST_TOOLS,$2))
+
 define CREATE_UPDATE_CD
-  $(TMPDIR)/$1/$2.iso: $(shell find $(SRC)/Windows/install_scripts/$2) | $(TMPDIR)/$1
-	genisoimage --iso-level 2 -flDJR -o $$@ $(SRC)/Windows/install_scripts/$2/
+  $(TMPDIR)/$1/$2.iso: $(shell find $(SRC)/Windows/install_scripts/$2) $(call GUEST_TOOLS_DEPS,$2,$1) | $(TMPDIR)/$1
+	genisoimage --iso-level 2 -flDJR -o $$@ $(SRC)/Windows/install_scripts/$2/ $(call GUEST_TOOLS_DEPS,$2,$1)
 endef
 
 # $1: image name
@@ -241,7 +245,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 
 	rm -rf $(TMPDIR)/$1/tcg_screenshots && mkdir -p $(TMPDIR)/$1/tcg_screenshots
 
-	if [ -z "$(findstring 8.1,$(call TO_VAR_OS_VERSION,$1))" ]; then \
+	if [ "x$(findstring 8.1,$(call TO_VAR_OS_VERSION,$1))" != "x" ]; then \
 		LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/win8_desktop.reg; \
 	fi
 
@@ -301,6 +305,13 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 		-enable-serial-commands \
 		-serial file:$(TMPDIR)/$1/ready_serial.txt \
 		-periodic-screenshot $(TMPDIR)/$1/ready_screenshots
+
+	@# In case there are blue screens, fail installation
+	if [ ! -f "$(OUTDIR)/$1/image.raw.s2e.ready" ]; then \
+		echo "Failed to create $(OUTDIR)/$1/image.raw.s2e.ready snapshot."; \
+		echo "Please check $(TMPDIR)/$1/ready_screenshots and logs for details"; \
+		exit 1; \
+	fi
 
 	$(call OK_MSG,[$1] Installation completed.)
 
