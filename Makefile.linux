@@ -130,7 +130,7 @@ define TAKE_SNAPSHOT
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) -enable-kvm \
 	    $(call QEMU_HD_S2E,0,$$<) \
 	    -serial file:$(OUTDIR)/$2$1/serial_ready.txt -enable-serial-commands \
-	    $(call QEMU_NIC,$2$1) $(call QEMU_CPU,$2$1) \
+	    $(call QEMU_NIC,$(call NIC,$2$1)) $(call QEMU_CPU,$(call CPU,$2$1)) \
 	    -m $(call SNAPSHOT_SIZE,$2$1) \
 	    $(GRAPHICS)
 
@@ -141,7 +141,7 @@ define TAKE_SNAPSHOT
 	$(SRC)/scripts/generate_image_descriptor.py -i $(SRC)/images.json -o $$@ -n "$2$1" \
 		snapshot="ready" qemu_build="$(call ARCH,$2$1)" \
 		memory="$(call SNAPSHOT_SIZE,$2$1)" \
-		qemu_extra_flags="$(call QEMU_NIC,$2$1) $(call QEMU_CPU,$2$1)"
+		qemu_extra_flags="$(call QEMU_NIC,$(call NIC,$2$1)) $(call QEMU_CPU,$(call CPU,$2$1))"
 endef
 
 ### Building Linux kernel ###
