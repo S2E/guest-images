@@ -16,5 +16,8 @@ while [ $# -gt 0 ]; do
     esac
 done
 
-exec qemu-system-x86_64 "${args[@]}" -cpu qemu64
+if [ "x$LIBGUESTFS_QEMU" = "x" ]; then
+  LIBGUESTFS_QEMU=qemu-system-x86_64
+fi
 
+exec $LIBGUESTFS_QEMU "${args[@]}" -cpu qemu64

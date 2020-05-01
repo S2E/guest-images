@@ -78,20 +78,20 @@ define BUILD_S2E_IMAGE
 	cp --reflink=auto "$$<" "$$@"
 
 	$(call INFO_MSG,[$$@] Installing kernels...)
-	LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-copy-in -a "$$@" $(TMPDIR)/$3/*.deb /home/s2e
+	virt-copy-in -a "$$@" $(TMPDIR)/$3/*.deb /home/s2e
 
 	$(call INFO_MSG,[$$@] Installing payload...)
-	LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-copy-in -a "$$@" $(SRC)/Linux/s2e_home/launch.sh $(SRC)/Linux/s2e_home/.bash_login /home/s2e/
+	virt-copy-in -a "$$@" $(SRC)/Linux/s2e_home/launch.sh $(SRC)/Linux/s2e_home/.bash_login /home/s2e/
 
-	LIBGUESTFS_HV=$(SRC)/qemu.wrapper guestfish --rw -a "$$@" -i mkdir /etc/systemd/system/getty@tty1.service.d/
-	LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-copy-in -a "$$@" $(SRC)/Linux/override.conf /etc/systemd/system/getty@tty1.service.d/
+	guestfish --rw -a "$$@" -i mkdir /etc/systemd/system/getty@tty1.service.d/
+	virt-copy-in -a "$$@" $(SRC)/Linux/override.conf /etc/systemd/system/getty@tty1.service.d/
 
 	$(call INFO_MSG,[$$@] Booting disk image...)
 	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
-	LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
+	virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
 
   # This rule extracts all executable files from the guest image into the guestfs folder.
   # This is useful for S2E plugins that need access to the binaries in order to extract
@@ -107,7 +107,7 @@ define BUILD_S2E_IMAGE
 
 	# TODO: rsync only executable files
 	cd $(OUTDIR)/$2$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
-	    LIBGUESTFS_HV=$(SRC)/qemu.wrapper guestmount --ro -i -a image.raw.s2e imagefs && \
+	    guestmount --ro -i -a image.raw.s2e imagefs && \
 	    rsync --links -rt --exclude '*.deb' imagefs/* guestfs
 
 	# Some files might not have read privileges, add them here

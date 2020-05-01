@@ -246,7 +246,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	rm -rf $(TMPDIR)/$1/tcg_screenshots && mkdir -p $(TMPDIR)/$1/tcg_screenshots
 
 	if [ "x$(findstring 8.1,$(call TO_VAR_OS_VERSION,$1))" != "x" ]; then \
-		LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/win8_desktop.reg; \
+		virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/win8_desktop.reg; \
 	fi
 
 	@# *** Reboot in TCG mode to install the CPU driver
@@ -263,7 +263,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	@# This must be done here because the registry keys are protected in the guest
 	$(call INFO_MSG,[$1] Disabling Windows Defender...)
 	if [ -z "$(findstring xp,$(call TO_VAR_OS_VERSION,$1))" ]; then \
-	  LIBGUESTFS_HV=$(SRC)/qemu.wrapper virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
+	  virt-win-reg $(OUTDIR)/$1/image.raw.s2e --merge $(SRC)/Windows/install_scripts/disable_windefend.reg; \
 	fi
 
 	$(call OK_MSG,[$1] Base installation completed.)
@@ -281,7 +281,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	mkdir -p $(OUTDIR)/$1/imagefs
 
 	cd $(OUTDIR)/$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
-	    LIBGUESTFS_HV=$(SRC)/qemu.wrapper guestmount --ro -i -a image.raw.s2e imagefs && \
+	    guestmount --ro -i -a image.raw.s2e imagefs && \
 	    $(SRC)/scripts/filter_exe.py imagefs guestfs
 
 	@# Convert the file names to lower case. This makes sure that the case
