@@ -104,6 +104,13 @@ GET_GUEST_TOOLS = $(if $(findstring $(call OS_ARCH,$(1)),i386),$(GUEST_TOOLS32_R
 # (e.g., runtimes, apps, etc.)
 WINDOWS_APPS_DIR ?= $(TMPDIR)/win_apps
 
+export LIBGUESTFS_HV := $(SRC)/qemu.wrapper
+
+# Use our own QEMU for libguestfs, as the one that comes with the system may crash
+# when used inside vmware with nested virtualization enabled.
+export LIBGUESTFS_QEMU := $(S2E_INSTALL_ROOT)/bin/qemu-system-x86_64
+
+
 ### Building archives ###
 # Note: pxz has a bug when run with unlimited stack size (which is the case in a makefile)
 $(OUTDIR)/%.tar.xz: $(OUTDIR)/%/image.json
