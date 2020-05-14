@@ -42,6 +42,14 @@ if exist "%SystemDrive%\Program Files (x86)" (
     d:\vs2008_vcredist_x64.exe /Q /norestart
 )
 
+:: Install ODT only on win7 and win10
+ver | find "5.1" > nul
+if %ERRORLEVEL% == 0 goto xp
+echo ==^> Installing Office Deployment Tool
+d:\odt.exe /extract:c:\odt /quiet /norestart
+:xp
+
+
 echo ==^> Installing ImDisk
 :: This must be the last step of the installation as ImDisk installer forces reboot
 
