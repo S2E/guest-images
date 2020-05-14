@@ -4,3 +4,4 @@ stamps
 iso
 win_apps
 .idea
+__pycache__
