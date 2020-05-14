@@ -18,8 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-SRC?=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+ifeq ("$(OUTDIR)","")
+SRC := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+endif
 
 ### Beginning of user-adjustable variables ###
 
@@ -41,10 +42,14 @@ GRAPHICS ?= -nographic -monitor null
 QEMU_KVM ?= -enable-kvm
 
 # Where to store final images
-OUTDIR ?= $(shell pwd)/output
+ifeq ("$(OUTDIR)","")
+OUTDIR := $(shell pwd)/output
+endif
 
 # Location of ISO files for Windows images
-ISODIR ?= $(shell pwd)/iso
+ifeq ("$(ISODIR)","")
+ISODIR := $(shell pwd)/iso
+endif
 
 # Location of the latest guest-images release
 GUEST_IMAGES_RELEASE_URL = https://github.com/S2E/guest-images/releases/download/v2.0.0
@@ -58,8 +63,8 @@ _NO_COLOR := $(shell tput sgr0)
 INFO_MSG = @echo "$(_INFO_MSG_COLOR)[`date`] $1$(_NO_COLOR)"
 OK_MSG = @echo "$(_OK_MSG_COLOR)[`date`] $1$(_NO_COLOR)"
 
-TMPDIR = $(shell pwd)/.tmp-output
-STAMPS = $(shell pwd)/.stamps
+TMPDIR := $(shell pwd)/.tmp-output
+STAMPS := $(shell pwd)/.stamps
 
 QEMU_IMG = $(S2E_INSTALL_ROOT)/bin/qemu-img
 QEMU64 = $(S2E_INSTALL_ROOT)/bin/qemu-system-x86_64
