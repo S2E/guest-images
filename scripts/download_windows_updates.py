@@ -50,7 +50,7 @@ def gen_makefile_target(output_dir, update):
     title = update.find('title').text.strip()
     print(f'# {title}')
     print(f'{file_path}: | {output_dir}')
-    print(f'\t$(WGET) $@ {url} || rm -f $@')
+    print(f'\t$(WGET) $@ {url}')
     print('')
 
 
