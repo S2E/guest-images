@@ -29,6 +29,7 @@ include $(SRC)/Makefile.linux
 include $(SRC)/Makefile.windows
 
 .DEFAULT_GOAL := linux
+.DELETE_ON_ERROR:
 
 ### Check that required variables are set up properly
 
