@@ -45,6 +45,6 @@ int main(int argc, char **argv) {
     devmode.dmSize = sizeof(DEVMODE);
 
     long result = ChangeDisplaySettings(&devmode, CDS_GLOBAL | CDS_UPDATEREGISTRY);
-    printf("result=%d\n", result);
+    printf("result=%ld\n", result);
     return 0;
 }
