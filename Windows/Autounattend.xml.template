@@ -117,12 +117,16 @@
             <FirstLogonCommands>
                 <SynchronousCommand wcm:action="add">
                     <Order>1</Order>
+                    <CommandLine>cmd.exe /c "powershell.exe Rename-Computer -NewName S2E-GUEST -force"</CommandLine>
+                </SynchronousCommand>
+                <SynchronousCommand wcm:action="add">
+                    <Order>2</Order>
                     <Description>Run all prepare scripts</Description>
                     <CommandLine>cmd /C e:\launch.bat</CommandLine>
                     <RequiresUserInput>true</RequiresUserInput>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <Order>2</Order>
+                    <Order>3</Order>
                     <Description>Shutting down Windows</Description>
                     <CommandLine>cmd /C shutdown /s /t 0</CommandLine>
                 </SynchronousCommand>

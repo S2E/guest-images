@@ -4,6 +4,9 @@
 cd /d %~dp0
 copy snapshot.bat c:\s2e
 
+echo ==^> Rename computer
+cmd.exe /c "powershell.exe Rename-Computer -NewName S2E-GUEST -force"
+
 echo ==^> Disabling Windows update
 sc config Wuauserv start= disabled
 sc config spupdsvc start= disabled
