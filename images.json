@@ -142,30 +142,6 @@
       }
     },
 
-    "windows-10ent1703-x86_64": {
-      "name": "Windows 10 Enterprise 1703 x86_64",
-      "image_group": "windows",
-      "url": "",
-      "iso": {
-        "name": "en_windows_10_enterprise_version_1703_updated_march_2017_x64_dvd_10189290.iso",
-        "sha1": "77d5e7c91b5dbbee410fb6c57cb944238bf7176a"
-      },
-      "os": {
-        "family": "windows",
-        "name": "windows",
-        "version": "10ent1703",
-        "arch": "x86_64",
-        "build": "1703",
-        "binary_formats": ["pe"]
-      },
-      "hw": {
-        "default_disk_size": "30G",
-        "default_snapshot_size": "2G",
-        "nic": "e1000",
-        "cpu": "core2duo"
-      }
-    },
-
     "windows-10pro1909-x86_64": {
       "name": "Windows 10 Pro 1909 x86_64",
       "image_group": "windows",
