@@ -47,12 +47,12 @@ dir c:\sysinternals
 
 echo ==^> Installing Visual Studio Redistributable Package
 
-d:\vs2015_vcredist_x86.exe /Q /norestart
+d:\vs2015-2019_vcredist_x86.exe /install /quiet /norestart
 d:\vs2013_vcredist_x86.exe /Q /norestart
 d:\vs2008_vcredist_x86.exe /Q /norestart
 
 if exist "%SystemDrive%\Program Files (x86)" (
-    d:\vs2015_vcredist_x64.exe /Q /norestart
+    d:\vs2015-2019_vcredist_x64.exe /install /quiet /norestart
     d:\vs2013_vcredist_x64.exe /Q /norestart
     d:\vs2008_vcredist_x64.exe /Q /norestart
 )
