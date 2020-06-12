@@ -239,7 +239,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 
   # Reboot in TCG mode
   $(OUTDIR)/$1/image.raw.s2e: $(call GET_FINAL_IMAGE_DEP,$1,image.raw.10_setup_finalize) $(TMPDIR)/$1/20_tcg_reboot.iso
-	if [ "x$(DEBUG_INTERMEDIATE_RULES)" = "x" ]; then \
+	if [ "x$(DEBUG_INTERMEDIATE_RULES)" != "x1" ]; then \
 		cp --reflink=auto $(TMPDIR)/$1/image.raw.1.fresh $$@; \
 	else \
 		cp --reflink=auto $$< $$@; \
