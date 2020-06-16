@@ -13,12 +13,16 @@ devcon enable *"PCI\VEN_1022&DEV_2000"
 :: services.exe eats up 100% cpu for several minutes.
 devcon disable *"PCI\VEN_1022&DEV_2000"
 
-sc stop cryptsvc
-
 :notxp
 
 :: Wait for various services to calm down
 timeout 600
+
+if not %ERRORLEVEL% == 0 goto notxp1
+:: This service causes 100% cpu usage on snapshot resume, disable it right before taking the snaphot.
+sc stop cryptsvc
+sc config cryptsvc start= disabled
+:notxp1:
 
 :: ###########################################################################
 :: Save the ready snapshot

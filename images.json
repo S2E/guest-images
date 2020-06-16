@@ -84,7 +84,7 @@
         "binary_formats": ["pe"]
       },
       "hw": {
-        "default_disk_size": "8G",
+        "default_disk_size": "12G",
         "default_snapshot_size": "256M",
         "nic": "pcnet",
         "cpu": "core2duo"
@@ -133,55 +133,6 @@
        "arch": "i386",
        "build": "7601.17514",
        "binary_formats": ["pe"]
-      },
-      "hw": {
-        "default_disk_size": "30G",
-        "default_snapshot_size": "2G",
-        "nic": "e1000",
-        "cpu": "core2duo"
-      }
-    },
-
-
-    "windows-8.1ent-x86_64": {
-      "name": "Windows 8.1 Enterprise x86_64",
-      "image_group": "windows",
-      "url": "",
-      "iso": {
-        "name": "en_windows_8_1_enterprise_x64_dvd_2971902.iso",
-        "sha1": "ae792b2ef982dac7391224b624eab8d6340d78ab"
-      },
-      "os": {
-        "family": "windows",
-        "name": "windows",
-        "version": "8.1ent",
-        "arch": "x86_64",
-        "build": "9600.17031",
-        "binary_formats": ["pe"]
-      },
-      "hw": {
-        "default_disk_size": "30G",
-        "default_snapshot_size": "2G",
-        "nic": "e1000",
-        "cpu": "core2duo"
-      }
-    },
-
-    "windows-10ent1703-x86_64": {
-      "name": "Windows 10 Enterprise 1703 x86_64",
-      "image_group": "windows",
-      "url": "",
-      "iso": {
-        "name": "en_windows_10_enterprise_version_1703_updated_march_2017_x64_dvd_10189290.iso",
-        "sha1": "77d5e7c91b5dbbee410fb6c57cb944238bf7176a"
-      },
-      "os": {
-        "family": "windows",
-        "name": "windows",
-        "version": "10ent1703",
-        "arch": "x86_64",
-        "build": "1703",
-        "binary_formats": ["pe"]
       },
       "hw": {
         "default_disk_size": "30G",

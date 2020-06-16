@@ -18,8 +18,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-
-SRC?=$(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+ifeq ("$(OUTDIR)","")
+SRC := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+endif
 
 ### Beginning of user-adjustable variables ###
 
@@ -40,11 +41,19 @@ GRAPHICS ?= -nographic -monitor null
 # Image creation will take much longer.
 QEMU_KVM ?= -enable-kvm
 
+# Port of the FTP server running on localhost.
+# Guest VMs connect to that FTP server to upload their files (guestfs).
+QEMU_FTP_PORT ?= 1234
+
 # Where to store final images
-OUTDIR ?= $(shell pwd)/output
+ifeq ("$(OUTDIR)","")
+OUTDIR := $(shell pwd)/output
+endif
 
 # Location of ISO files for Windows images
-ISODIR ?= $(shell pwd)/iso
+ifeq ("$(ISODIR)","")
+ISODIR := $(shell pwd)/iso
+endif
 
 # Location of the latest guest-images release
 GUEST_IMAGES_RELEASE_URL = https://github.com/S2E/guest-images/releases/download/v2.0.0
@@ -58,14 +67,15 @@ _NO_COLOR := $(shell tput sgr0)
 INFO_MSG = @echo "$(_INFO_MSG_COLOR)[`date`] $1$(_NO_COLOR)"
 OK_MSG = @echo "$(_OK_MSG_COLOR)[`date`] $1$(_NO_COLOR)"
 
-TMPDIR = $(shell pwd)/.tmp-output
-STAMPS = $(shell pwd)/.stamps
+TMPDIR := $(shell pwd)/.tmp-output
+STAMPS := $(shell pwd)/.stamps
 
 QEMU_IMG = $(S2E_INSTALL_ROOT)/bin/qemu-img
 QEMU64 = $(S2E_INSTALL_ROOT)/bin/qemu-system-x86_64
 
 GET_SETTING = $(shell $(SRC)/scripts/get_setting.py -d $(SRC)/images.json -n $(1) -s $(2))
-ISO_URL=$(call GET_SETTING,$(1),iso.url)
+GET_APP_SETTING = $(shell jq -e -r $(1) $(SRC)/apps.json)
+ISO_URL = $(call GET_SETTING,$(1),iso.url)
 
 ARCH = $(word 3, $(subst -, ,$(shell basename $(1))))
 OS_ARCH = $(call GET_SETTING,$(1),os.arch)
@@ -119,6 +129,10 @@ $(OUTDIR)/%.tar.xz: $(OUTDIR)/%/image.json
 
 define IMAGE_RULE
   $1: $(OUTDIR)/$1/image.json
+endef
+
+define IMAGE_APP_RULE
+  $1/$2: $(OUTDIR)/$1/$2/image.json
 endef
 
 $(WINDOWS_APPS_DIR) $(OUTDIR) $(TMPDIR):
