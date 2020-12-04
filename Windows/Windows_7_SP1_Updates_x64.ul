@@ -24,13 +24,6 @@
     <updates>
 
         <!-- Convenience Rollup Update and Prerequisites -->
-        <update id="KB2533552" category="1" publishdate="2011-05-10" article="http://support.microsoft.com/kb/2533552">
-            <title>KB2533552 - Update for Windows 7 SP1 x64</title>
-            <description></description>
-            <filename>Windows6.1-KB2533552-x64.msu</filename>
-            <url>http://download.microsoft.com/download/B/6/F/B6F95B10-8B74-42F2-B57A-2C559D43BC28/Windows6.1-KB2533552-x64.msu</url>
-        </update>
-
         <update id="KB3020369" category="1" publishdate="2015-04-01"
                 article="https://support.microsoft.com/en-us/help/3020369">
             <title>KB3020369 - April 2015 servicing stack update for Windows 7 and Windows Server 2008 R2</title>
@@ -77,6 +70,13 @@
             <url>
                 http://download.windowsupdate.com/c/msdownload/update/software/secu/2020/01/windows6.1-kb4536952-x64_87f81056110003107fa0e0ec35a3b600ef300a14.msu
             </url>
+        </update>
+
+        <update id="KB4580970" category="1" publishdate="2020-10-09" article="http://support.microsoft.com/kb/4580970">
+            <title>KB4580970 - Update for Windows 7 SP1 x64</title>
+            <description></description>
+            <filename>Windows6.1-KB4580970-x64.msu</filename>
+            <url>http://download.windowsupdate.com/d/msdownload/update/software/secu/2020/10/windows6.1-kb4580970-x64_2616e0b0014f1b7db14ce7a8b0603dfdd0a9bf50.msu</url>
         </update>
 
         <update id="KB4474419" category="2" publishdate="2019-09-09"
@@ -429,7 +429,7 @@
             <description></description>
             <filename>Windows6.1-KB2547666-x64.msu</filename>
             <url>
-                http://download.microsoft.com/download/E/E/4/EE4DA494-C870-409B-8938-05305BF52BA8/Windows6.1-KB2547666-x64.msu
+                http://download.windowsupdate.com/msdownload/update/software/updt/2011/06/windows6.1-kb2547666-x64_28b78926b1b1a04a9867050ecb5e81857ebd5d66.msu
             </url>
         </update>
 
@@ -438,7 +438,7 @@
             <description></description>
             <filename>Windows6.1-KB2545698-x64.msu</filename>
             <url>
-                http://download.microsoft.com/download/0/5/6/05675ADF-21AB-4476-8731-95182643D02C/Windows6.1-KB2545698-x64.msu
+                http://download.windowsupdate.com/msdownload/update/software/updt/2011/06/windows6.1-kb2545698-x64_51753a436cc6358b6e3e15db9b43ffc97d523fc9.msu
             </url>
         </update>
 
@@ -447,15 +447,8 @@
             <description></description>
             <filename>Windows6.1-KB2603229-x64.msu</filename>
             <url>
-                http://download.microsoft.com/download/9/5/9/959A7CAA-CBC1-44F9-B81E-A74348599ABC/Windows6.1-KB2603229-x64.msu
+                http://download.windowsupdate.com/msdownload/update/software/updt/2011/10/windows6.1-kb2603229-x64_aea29b57253c8f271d99b76f09839dbf1c0a7f86.msu
             </url>
-        </update>
-
-        <update id="KB971033" category="10" publishdate="2011-04-27" article="http://support.microsoft.com/kb/971033">
-            <title>KB971033 - Update Windows Activation Technologies for Windows 7 SP1 x64</title>
-            <description></description>
-            <filename>Windows6.1-KB971033-x64.msu</filename>
-            <url>http://go.microsoft.com/fwlink/?LinkID=152411</url>
         </update>
 
         <update id="KB2729094" category="10" publishdate="2012-10-09" article="http://support.microsoft.com/kb/2729094">
