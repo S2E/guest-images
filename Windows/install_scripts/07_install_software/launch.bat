@@ -57,6 +57,13 @@ if exist "%SystemDrive%\Program Files (x86)" (
     d:\vs2008_vcredist_x64.exe /Q /norestart
 )
 
+echo ==^> Installing WinDbg
+
+msiexec.exe /i d:\windbg-x86.msi /qn /norestart
+if exist "%SystemDrive%\Program Files (x86)" (
+    msiexec.exe /i d:\windbg-x64.msi /qn /norestart
+)
+
 :: Install ODT only on win7 and win10
 ver | find "5.1" > nul
 if %ERRORLEVEL% == 0 goto xp
