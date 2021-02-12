@@ -83,6 +83,10 @@ reg add "HKEY_CURRENT_USER\Software\Microsoft\Office\{{version}}\Word\Security\F
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Office\{{version}}\Word\Security\FileBlock" /v Word95Files /t REG_DWORD /d 0 /f
 reg add "HKEY_CURRENT_USER\Software\Microsoft\Office\{{version}}\Word\Security\FileBlock" /v Word2Files /t REG_DWORD /d 0 /f
 
+reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\{{version}}\Word\Security\FileValidation" /v EnableOnLoad /t REG_DWORD /d 0 /f
+reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\{{version}}\Excel\Security\FileValidation" /v EnableOnLoad /t REG_DWORD /d 0 /f
+reg add "HKEY_CURRENT_USER\Software\Policies\Microsoft\Office\{{version}}\PowerPoint\Security\FileValidation" /v EnableOnLoad /t REG_DWORD /d 0 /f
+
 c:\Python27\python.exe e:\upload_guestfs.py e:\guest_files.txt 10.0.2.100:1234 {{ guestfs }} c:\
 
 :end
