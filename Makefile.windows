@@ -282,7 +282,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	mkdir -p $(OUTDIR)/$1/imagefs
 
 	cd $(OUTDIR)/$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
-	    guestmount --ro -i -a image.raw.s2e imagefs && \
+	    guestmount --ro -i --format=raw -a image.raw.s2e imagefs && \
 	    $(SRC)/scripts/filter_exe.py imagefs guestfs
 
 	@# Convert the file names to lower case. This makes sure that the case
