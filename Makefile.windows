@@ -23,8 +23,7 @@
 WINDOWS_UPDATES :=
 
 include $(SRC)/Makefile.windows.apps
-include $(SRC)/Makefile.windows.updates32
-include $(SRC)/Makefile.windows.updates64
+include $(SRC)/Makefile.windows.updates
 
 windows_clean:
 	rm -rf $(WINDOWS_APPS_DIR)
