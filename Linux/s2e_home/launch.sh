@@ -120,20 +120,16 @@ install_cgc_packages() {
     linux-libc-dev_10551-cfe-rc8_i386.deb
     "
 
-    local CUR_DIR
-    CUR_DIR="$(pwd)"
-
-    # Download packages in temp folder
-    cd /tmp
+    wget https://github.com/S2E/guest-images/releases/download/v2.0.0/cgc-packages.tar.gz
+    tar xzvf cgc-packages.tar.gz
 
     # Install the CGC packages
     for PACKAGE in ${CGC_PACKAGES}; do
-        wget --no-check-certificate https://cgcdist.s3.amazonaws.com/release-final/deb/${PACKAGE}
         sudo dpkg -i --force-confnew ${PACKAGE}
         rm -f ${PACKAGE}
     done
 
-    cd "$CUR_DIR"
+    rm -f cgc-packages.tar.gz
 }
 
 sudo apt-get update
