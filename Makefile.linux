@@ -107,7 +107,7 @@ define BUILD_S2E_IMAGE
 
 	# TODO: rsync only executable files
 	cd $(OUTDIR)/$2$1 && trap 'fusermount -u imagefs && rmdir imagefs' EXIT && \
-	    guestmount --ro -i -a image.raw.s2e imagefs && \
+	    guestmount --ro -i --format=raw -a image.raw.s2e imagefs && \
 	    rsync --links -rt --exclude '*.deb' imagefs/* guestfs
 
 	# Some files might not have read privileges, add them here

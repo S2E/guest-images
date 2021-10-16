@@ -79,10 +79,40 @@ def handle_makefile(args, root):
         category = int(update.attrib['category'])
         if category not in g_ignored_categories:
             gen_makefile_target(args.output_prefix, update)
-            targets.append(os.path.join(args.output_prefix, file_path))
+            target = os.path.join(args.output_prefix, file_path)
+            if target not in targets:
+                targets.append(target)
 
     file_paths = ' '.join(targets)
     print(f'{args.var_name} := $({args.var_name}) {file_paths}')
+
+
+def gen_makefile_target_tgz(output_dir, update):
+    file_path = os.path.join(output_dir, get_file_name(update))
+    url = update.find('url').text.strip()
+    title = update.find('title').text.strip()
+    print(f'# {title}')
+    print(f'{file_path}: {output_dir}/stamp')
+    print('')
+
+
+def handle_makefile_tgz(args, root):
+    print('# Automatically generated')
+    cmdline = ' '.join(sys.argv)
+    print(f'# {cmdline}\n')
+
+    targets = []
+    ul = get_update_list(root)
+    for file_path, update in ul:
+        category = int(update.attrib['category'])
+        if category not in g_ignored_categories:
+            gen_makefile_target_tgz(args.output_prefix, update)
+            target = os.path.join(args.output_prefix, file_path)
+            if target not in targets:
+                targets.append(target)
+
+    file_paths = ' '.join(targets)
+    print(f'{args.var_name} := $({args.var_name}) {file_paths}\n')
 
 
 def handle_download(args, root):
@@ -124,6 +154,12 @@ def main():
     makefile.add_argument('-f', '--update-file', help='Path to the XML file that describes the updates', required=True)
     makefile.add_argument('-v', '--var-name', help='Variable that contains all the targets', required=True)
     makefile.set_defaults(func=handle_makefile)
+
+    makefile_tgz = subparser.add_parser('makefile-tgz')
+    makefile_tgz.add_argument('-o', '--output-prefix', help='Output prefix', required=True)
+    makefile_tgz.add_argument('-f', '--update-file', help='Path to the XML file that describes the updates', required=True)
+    makefile_tgz.add_argument('-v', '--var-name', help='Variable that contains all the targets', required=True)
+    makefile_tgz.set_defaults(func=handle_makefile_tgz)
 
     download = subparser.add_parser('download')
     download.add_argument('-o', '--output-dir', help='Output directory', required=True)
