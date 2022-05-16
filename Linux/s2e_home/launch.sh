@@ -44,7 +44,7 @@ install_i386() {
 install_systemtap() {
     git clone git://sourceware.org/git/systemtap.git
     cd systemtap
-    git checkout release-3.2
+    git checkout release-4.7
     cd ..
 
     mkdir systemtap-build
