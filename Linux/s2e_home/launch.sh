@@ -25,15 +25,29 @@
 
 set -ex
 
+# libelf is required for s2e.so
+COMMON_PACKAGES="gcc-multilib g++-multilib libc6-dev-i386 libelf1:i386"
+DEBIAN9_PACKAGES="lib32stdc++-6-dev libstdc++6:i386"
+DEBIAN11_PACKAGES="lib32stdc++-10-dev lib32stdc++6 libstdc++6:i386"
+
+dist_version() {
+    lsb_release -rs | cut -d '.' -f 1
+}
+
 # Install 32-bit user space for 64-bit kernels
 install_i386() {
     if uname -a | grep -q x86_64; then
         sudo dpkg --add-architecture i386
         sudo apt-get update
 
-        # libelf is required for s2e.so
-        sudo apt-get -y install gcc-multilib g++-multilib libc6-dev-i386 lib32stdc++-6-dev libstdc++6:i386 \
-            libelf1:i386
+        sudo apt-get -y install ${COMMON_PACKAGES}
+
+        VER=$(dist_version)
+        if [ $VER -eq 9 ]; then
+            sudo apt-get -y install ${DEBIAN9_PACKAGES}
+        elif [ $VER -eq 11 ]; then
+            sudo apt-get -y install ${DEBIAN11_PACKAGES}
+        fi
     fi
 }
 
@@ -94,6 +108,8 @@ install_apt_packages() {
     sudo dpkg -i python-support_1.0.15_all.deb
 }
 
+# This works only on Debian 9, CGC packages are not compatible with
+# more recent distributions.
 install_cgc_packages() {
     CGC_PACKAGES="
     binutils-cgc-i386_2.24-10551-cfe-rc8_i386.deb
@@ -133,13 +149,16 @@ install_cgc_packages() {
 }
 
 sudo apt-get update
+sudo apt-get -y install wget lsb-release
+
 install_i386
-install_systemtap
 
 # Install CGC tools if we have a CGC kernel
 if [ $(has_cgc_kernel) -eq 1 ]; then
     install_apt_packages
     install_cgc_packages
+else
+    install_systemtap
 fi
 
 install_kernel
