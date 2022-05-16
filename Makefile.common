@@ -125,7 +125,7 @@ export LIBGUESTFS_QEMU := $(S2E_INSTALL_ROOT)/bin/qemu-system-x86_64
 # Note: pxz has a bug when run with unlimited stack size (which is the case in a makefile)
 $(OUTDIR)/%.tar.xz: $(OUTDIR)/%/image.json
 	$(call INFO_MSG,[$@] Creating image archive...)
-	cd $(OUTDIR) &&  bash -c 'ulimit -s 8192; tar -I pxz -cf "$(shell basename $@)" "$(shell basename $(shell dirname $<))"'
+	cd $(OUTDIR) &&  bash -c 'ulimit -s 8192; tar -I "xz -T 0" -cf "$(shell basename $@)" "$(shell basename $(shell dirname $<))"'
 
 define IMAGE_RULE
   $1: $(OUTDIR)/$1/image.json
