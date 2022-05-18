@@ -87,7 +87,7 @@ define BUILD_S2E_IMAGE
 	virt-copy-in -a "$$@" $(SRC)/Linux/override.conf /etc/systemd/system/getty@tty1.service.d/
 
 	$(call INFO_MSG,[$$@] Booting disk image...)
-	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
+	$(QEMU64) -m 4G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
