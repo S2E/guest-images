@@ -27,7 +27,7 @@ endif
 
 ### Provisioning the initial image ###
 
-define TEMPLATE_BASE_LINUX_IMAGE
+define COMMON_LINUX_IMAGE_TARGETS
  $(OUTDIR)/$1: | $(OUTDIR)
  $(TMPDIR)/$1: | $(TMPDIR)
 	mkdir -p "$$@"
@@ -35,7 +35,10 @@ define TEMPLATE_BASE_LINUX_IMAGE
  $(TMPDIR)/$1/$1.iso: | $(TMPDIR)/$1
 	$(call INFO_MSG,[$$@] Downloading disk image...)
 	cd $(TMPDIR)/$1 && $(GET_ISO) $(call ISO_URL,$(1)) $$@
+endef
 
+# Debian-specific unattended installation
+define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
  $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/bootcd/preseed.cfg
 	$(call INFO_MSG,[$$@] Creating installation disk...)
 	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
@@ -65,6 +68,35 @@ define TEMPLATE_BASE_LINUX_IMAGE
 	    $(call QEMU_HD,0,$$@) \
 	    -cdrom $(TMPDIR)/$1/install_files.iso \
 	    -serial file:$(TMPDIR)/$1/serial.txt
+endef
+
+# Ubuntu-specific unattended installation
+define TEMPLATE_BASE_UBUNTU_LINUX_IMAGE
+ $(TMPDIR)/$1/seed.iso: $(SRC)/Linux/ubuntu-preseed/user-data $(SRC)/Linux/ubuntu-preseed/meta-data
+	$(call INFO_MSG,[$$@] Creating installation disk...)
+	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
+
+	cloud-localds "$$@" $(SRC)/Linux/ubuntu-preseed/user-data $(SRC)/Linux/ubuntu-preseed/meta-data
+
+ $(TMPDIR)/$1/image.raw: $(TMPDIR)/$1/$1.iso $(TMPDIR)/$1/seed.iso
+	$(call INFO_MSG,[$$@] Creating disk image...)
+	$(QEMU_IMG) create -f raw $$@ $(call DISK_SIZE,$1)
+
+	rm -rf "$(TMPDIR)/$1/vmlinuz" "$(TMPDIR)/$1/initrd"
+	7z e "$(TMPDIR)/$1/$1.iso" "-o$(TMPDIR)/$1" vmlinuz initrd -r
+
+	$(call INFO_MSG,[$$@] Running initial setup...)
+	# Note: install the image using default KVM CPU because the stock
+	# kernel may not support the required CPU flags (e.g., pentium,-nommx).
+	# The custom S2E kernel will work though.
+	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
+	    $(call QEMU_HD,0,$$@) \
+		$(call QEMU_CD,1,$(TMPDIR)/$1/$1.iso) \
+		$(call QEMU_CD,2,$(TMPDIR)/$1/seed.iso) \
+		-serial file:$(TMPDIR)/$1/serial.txt \
+		-kernel $(TMPDIR)/$1/vmlinuz \
+		-initrd $(TMPDIR)/$1/initrd \
+		-append autoinstall
 endef
 
 ### Installing the kernel and S2E payload ###
@@ -178,12 +210,23 @@ endef
 
 
 ### Instantiating all build configurations ###
-LINUX_IMAGES = debian-9.2.1-i386 debian-11.3-i386  debian-9.2.1-x86_64 debian-11.3-x86_64 cgc_debian-9.2.1-i386
-LINUX_ARCHIVES=$(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(LINUX_IMAGES)))
+DEBIAN_IMAGES = debian-9.2.1-i386 debian-11.3-i386 debian-9.2.1-x86_64 debian-11.3-x86_64 cgc_debian-9.2.1-i386
+UBUNTU_IMAGES = ubuntu-22.04-x86_64
+LINUX_IMAGES = $(DEBIAN_IMAGES) $(UBUNTU_IMAGES)
+LINUX_ARCHIVES = $(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(LINUX_IMAGES)))
+
+$(foreach os,$(LINUX_IMAGES), \
+  $(eval $(call COMMON_LINUX_IMAGE_TARGETS,$(os))) \
+)
 
 # The cgc linux image uses an existing base image
-$(foreach os,$(LINUX_IMAGES), \
-  $(if $(findstring cgc,$(os)),,$(eval $(call TEMPLATE_BASE_LINUX_IMAGE,$(os)))) \
+$(foreach os,$(DEBIAN_IMAGES), \
+  $(if $(findstring cgc,$(os)),,$(eval $(call TEMPLATE_BASE_DEBIAN_LINUX_IMAGE,$(os)))) \
+  $(eval $(call IMAGE_RULE,$(os))) \
+)
+
+$(foreach os,$(UBUNTU_IMAGES), \
+  $(eval $(call TEMPLATE_BASE_UBUNTU_LINUX_IMAGE,$(os))) \
   $(eval $(call IMAGE_RULE,$(os))) \
 )
 
@@ -208,6 +251,9 @@ $(eval $(call TAKE_SNAPSHOT,debian-9.2.1-x86_64,))
 
 $(eval $(call BUILD_S2E_IMAGE,debian-11.3-x86_64,,linux-4.9.3-x86_64))
 $(eval $(call TAKE_SNAPSHOT,debian-11.3-x86_64,))
+
+$(eval $(call BUILD_S2E_IMAGE,ubuntu-22.04-x86_64,,linux-4.9.3-x86_64))
+$(eval $(call TAKE_SNAPSHOT,ubuntu-22.04-x86_64,))
 
 ### Top level rules ###
 

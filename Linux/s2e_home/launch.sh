@@ -25,13 +25,39 @@
 
 set -ex
 
+export DEBIAN_FRONTEND=noninteractive
+
 # libelf is required for s2e.so
 COMMON_PACKAGES="gcc-multilib g++-multilib libc6-dev-i386 libelf1:i386"
 DEBIAN9_PACKAGES="lib32stdc++-6-dev libstdc++6:i386"
 DEBIAN11_PACKAGES="lib32stdc++-10-dev lib32stdc++6 libstdc++6:i386"
 
+# systemtap
+UBUNTU_PACKAGES="elfutils libdw-dev"
+
 dist_version() {
     lsb_release -rs | cut -d '.' -f 1
+}
+
+dist_name() {
+    lsb_release -is | tr '[:upper:]' '[:lower:]'
+}
+
+install_packages() {
+    # Preserve environment (-E)
+    DEBIAN_FRONTEND=noninteractive sudo -E apt-get -y install $*
+}
+
+remove_packages() {
+    # Preserve environment (-E)
+    DEBIAN_FRONTEND=noninteractive sudo -E apt-get purge -y cloud-init
+}
+
+remove_ubuntu_packages() {
+    NAME=$(dist_name)
+    if [ "x$NAME" = "xubuntu" ]; then
+        remove_packages cloud-init
+    fi
 }
 
 # Install 32-bit user space for 64-bit kernels
@@ -40,13 +66,22 @@ install_i386() {
         sudo dpkg --add-architecture i386
         sudo apt-get update
 
-        sudo apt-get -y install ${COMMON_PACKAGES}
+        install_packages ${COMMON_PACKAGES}
 
+        NAME=$(dist_name)
         VER=$(dist_version)
-        if [ $VER -eq 9 ]; then
-            sudo apt-get -y install ${DEBIAN9_PACKAGES}
-        elif [ $VER -eq 11 ]; then
-            sudo apt-get -y install ${DEBIAN11_PACKAGES}
+
+        if [ "x$NAME" = "xdebian" ]; then
+            if [ $VER -eq 9 ]; then
+                install_packages ${DEBIAN9_PACKAGES}
+            elif [ $VER -eq 11 ]; then
+                install_packages ${DEBIAN11_PACKAGES}
+            fi
+        elif [ "x$NAME" = "xubuntu" ]; then
+            install_packages ${DEBIAN11_PACKAGES} ${UBUNTU_PACKAGES}
+        else
+            echo "Unsupported distribution ${NAME} ${VER}"
+            exit 1
         fi
     fi
 }
@@ -101,7 +136,7 @@ install_apt_packages() {
     tcpdump
     "
 
-    sudo apt-get -y install ${APT_PACKAGES}
+    install_packages ${APT_PACKAGES}
 
     # This package no longer exists on recent debian version
     wget http://ftp.us.debian.org/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
@@ -149,7 +184,8 @@ install_cgc_packages() {
 }
 
 sudo apt-get update
-sudo apt-get -y install wget lsb-release
+install_packages wget lsb-release
+remove_ubuntu_packages
 
 install_i386
 
