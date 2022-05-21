@@ -210,7 +210,7 @@ endef
 
 
 ### Instantiating all build configurations ###
-DEBIAN_IMAGES = debian-9.2.1-i386 debian-11.3-i386 debian-9.2.1-x86_64 debian-11.3-x86_64 cgc_debian-9.2.1-i386
+DEBIAN_IMAGES = debian-11.3-i386 debian-11.3-x86_64 cgc_debian-9.2.1-i386
 UBUNTU_IMAGES = ubuntu-22.04-x86_64
 LINUX_IMAGES = $(DEBIAN_IMAGES) $(UBUNTU_IMAGES)
 LINUX_ARCHIVES = $(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(LINUX_IMAGES)))
@@ -221,7 +221,7 @@ $(foreach os,$(LINUX_IMAGES), \
 
 # The cgc linux image uses an existing base image
 $(foreach os,$(DEBIAN_IMAGES), \
-  $(if $(findstring cgc,$(os)),,$(eval $(call TEMPLATE_BASE_DEBIAN_LINUX_IMAGE,$(os)))) \
+  $(eval $(call TEMPLATE_BASE_DEBIAN_LINUX_IMAGE,$(os))) \
   $(eval $(call IMAGE_RULE,$(os))) \
 )
 
@@ -237,17 +237,11 @@ $(eval $(call TEMPLATE_LINUX_KERNEL,linux-4.9.3,x86_64))
 
 # Rules for building different images
 # TODO: cgc image is treated in an adhoc manner, try to factor it out somehow
-$(eval $(call BUILD_S2E_IMAGE,debian-9.2.1-i386,cgc_,decree-cgc-cfe-i386))
-$(eval $(call TAKE_SNAPSHOT,debian-9.2.1-i386,cgc_))
-
-$(eval $(call BUILD_S2E_IMAGE,debian-9.2.1-i386,,linux-4.9.3-i386))
-$(eval $(call TAKE_SNAPSHOT,debian-9.2.1-i386,))
+$(eval $(call BUILD_S2E_IMAGE,cgc_debian-9.2.1-i386,,decree-cgc-cfe-i386))
+$(eval $(call TAKE_SNAPSHOT,cgc_debian-9.2.1-i386,))
 
 $(eval $(call BUILD_S2E_IMAGE,debian-11.3-i386,,linux-4.9.3-i386))
 $(eval $(call TAKE_SNAPSHOT,debian-11.3-i386,))
-
-$(eval $(call BUILD_S2E_IMAGE,debian-9.2.1-x86_64,,linux-4.9.3-x86_64))
-$(eval $(call TAKE_SNAPSHOT,debian-9.2.1-x86_64,))
 
 $(eval $(call BUILD_S2E_IMAGE,debian-11.3-x86_64,,linux-4.9.3-x86_64))
 $(eval $(call TAKE_SNAPSHOT,debian-11.3-x86_64,))

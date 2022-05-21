@@ -43,28 +43,6 @@
       }
     },
 
-    "debian-9.2.1-i386": {
-      "name": "Debian i386 image",
-      "image_group": "linux",
-      "url": "https://drive.google.com/open?id=1RltZ99RXk4dnP8XHAldVyCgUcliDTplY",
-      "iso": {
-        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/i386/iso-cd/debian-9.2.1-i386-netinst.iso"
-      },
-      "os": {
-        "name": "debian",
-        "version": "9.2.1",
-        "arch": "i386",
-        "build": "",
-        "binary_formats": ["elf"]
-      },
-      "hw": {
-        "default_disk_size": "4G",
-        "default_snapshot_size": "256M",
-        "nic": "e1000"
-      }
-    },
-
-
     "cgc_debian-9.2.1-i386": {
       "name": "Debian i386 image with CGC kernel and user-space packages",
       "image_group": "linux",
@@ -78,28 +56,6 @@
         "arch": "i386",
         "build": "",
         "binary_formats": ["decree"]
-      },
-      "hw": {
-        "default_disk_size": "4G",
-        "default_snapshot_size": "256M",
-        "nic": "e1000"
-      }
-    },
-
-
-    "debian-9.2.1-x86_64": {
-      "name": "Debian x86_64 image",
-      "image_group": "linux",
-      "url": "https://drive.google.com/open?id=1fybAk4Qb-0Ig8W3immpwBLc-SZoN7UUh",
-      "iso": {
-        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/amd64/iso-cd/debian-9.2.1-amd64-netinst.iso"
-      },
-      "os": {
-        "name": "debian",
-        "version": "9.2.1",
-        "arch": "x86_64",
-        "build": "",
-        "binary_formats": ["elf"]
       },
       "hw": {
         "default_disk_size": "4G",
@@ -128,7 +84,6 @@
         "nic": "e1000"
       }
     },
-
 
     "windows-xpsp3pro-i386": {
       "name": "Windows XP Professional SP3 i386",
