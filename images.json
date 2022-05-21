@@ -4,7 +4,7 @@
     "ubuntu-22.04-x86_64": {
       "name": "Ubuntu x86_64 image",
       "image_group": "linux",
-      "url": "",
+      "url": "https://drive.google.com/open?id=102EgrujJE5Pzlg98qe3twLNIeMz5MkJQ",
       "iso": {
         "url": "https://releases.ubuntu.com/22.04/ubuntu-22.04-live-server-amd64.iso"
       },
@@ -25,7 +25,7 @@
     "debian-11.3-i386": {
       "name": "Debian i386 image",
       "image_group": "linux",
-      "url": "",
+      "url": "https://drive.google.com/open?id=1fNw4Vfa2Z3neZGZvMIIQ38q06PuNvARS",
       "iso": {
         "url": "https://cdimage.debian.org/debian-cd/current/i386/iso-cd/debian-11.3.0-i386-netinst.iso"
       },
@@ -67,7 +67,7 @@
     "debian-11.3-x86_64": {
       "name": "Debian x86_64 image",
       "image_group": "linux",
-      "url": "",
+      "url": "https://drive.google.com/open?id=19nGaTNpk-qH29FuXI3cy8I8wLU-rKC3E",
       "iso": {
         "url": "https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso"
       },
