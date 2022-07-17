@@ -64,7 +64,7 @@ define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
 	# Note: install the image using default KVM CPU because the stock
 	# kernel may not support the required CPU flags (e.g., pentium,-nommx).
 	# The custom S2E kernel will work though.
-	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
+	$(QEMU64) -m 4G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
 	    -cdrom $(TMPDIR)/$1/install_files.iso \
 	    -serial file:$(TMPDIR)/$1/serial.txt
@@ -89,7 +89,7 @@ define TEMPLATE_BASE_UBUNTU_LINUX_IMAGE
 	# Note: install the image using default KVM CPU because the stock
 	# kernel may not support the required CPU flags (e.g., pentium,-nommx).
 	# The custom S2E kernel will work though.
-	$(QEMU64) -m 1G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
+	$(QEMU64) -m 4G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
 	    $(call QEMU_HD,0,$$@) \
 		$(call QEMU_CD,1,$(TMPDIR)/$1/$1.iso) \
 		$(call QEMU_CD,2,$(TMPDIR)/$1/seed.iso) \
