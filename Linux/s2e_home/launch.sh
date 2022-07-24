@@ -25,15 +25,64 @@
 
 set -ex
 
+export DEBIAN_FRONTEND=noninteractive
+
+# libelf is required for s2e.so
+COMMON_PACKAGES="gcc-multilib g++-multilib libc6-dev-i386 libelf1:i386"
+DEBIAN9_PACKAGES="lib32stdc++-6-dev libstdc++6:i386"
+DEBIAN11_PACKAGES="lib32stdc++-10-dev lib32stdc++6 libstdc++6:i386"
+
+# systemtap
+UBUNTU_PACKAGES="elfutils libdw-dev"
+
+dist_version() {
+    lsb_release -rs | cut -d '.' -f 1
+}
+
+dist_name() {
+    lsb_release -is | tr '[:upper:]' '[:lower:]'
+}
+
+install_packages() {
+    # Preserve environment (-E)
+    DEBIAN_FRONTEND=noninteractive sudo -E apt-get -y install $*
+}
+
+remove_packages() {
+    # Preserve environment (-E)
+    DEBIAN_FRONTEND=noninteractive sudo -E apt-get purge -y cloud-init
+}
+
+remove_ubuntu_packages() {
+    NAME=$(dist_name)
+    if [ "x$NAME" = "xubuntu" ]; then
+        remove_packages cloud-init
+    fi
+}
+
 # Install 32-bit user space for 64-bit kernels
 install_i386() {
     if uname -a | grep -q x86_64; then
         sudo dpkg --add-architecture i386
         sudo apt-get update
 
-        # libelf is required for s2e.so
-        sudo apt-get -y install gcc-multilib g++-multilib libc6-dev-i386 lib32stdc++-6-dev libstdc++6:i386 \
-            libelf1:i386
+        install_packages ${COMMON_PACKAGES}
+
+        NAME=$(dist_name)
+        VER=$(dist_version)
+
+        if [ "x$NAME" = "xdebian" ]; then
+            if [ $VER -eq 9 ]; then
+                install_packages ${DEBIAN9_PACKAGES}
+            elif [ $VER -eq 11 ]; then
+                install_packages ${DEBIAN11_PACKAGES}
+            fi
+        elif [ "x$NAME" = "xubuntu" ]; then
+            install_packages ${DEBIAN11_PACKAGES} ${UBUNTU_PACKAGES}
+        else
+            echo "Unsupported distribution ${NAME} ${VER}"
+            exit 1
+        fi
     fi
 }
 
@@ -44,13 +93,13 @@ install_i386() {
 install_systemtap() {
     git clone git://sourceware.org/git/systemtap.git
     cd systemtap
-    git checkout release-3.2
+    git checkout release-4.7
     cd ..
 
     mkdir systemtap-build
     cd systemtap-build
     ../systemtap/configure --disable-docs
-    make -j2
+    make
     sudo make install
     cd ..
 }
@@ -58,7 +107,7 @@ install_systemtap() {
 # Install kernels last, the cause downgrade of libc,
 # which will cause issues when installing other packages
 install_kernel() {
-    sudo dpkg -i *.deb
+    sudo dpkg -i linux-image*.deb linux-headers*.deb
 
     MENU_ENTRY="$(grep menuentry /boot/grub/grub.cfg  | grep s2e | cut -d "'" -f 2 | head -n 1)"
     echo "Default menu entry: $MENU_ENTRY"
@@ -87,13 +136,15 @@ install_apt_packages() {
     tcpdump
     "
 
-    sudo apt-get -y install ${APT_PACKAGES}
+    install_packages ${APT_PACKAGES}
 
     # This package no longer exists on recent debian version
     wget http://ftp.us.debian.org/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
     sudo dpkg -i python-support_1.0.15_all.deb
 }
 
+# This works only on Debian 9, CGC packages are not compatible with
+# more recent distributions.
 install_cgc_packages() {
     CGC_PACKAGES="
     binutils-cgc-i386_2.24-10551-cfe-rc8_i386.deb
@@ -133,13 +184,17 @@ install_cgc_packages() {
 }
 
 sudo apt-get update
+install_packages wget lsb-release
+remove_ubuntu_packages
+
 install_i386
-install_systemtap
 
 # Install CGC tools if we have a CGC kernel
 if [ $(has_cgc_kernel) -eq 1 ]; then
     install_apt_packages
     install_cgc_packages
+else
+    install_systemtap
 fi
 
 install_kernel

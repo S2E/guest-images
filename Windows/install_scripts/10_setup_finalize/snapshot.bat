@@ -35,7 +35,7 @@ echo %SECRET_MESSAGE_SAVEVM% > com1 2>&1
 :: ###########################################################################
 :: This is where we should be after resuming the snapshot
 
-s2eget bootstrap.sh
+s2ecmd get bootstrap.sh
 
 :: Need to use call, otherwise msys.bat would just close the terminal
 call c:\msys\1.0\msys.bat /c/s2e/bootstrap.sh > com1 2>&1

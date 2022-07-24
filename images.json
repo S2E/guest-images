@@ -1,16 +1,37 @@
 {
   "version": 3,
   "images": {
-    "debian-9.2.1-i386": {
+    "ubuntu-22.04-x86_64": {
+      "name": "Ubuntu x86_64 image",
+      "image_group": "linux",
+      "url": "https://drive.google.com/open?id=102EgrujJE5Pzlg98qe3twLNIeMz5MkJQ",
+      "iso": {
+        "url": "https://releases.ubuntu.com/22.04/ubuntu-22.04-live-server-amd64.iso"
+      },
+      "os": {
+        "name": "ubuntu",
+        "version": "22.04",
+        "arch": "x86_64",
+        "build": "",
+        "binary_formats": ["elf"]
+      },
+      "hw": {
+        "default_disk_size": "6G",
+        "default_snapshot_size": "256M",
+        "nic": "e1000"
+      }
+    },
+
+    "debian-11.3-i386": {
       "name": "Debian i386 image",
       "image_group": "linux",
-      "url": "https://drive.google.com/open?id=1RltZ99RXk4dnP8XHAldVyCgUcliDTplY",
+      "url": "https://drive.google.com/open?id=1fNw4Vfa2Z3neZGZvMIIQ38q06PuNvARS",
       "iso": {
-        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/i386/iso-cd/debian-9.2.1-i386-netinst.iso"
+        "url": "https://cdimage.debian.org/mirror/cdimage/archive/11.3.0/i386/iso-cd/debian-11.3.0-i386-netinst.iso"
       },
       "os": {
         "name": "debian",
-        "version": "9.2.1",
+        "version": "11.3",
         "arch": "i386",
         "build": "",
         "binary_formats": ["elf"]
@@ -21,7 +42,6 @@
         "nic": "e1000"
       }
     },
-
 
     "cgc_debian-9.2.1-i386": {
       "name": "Debian i386 image with CGC kernel and user-space packages",
@@ -44,17 +64,16 @@
       }
     },
 
-
-    "debian-9.2.1-x86_64": {
+    "debian-11.3-x86_64": {
       "name": "Debian x86_64 image",
       "image_group": "linux",
-      "url": "https://drive.google.com/open?id=1fybAk4Qb-0Ig8W3immpwBLc-SZoN7UUh",
+      "url": "https://drive.google.com/open?id=19nGaTNpk-qH29FuXI3cy8I8wLU-rKC3E",
       "iso": {
-        "url": "https://cdimage.debian.org/mirror/cdimage/archive/9.2.1/amd64/iso-cd/debian-9.2.1-amd64-netinst.iso"
+        "url": "https://cdimage.debian.org/mirror/cdimage/archive/11.3.0/amd64/iso-cd/debian-11.3.0-amd64-netinst.iso"
       },
       "os": {
         "name": "debian",
-        "version": "9.2.1",
+        "version": "11.3",
         "arch": "x86_64",
         "build": "",
         "binary_formats": ["elf"]
@@ -65,7 +84,6 @@
         "nic": "e1000"
       }
     },
-
 
     "windows-xpsp3pro-i386": {
       "name": "Windows XP Professional SP3 i386",
