@@ -46,7 +46,12 @@ define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
 
 	cd $(TMPDIR)/$1 && chmod -R u+rwx install_files
 
-	cp "$(SRC)/Linux/bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files"
+	if [ "$1" = "cgc_debian-9.2.1-i386" ]; then \
+		cp "$(SRC)/Linux/bootcd/preseed.cfg-jessie" "$(TMPDIR)/$1/install_files/preseed.cfg"; \
+	else \
+		cp "$(SRC)/Linux/bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files"; \
+	fi
+
 	cp "$(SRC)/Linux/bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"
 	cp "$(SRC)/Linux/bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"
 

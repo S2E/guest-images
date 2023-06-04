@@ -30,9 +30,14 @@ FROM i386/debian:jessie
 
 MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.io>
 
+RUN echo "deb http://archive.debian.org/debian/ jessie main contrib non-free" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.debian.org/debian/ jessie main contrib non-free" >> /etc/apt/sources.list
+RUN echo "deb http://archive.debian.org/debian-security jessie/updates main"  >> /etc/apt/sources.list
+RUN echo "deb-src http://archive.debian.org/debian/ jessie main"  >> /etc/apt/sources.list
+
 RUN                                                                             \
     apt-get update &&                                                           \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --no-install-recommends   \
     sudo apt-file texinfo flex bison patch python unzip git bc parallel         \
     bzip2 wget less nano g++ gcc file libc6-dev make                            \
     fakeroot build-essential devscripts libncurses5-dev ca-certificates &&      \
