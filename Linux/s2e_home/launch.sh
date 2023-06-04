@@ -139,7 +139,7 @@ install_apt_packages() {
     install_packages ${APT_PACKAGES}
 
     # This package no longer exists on recent debian version
-    wget http://ftp.us.debian.org/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
+    wget http://archive.debian.org/debian-archive/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
     sudo dpkg -i python-support_1.0.15_all.deb
 }
 

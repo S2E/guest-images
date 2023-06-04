@@ -26,6 +26,9 @@ FROM i386/debian:9.3
 
 MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.io>
 
+RUN echo "deb http://archive.debian.org/debian/ stretch main contrib non-free" > /etc/apt/sources.list
+RUN echo "deb-src http://archive.debian.org/debian/ stretch main contrib non-free" >> /etc/apt/sources.list
+
 RUN                                                                             \
     apt-get update &&                                                           \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
