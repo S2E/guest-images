@@ -12,6 +12,7 @@
     Repartition=Yes
     WaitForReboot="No"
     UnattendSwitch="Yes"
+    DriverSigningPolicy=Ignore
 
 [Display]
     AutoConfirm=1
