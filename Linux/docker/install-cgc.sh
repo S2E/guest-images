@@ -32,10 +32,11 @@ install_apt_packages() {
     python-lxml
     python-matplotlib
     python-yaml
+    openssh-client
     tcpdump
     "
 
-    sudo apt-get -y install ${APT_PACKAGES}
+    sudo apt-get -y --force-yes install ${APT_PACKAGES}
 
     # This package no longer exists on recent debian version
     wget http://archive.debian.org/debian-archive/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
