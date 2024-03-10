@@ -39,7 +39,7 @@ endef
 
 # Debian-specific unattended installation
 define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
- $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/bootcd/preseed.cfg
+ $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/bootcd/preseed.cfg $(SRC)/Linux/bootcd/isolinux.cfg
 	$(call INFO_MSG,[$$@] Creating installation disk...)
 	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
 	7z x $(TMPDIR)/$1/$1.iso -o$(TMPDIR)/$1/install_files
