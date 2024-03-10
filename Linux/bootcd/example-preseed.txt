@@ -5,9 +5,9 @@
 d-i debian-installer/locale string en_US
 
 # The values can also be preseeded individually for greater flexibility.
-d-i debian-installer/language string en
-d-i debian-installer/country string US
-d-i debian-installer/locale string en_US.UTF-8
+#d-i debian-installer/language string en
+#d-i debian-installer/country string NL
+#d-i debian-installer/locale string en_GB.UTF-8
 # Optionally specify additional locales to be generated.
 #d-i localechooser/supported-locales multiselect en_US.UTF-8, nl_NL.UTF-8
 
@@ -40,7 +40,7 @@ d-i netcfg/choose_interface select auto
 # Automatic network configuration is the default.
 # If you prefer to configure the network manually, uncomment this line and
 # the static network configuration below.
-d-i netcfg/disable_autoconfig boolean true
+#d-i netcfg/disable_autoconfig boolean true
 
 # If you want the preconfiguration file to work on systems both with and
 # without a dhcp server, uncomment these lines and the static network
@@ -51,11 +51,11 @@ d-i netcfg/disable_autoconfig boolean true
 # Static network configuration.
 #
 # IPv4 example
-d-i netcfg/get_ipaddress string 10.0.2.15
-d-i netcfg/get_netmask string 255.255.255.0
-d-i netcfg/get_gateway string 10.0.2.2
-d-i netcfg/get_nameservers string 10.0.2.3
-d-i netcfg/confirm_static boolean true
+#d-i netcfg/get_ipaddress string 192.168.1.42
+#d-i netcfg/get_netmask string 255.255.255.0
+#d-i netcfg/get_gateway string 192.168.1.1
+#d-i netcfg/get_nameservers string 192.168.1.1
+#d-i netcfg/confirm_static boolean true
 #
 # IPv6 example
 #d-i netcfg/get_ipaddress string fc00::2
@@ -67,8 +67,8 @@ d-i netcfg/confirm_static boolean true
 # Any hostname and domain names assigned from dhcp take precedence over
 # values set here. However, setting the values still prevents the questions
 # from being shown, even if values come from dhcp.
-d-i netcfg/get_hostname string s2e
-d-i netcfg/get_domain string localhost
+d-i netcfg/get_hostname string unassigned-hostname
+d-i netcfg/get_domain string unassigned-domain
 
 # If you want to force a hostname, regardless of what either the DHCP
 # server returns or what the reverse DNS entry for the IP is, uncomment
@@ -79,6 +79,10 @@ d-i netcfg/get_domain string localhost
 d-i netcfg/wireless_wep string
 # The wacky dhcp hostname that some ISPs use as a password of sorts.
 #d-i netcfg/dhcp_hostname string radish
+
+# If you want to completely disable firmware lookup (i.e. not use firmware
+# files or packages that might be available on installation images):
+#d-i hw-detect/firmware-lookup string never
 
 # If non-free firmware is needed for the network or other hardware, you can
 # configure the installer to always try to load it, without prompting. Or
@@ -95,7 +99,9 @@ d-i netcfg/wireless_wep string
 #d-i network-console/password-again password r00tme
 
 ### Mirror settings
+# Mirror protocol:
 # If you select ftp, the mirror/country string does not need to be set.
+# Default value for the mirror protocol: http.
 #d-i mirror/protocol string ftp
 d-i mirror/country string manual
 d-i mirror/http/hostname string http.us.debian.org
@@ -110,30 +116,30 @@ d-i mirror/http/proxy string
 ### Account setup
 # Skip creation of a root account (normal user account will be able to
 # use sudo).
-d-i passwd/root-login boolean false
+#d-i passwd/root-login boolean false
 # Alternatively, to skip creation of a normal user account.
 #d-i passwd/make-user boolean false
 
 # Root password, either in clear text
-d-i passwd/root-password password root
-d-i passwd/root-password-again password root
-# or encrypted using an MD5 hash.
-#d-i passwd/root-password-crypted password [MD5 hash]
+#d-i passwd/root-password password r00tme
+#d-i passwd/root-password-again password r00tme
+# or encrypted using a crypt(3)  hash.
+#d-i passwd/root-password-crypted password [crypt(3) hash]
 
 # To create a normal user account.
-d-i passwd/user-fullname string s2e
-d-i passwd/username string s2e
+#d-i passwd/user-fullname string Debian User
+#d-i passwd/username string debian
 # Normal user's password, either in clear text
-d-i passwd/user-password password s2e
-d-i passwd/user-password-again password s2e
-# or encrypted using an MD5 hash.
-#d-i passwd/user-password-crypted password [MD5 hash]
+#d-i passwd/user-password password insecure
+#d-i passwd/user-password-again password insecure
+# or encrypted using a crypt(3) hash.
+#d-i passwd/user-password-crypted password [crypt(3) hash]
 # Create the first user with the specified UID instead of the default.
 #d-i passwd/user-uid string 1010
 
 # The user account will be added to some standard initial groups. To
 # override that, use this.
-d-i passwd/user-default-groups string audio cdrom video dialout tty
+#d-i passwd/user-default-groups string audio cdrom video
 
 ### Clock and time zone setup
 # Controls whether or not the hardware clock is set to UTC.
@@ -152,12 +158,12 @@ d-i clock-setup/ntp boolean true
 ## Partitioning example
 # If the system has free space you can choose to only partition that space.
 # This is only honoured if partman-auto/method (below) is not set.
-d-i partman-auto/init_automatically_partition select biggest_free
+#d-i partman-auto/init_automatically_partition select biggest_free
 
 # Alternatively, you may specify a disk to partition. If the system has only
 # one disk the installer will default to using that, but otherwise the device
-# name must be given in traditional, non-devfs format (so e.g. /dev/hda or
-# /dev/sda, and not e.g. /dev/discs/disc0/disc).
+# name must be given in traditional, non-devfs format (so e.g. /dev/sda
+# and not e.g. /dev/discs/disc0/disc).
 # For example, to use the first SCSI/SATA hard disk:
 #d-i partman-auto/disk string /dev/sda
 # In addition, you'll need to specify the method to use.
@@ -165,7 +171,12 @@ d-i partman-auto/init_automatically_partition select biggest_free
 # - regular: use the usual partition types for your architecture
 # - lvm:     use LVM to partition the disk
 # - crypto:  use LVM within an encrypted partition
-d-i partman-auto/method string regular
+d-i partman-auto/method string lvm
+
+# You can define the amount of space that will be used for the LVM volume
+# group. It can either be a size with its unit (eg. 20 GB), a percentage of
+# free space or the 'max' keyword.
+d-i partman-auto-lvm/guided_size string max
 
 # If one of the disks that are going to be automatically partitioned
 # contains an old LVM configuration, the user will normally receive a
@@ -180,31 +191,13 @@ d-i partman-lvm/confirm_nooverwrite boolean true
 # You can choose one of the three predefined partitioning recipes:
 # - atomic: all files in one partition
 # - home:   separate /home partition
-# - multi:  separate /home, /usr, /var, and /tmp partitions
+# - multi:  separate /home, /var, and /tmp partitions
 d-i partman-auto/choose_recipe select atomic
 
 # Or provide a recipe of your own...
 # If you have a way to get a recipe file into the d-i environment, you can
 # just point at it.
 #d-i partman-auto/expert_recipe_file string /hd-media/recipe
-
-# Disable no swap warning
-d-i partman-basicfilesystems/no_swap boolean false
-
-d-i partman-auto/expert_recipe string \
-     myroot ::                        \
-        512 1024 512 linux-swap       \
-            $primary{ }               \
-            method{ swap } format{ }  \
-        .                             \
-        1000 10 -1 ext4               \
-            $primary{ } $bootable{ } method{ format }      \
-            format{ } use_filesystem{ } filesystem{ ext4 } \
-            mountpoint{ / }           \
-        .                             \
-
-
-d-i partman-auto/choose_recipe select myroot
 
 # If not, you can put an entire recipe into the preconfiguration file in one
 # (logical) line. This example creates a small /boot partition, suitable
@@ -232,12 +225,35 @@ d-i partman-auto/choose_recipe select myroot
 # system labels, volume group names and which physical devices to include
 # in a volume group.
 
+## Partitioning for EFI
+# If your system needs an EFI partition you could add something like
+# this to the recipe above, as the first element in the recipe:
+#               538 538 1075 free                              \
+#                      $iflabel{ gpt }                         \
+#                      $reusemethod{ }                         \
+#                      method{ efi }                           \
+#                      format{ }                               \
+#               .                                              \
+#
+# The fragment above is for the amd64 architecture; the details may be
+# different on other architectures. The 'partman-auto' package in the
+# D-I source repository may have an example you can follow.
+
 # This makes partman automatically partition without confirmation, provided
 # that you told it what to do using one of the methods above.
 d-i partman-partitioning/confirm_write_new_label boolean true
 d-i partman/choose_partition select finish
 d-i partman/confirm boolean true
 d-i partman/confirm_nooverwrite boolean true
+
+# Force UEFI booting ('BIOS compatibility' will be lost). Default: false.
+#d-i partman-efi/non_efi_system boolean true
+# Ensure the partition table is GPT - this is required for EFI
+#d-i partman-partitioning/choose_label select gpt
+#d-i partman-partitioning/default_label string gpt
+
+# When disk encryption is enabled, skip wiping the partitions beforehand.
+#d-i partman-auto-crypto/erase_disks boolean false
 
 ## Partitioning using RAID
 # The method should be set to "raid".
@@ -246,7 +262,7 @@ d-i partman/confirm_nooverwrite boolean true
 # so this will only work if the disks are the same size.
 #d-i partman-auto/disk string /dev/sda /dev/sdb
 
-# Next you need to specify the physical partitions that will be used.
+# Next you need to specify the physical partitions that will be used. 
 #d-i partman-auto/expert_recipe string \
 #      multiraid ::                                         \
 #              1000 5000 4000 raid                          \
@@ -360,7 +376,7 @@ d-i apt-setup/cdrom/set-first boolean false
 #d-i pkgsel/run_tasksel boolean false
 
 # Individual additional packages to install
-d-i pkgsel/include string openssh-server build-essential python3-dev python3-setuptools gcc g++ libc-dbg gdb valgrind strace git libdw-dev elfutils gettext libelf1 tmux
+#d-i pkgsel/include string openssh-server build-essential
 # Whether to upgrade packages after debootstrap.
 # Allowed values: none, safe-upgrade, full-upgrade
 #d-i pkgsel/upgrade select none
@@ -369,33 +385,28 @@ d-i pkgsel/include string openssh-server build-essential python3-dev python3-set
 # installed, and what software you use. The default is not to report back,
 # but sending reports helps the project determine what software is most
 # popular and should be included on the first CD/DVD.
-popularity-contest popularity-contest/participate boolean false
+#popularity-contest popularity-contest/participate boolean false
 
 ### Boot loader installation
-# Grub is the default boot loader (for x86). If you want lilo installed
-# instead, uncomment this:
-#d-i grub-installer/skip boolean true
-# To also skip installing lilo, and install no bootloader, uncomment this
-# too:
-#d-i lilo-installer/skip boolean true
+# Grub is the boot loader (for x86).
 
-
-# This is fairly safe to set, it makes grub install automatically to the MBR
-# if no other operating system is detected on the machine.
+# This is fairly safe to set, it makes grub install automatically to the UEFI
+# partition/boot record if no other operating system is detected on the machine.
 d-i grub-installer/only_debian boolean true
 
-# This one makes grub-installer install to the MBR if it also finds some other
-# OS, which is less safe as it might not be able to boot that other OS.
+# This one makes grub-installer install to the UEFI partition/boot record, if
+# it also finds some other OS, which is less safe as it might not be able to
+# boot that other OS.
 d-i grub-installer/with_other_os boolean true
 
-# Due notably to potential USB sticks, the location of the MBR can not be
-# determined safely in general, so this needs to be specified:
+# Due notably to potential USB sticks, the location of the primary drive can
+# not be determined safely in general, so this needs to be specified:
 #d-i grub-installer/bootdev  string /dev/sda
-# To install to the first device (assuming it is not a USB stick):
-d-i grub-installer/bootdev  string default
+# To install to the primary device (assuming it is not a USB stick):
+#d-i grub-installer/bootdev  string default
 
-# Alternatively, if you want to install to a location other than the mbr,
-# uncomment and edit these lines:
+# Alternatively, if you want to install to a location other than the UEFI
+# parition/boot record, uncomment and edit these lines:
 #d-i grub-installer/only_debian boolean false
 #d-i grub-installer/with_other_os boolean false
 #d-i grub-installer/bootdev  string (hd0,1)
@@ -465,7 +476,3 @@ d-i finish-install/reboot_in_progress note
 # packages and run commands in the target system.
 #d-i preseed/late_command string apt-install zsh; in-target chsh -s /bin/zsh
 
-d-i preseed/late_command string \
-    mkdir -p /target/etc/sudoers.d; \
-    echo 's2e ALL=(ALL) NOPASSWD: ALL' > /target/etc/sudoers.d/s2e ; \
-    in-target chmod 440 /etc/sudoers.d/s2e ;
