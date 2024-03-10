@@ -99,7 +99,7 @@ install_systemtap() {
     mkdir systemtap-build
     cd systemtap-build
     ../systemtap/configure --disable-docs
-    make
+    make -j4
     sudo make install
     cd ..
 }

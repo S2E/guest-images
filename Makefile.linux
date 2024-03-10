@@ -124,8 +124,8 @@ define BUILD_S2E_IMAGE
 	virt-copy-in -a "$$@" $(SRC)/Linux/override.conf /etc/systemd/system/getty@tty1.service.d/
 
 	$(call INFO_MSG,[$$@] Booting disk image...)
-	$(QEMU64) -m 4G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
-	    $(call QEMU_HD,0,$$@) \
+	$(QEMU64) -m 8G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
+	    $(call QEMU_HD,0,$$@) -smp 4 \
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
 	virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
