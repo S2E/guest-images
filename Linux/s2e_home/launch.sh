@@ -30,7 +30,7 @@ export DEBIAN_FRONTEND=noninteractive
 # libelf is required for s2e.so
 COMMON_PACKAGES="gcc-multilib g++-multilib libc6-dev-i386 libelf1:i386"
 DEBIAN9_PACKAGES="lib32stdc++-6-dev libstdc++6:i386"
-DEBIAN11_PACKAGES="lib32stdc++-10-dev lib32stdc++6 libstdc++6:i386"
+DEBIAN12_PACKAGES="lib32stdc++-12-dev libdebuginfod-dev lib32stdc++6 libstdc++6:i386"
 
 # systemtap
 UBUNTU_PACKAGES="elfutils libdw-dev"
@@ -74,11 +74,11 @@ install_i386() {
         if [ "x$NAME" = "xdebian" ]; then
             if [ $VER -eq 9 ]; then
                 install_packages ${DEBIAN9_PACKAGES}
-            elif [ $VER -eq 11 ]; then
-                install_packages ${DEBIAN11_PACKAGES}
+            elif [ $VER -eq 12 ]; then
+                install_packages ${DEBIAN12_PACKAGES}
             fi
         elif [ "x$NAME" = "xubuntu" ]; then
-            install_packages ${DEBIAN11_PACKAGES} ${UBUNTU_PACKAGES}
+            install_packages ${DEBIAN12_PACKAGES} ${UBUNTU_PACKAGES}
         else
             echo "Unsupported distribution ${NAME} ${VER}"
             exit 1
@@ -93,13 +93,13 @@ install_i386() {
 install_systemtap() {
     git clone git://sourceware.org/git/systemtap.git
     cd systemtap
-    git checkout release-4.7
+    git checkout release-4.9
     cd ..
 
     mkdir systemtap-build
     cd systemtap-build
     ../systemtap/configure --disable-docs
-    make
+    make -j4
     sudo make install
     cd ..
 }
@@ -109,9 +109,10 @@ install_systemtap() {
 install_kernel() {
     sudo dpkg -i linux-image*.deb linux-headers*.deb
 
-    MENU_ENTRY="$(grep menuentry /boot/grub/grub.cfg  | grep s2e | cut -d "'" -f 2 | head -n 1)"
+    MENU_ENTRY="$(sudo grep menuentry /boot/grub/grub.cfg  | grep s2e | cut -d "'" -f 2 | head -n 1)"
     echo "Default menu entry: $MENU_ENTRY"
     echo "GRUB_DEFAULT=\"1>$MENU_ENTRY\"" | sudo tee -a /etc/default/grub
+    echo 'GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0"' | sudo tee -a /etc/default/grub
     sudo update-grub
 }
 

@@ -39,7 +39,8 @@ endef
 
 # Debian-specific unattended installation
 define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
- $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/bootcd/preseed.cfg
+ $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/debian-12-bootcd/preseed.cfg $(SRC)/Linux/debian-12-bootcd/isolinux.cfg \
+ 								 $(SRC)/Linux/debian-9-bootcd/preseed.cfg $(SRC)/Linux/debian-9-bootcd/isolinux.cfg
 	$(call INFO_MSG,[$$@] Creating installation disk...)
 	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
 	7z x $(TMPDIR)/$1/$1.iso -o$(TMPDIR)/$1/install_files
@@ -47,13 +48,14 @@ define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
 	cd $(TMPDIR)/$1 && chmod -R u+rwx install_files
 
 	if [ "$1" = "cgc_debian-9.2.1-i386" ]; then \
-		cp "$(SRC)/Linux/bootcd/preseed.cfg-jessie" "$(TMPDIR)/$1/install_files/preseed.cfg"; \
+		cp "$(SRC)/Linux/debian-9-bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files/preseed.cfg"; \
+		cp "$(SRC)/Linux/debian-9-bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"; \
+		cp "$(SRC)/Linux/debian-9-bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"; \
 	else \
-		cp "$(SRC)/Linux/bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files"; \
+		cp "$(SRC)/Linux/debian-12-bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files"; \
+		cp "$(SRC)/Linux/debian-12-bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"; \
+		cp "$(SRC)/Linux/debian-12-bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"; \
 	fi
-
-	cp "$(SRC)/Linux/bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"
-	cp "$(SRC)/Linux/bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"
 
 	cd $(TMPDIR)/$1/install_files && \
 		md5sum `find -follow -type f` > md5sum.txt
@@ -124,8 +126,8 @@ define BUILD_S2E_IMAGE
 	virt-copy-in -a "$$@" $(SRC)/Linux/override.conf /etc/systemd/system/getty@tty1.service.d/
 
 	$(call INFO_MSG,[$$@] Booting disk image...)
-	$(QEMU64) -m 4G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
-	    $(call QEMU_HD,0,$$@) \
+	$(QEMU64) -m 8G -no-reboot $(GRAPHICS) $(QEMU_KVM) \
+	    $(call QEMU_HD,0,$$@) -smp 4 \
 	    -serial file:$(OUTDIR)/$2$1/serial.txt
 
 	virt-copy-in -a "$$@" $(S2E_INSTALL_ROOT)/bin/guest-tools32/* /home/s2e/
@@ -215,7 +217,7 @@ endef
 
 
 ### Instantiating all build configurations ###
-DEBIAN_IMAGES = debian-11.3-i386 debian-11.3-x86_64 cgc_debian-9.2.1-i386
+DEBIAN_IMAGES = debian-12.5-i386 debian-12.5-x86_64 cgc_debian-9.2.1-i386
 UBUNTU_IMAGES = ubuntu-22.04-x86_64
 LINUX_IMAGES = $(DEBIAN_IMAGES) $(UBUNTU_IMAGES)
 LINUX_ARCHIVES = $(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(LINUX_IMAGES)))
@@ -245,11 +247,11 @@ $(eval $(call TEMPLATE_LINUX_KERNEL,linux-4.9.3,x86_64))
 $(eval $(call BUILD_S2E_IMAGE,cgc_debian-9.2.1-i386,,decree-cgc-cfe-i386))
 $(eval $(call TAKE_SNAPSHOT,cgc_debian-9.2.1-i386,))
 
-$(eval $(call BUILD_S2E_IMAGE,debian-11.3-i386,,linux-4.9.3-i386))
-$(eval $(call TAKE_SNAPSHOT,debian-11.3-i386,))
+$(eval $(call BUILD_S2E_IMAGE,debian-12.5-i386,,linux-4.9.3-i386))
+$(eval $(call TAKE_SNAPSHOT,debian-12.5-i386,))
 
-$(eval $(call BUILD_S2E_IMAGE,debian-11.3-x86_64,,linux-4.9.3-x86_64))
-$(eval $(call TAKE_SNAPSHOT,debian-11.3-x86_64,))
+$(eval $(call BUILD_S2E_IMAGE,debian-12.5-x86_64,,linux-4.9.3-x86_64))
+$(eval $(call TAKE_SNAPSHOT,debian-12.5-x86_64,))
 
 $(eval $(call BUILD_S2E_IMAGE,ubuntu-22.04-x86_64,,linux-4.9.3-x86_64))
 $(eval $(call TAKE_SNAPSHOT,ubuntu-22.04-x86_64,))
