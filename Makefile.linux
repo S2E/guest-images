@@ -39,7 +39,8 @@ endef
 
 # Debian-specific unattended installation
 define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
- $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/bootcd/preseed.cfg $(SRC)/Linux/bootcd/isolinux.cfg
+ $(TMPDIR)/$1/install_files.iso: $(TMPDIR)/$1/$1.iso $(SRC)/Linux/debian-12-bootcd/preseed.cfg $(SRC)/Linux/debian-12-bootcd/isolinux.cfg \
+ 								 $(SRC)/Linux/debian-9-bootcd/preseed.cfg $(SRC)/Linux/debian-9-bootcd/isolinux.cfg
 	$(call INFO_MSG,[$$@] Creating installation disk...)
 	rm -Rf $(TMPDIR)/$1/install_files && mkdir -p $(TMPDIR)/$1/install_files
 	7z x $(TMPDIR)/$1/$1.iso -o$(TMPDIR)/$1/install_files
@@ -47,13 +48,14 @@ define TEMPLATE_BASE_DEBIAN_LINUX_IMAGE
 	cd $(TMPDIR)/$1 && chmod -R u+rwx install_files
 
 	if [ "$1" = "cgc_debian-9.2.1-i386" ]; then \
-		cp "$(SRC)/Linux/bootcd/preseed.cfg-jessie" "$(TMPDIR)/$1/install_files/preseed.cfg"; \
+		cp "$(SRC)/Linux/debian-9-bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files/preseed.cfg"; \
+		cp "$(SRC)/Linux/debian-9-bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"; \
+		cp "$(SRC)/Linux/debian-9-bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"; \
 	else \
-		cp "$(SRC)/Linux/bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files"; \
+		cp "$(SRC)/Linux/debian-12-bootcd/preseed.cfg" "$(TMPDIR)/$1/install_files"; \
+		cp "$(SRC)/Linux/debian-12-bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"; \
+		cp "$(SRC)/Linux/debian-12-bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"; \
 	fi
-
-	cp "$(SRC)/Linux/bootcd/isolinux.cfg" "$(TMPDIR)/$1/install_files/isolinux/"
-	cp "$(SRC)/Linux/bootcd/txt-$(call ARCH,$1).cfg" "$(TMPDIR)/$1/install_files/isolinux/txt.cfg"
 
 	cd $(TMPDIR)/$1/install_files && \
 		md5sum `find -follow -type f` > md5sum.txt
