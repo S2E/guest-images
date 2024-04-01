@@ -20,8 +20,10 @@
 
 ### Check that required variables are setup properly
 
-ifeq ("$(wildcard $(S2E_LINUX_KERNELS_ROOT)/linux-4.9.3/config-i386)","")
-$(error $(S2E_LINUX_KERNELS_ROOT)/linux-4.9.3/config-i386 does not exist. Make sure S2E_LINUX_KERNELS_ROOT is set properly)
+LINUX_VERSION:=6.8.2
+
+ifeq ("$(wildcard $(S2E_LINUX_KERNELS_ROOT)/linux-$(LINUX_VERSION)/config-i386)","")
+$(error $(S2E_LINUX_KERNELS_ROOT)/linux-$(LINUX_VERSION)/config-i386 does not exist. Make sure S2E_LINUX_KERNELS_ROOT is set properly)
 endif
 
 
@@ -192,7 +194,7 @@ endef
 CGCARCH=$(findstring cgc,$(1))
 
 # This creates the base docker image inside which the kernel will be built
-$(STAMPS)/linux-build-%:
+$(STAMPS)/linux-build-%: $(SRC)/Linux/docker/Dockerfile.i386 $(SRC)/Linux/docker/Dockerfile.x86_64
 	$(call INFO_MSG,[$@] Building docker image...)
 	mkdir -p $(STAMPS)
 	cd $(SRC)/Linux/docker && docker build -t linux-build-$(call ARCH,$@) -f Dockerfile.$(call ARCH,$@) .
@@ -239,25 +241,25 @@ $(foreach os,$(UBUNTU_IMAGES), \
 
 # Rules for building the kernels
 $(eval $(call TEMPLATE_LINUX_KERNEL,decree-cgc-cfe,i386))
-$(eval $(call TEMPLATE_LINUX_KERNEL,linux-4.9.3,i386))
-$(eval $(call TEMPLATE_LINUX_KERNEL,linux-4.9.3,x86_64))
+$(eval $(call TEMPLATE_LINUX_KERNEL,linux-$(LINUX_VERSION),i386))
+$(eval $(call TEMPLATE_LINUX_KERNEL,linux-$(LINUX_VERSION),x86_64))
 
 # Rules for building different images
 # TODO: cgc image is treated in an adhoc manner, try to factor it out somehow
 $(eval $(call BUILD_S2E_IMAGE,cgc_debian-9.2.1-i386,,decree-cgc-cfe-i386))
 $(eval $(call TAKE_SNAPSHOT,cgc_debian-9.2.1-i386,))
 
-$(eval $(call BUILD_S2E_IMAGE,debian-12.5-i386,,linux-4.9.3-i386))
+$(eval $(call BUILD_S2E_IMAGE,debian-12.5-i386,,linux-$(LINUX_VERSION)-i386))
 $(eval $(call TAKE_SNAPSHOT,debian-12.5-i386,))
 
-$(eval $(call BUILD_S2E_IMAGE,debian-12.5-x86_64,,linux-4.9.3-x86_64))
+$(eval $(call BUILD_S2E_IMAGE,debian-12.5-x86_64,,linux-$(LINUX_VERSION)-x86_64))
 $(eval $(call TAKE_SNAPSHOT,debian-12.5-x86_64,))
 
-$(eval $(call BUILD_S2E_IMAGE,ubuntu-22.04-x86_64,,linux-4.9.3-x86_64))
+$(eval $(call BUILD_S2E_IMAGE,ubuntu-22.04-x86_64,,linux-$(LINUX_VERSION)-x86_64))
 $(eval $(call TAKE_SNAPSHOT,ubuntu-22.04-x86_64,))
 
 ### Top level rules ###
 
 linux: $(LINUX_IMAGES)
 linux_archives: $(LINUX_ARCHIVES)
-all-kernels: $(STAMPS)/decree-cgc-cfe-i386 $(STAMPS)/linux-4.9.3-i386 $(STAMPS)/linux-4.9.3-x86_64
+all-kernels: $(STAMPS)/decree-cgc-cfe-i386 $(STAMPS)/linux-$(LINUX_VERSION)-i386 $(STAMPS)/linux-$(LINUX_VERSION)-x86_64
