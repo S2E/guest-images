@@ -75,7 +75,8 @@ if echo \$VERSION | grep -q 3.13.11; then
     TARGET=deb-pkg
 fi
 
-fakeroot make -j8 \$TARGET LOCALVERSION=-s2e || err "Build failed"
+JOBS=$(grep -c ^processor /proc/cpuinfo)
+make -j\$JOBS \$TARGET LOCALVERSION=-s2e || echo "Build failed"
 
 # Restore access to files under version control
 chmod a+rw debian
