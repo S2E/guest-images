@@ -41,8 +41,8 @@ RUN                                                                             
 
 
 RUN \
-    git clone git://sourceware.org/git/systemtap.git && \
-    cd systemtap && git checkout release-3.2
+    git clone https://github.com/S2E/systemtap.git && \
+    cd systemtap && git checkout release-4.9
 
 RUN \
     mkdir systemtap-build && \
