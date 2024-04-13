@@ -22,27 +22,23 @@
 # Use it to compile the kernel
 # docker build -t linux-build-x86_64 -f Dockerfile.x86_64 .
 
-FROM debian:9.3
+FROM debian:12.5
 
-MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.io>
-
-RUN echo "deb http://archive.debian.org/debian/ stretch main contrib non-free" > /etc/apt/sources.list
-RUN echo "deb-src http://archive.debian.org/debian/ stretch main contrib non-free" >> /etc/apt/sources.list
+MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.com>
 
 RUN                                                                             \
     apt-get update &&                                                           \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
-    sudo apt-file texinfo flex bison patch python unzip git bc                  \
+    sudo apt-file texinfo flex bison patch python3 unzip git bc                 \
     bzip2 wget less nano g++ gcc file libc6-dev make                            \
-    fakeroot build-essential devscripts libncurses5-dev                         \
-    libdw-dev elfutils gettext && \
+    fakeroot build-essential devscripts libncurses5-dev pahole                  \
+    libdw-dev elfutils gettext rsync cpio kmod libssl-dev debhelper-compat &&   \
     apt-get clean && \
     apt-file update
 
-
 RUN \
-    git clone git://sourceware.org/git/systemtap.git && \
-    cd systemtap && git checkout release-3.2
+    git clone https://github.com/S2E/systemtap.git && \
+    cd systemtap && git checkout release-4.9
 
 RUN \
     mkdir systemtap-build && \

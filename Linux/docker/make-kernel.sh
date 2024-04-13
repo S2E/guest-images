@@ -70,12 +70,13 @@ fi
 # NOTE: you have to run this inside special docker image (see run-docker.sh)
 TARGET=bindeb-pkg
 VERSION=$(fakeroot make kernelversion)
-if ! echo $VERSION | grep -q 3.13.11; then
+if echo \$VERSION | grep -q 3.13.11; then
     # Older kernel versions use this target for binary only package
     TARGET=deb-pkg
 fi
 
-fakeroot make -j8 \$TARGET LOCALVERSION=-s2e || err "Build failed"
+JOBS=$(grep -c ^processor /proc/cpuinfo)
+make -j\$JOBS \$TARGET LOCALVERSION=-s2e || echo "Build failed"
 
 # Restore access to files under version control
 chmod a+rw debian
