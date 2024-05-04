@@ -34,7 +34,7 @@
         "version": "12.5",
         "arch": "i386",
         "build": "",
-        "binary_formats": ["elf"]
+        "binary_formats": ["elf", "decree"]
       },
       "hw": {
         "default_disk_size": "8G",
