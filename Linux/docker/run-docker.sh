@@ -23,7 +23,7 @@
 # Runs command inside docker image
 # Usage: ./run-docker.sh /path/to/guest-images/src /path/to/s2e-linux-kernel docker-image working_dir [COMMAND]
 # To build a 32-bit linux package:
-#   ./run-docker.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-32 ../decree-cgc-cfe ./make-kernel.sh $(pwd)/../include
+#   ./run-docker.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-32 ../linux-6.8.2 ./make-kernel.sh $(pwd)/../include
 
 SRC_DIR=$1
 shift
