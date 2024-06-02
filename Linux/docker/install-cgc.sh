@@ -25,48 +25,26 @@ set -ex
 # Install the prerequisites for cgc packages
 install_apt_packages() {
     APT_PACKAGES="
-    python-apt
-    python-crypto
-    python-daemon
-    python-lockfile
-    python-lxml
-    python-matplotlib
-    python-yaml
-    openssh-client
-    tcpdump
+    libtinfo5
     "
 
     sudo apt-get -y --force-yes install ${APT_PACKAGES}
-
-    # This package no longer exists on recent debian version
-    wget http://archive.debian.org/debian-archive/debian/pool/main/p/python-support/python-support_1.0.15_all.deb
-    sudo dpkg -i python-support_1.0.15_all.deb
 }
 
+# Set of packages required to build CGC binaries.
+# The rest of the infrastructure is not installed because it uses an old version
+# of Python and can't work anymore.
 install_cgc_packages() {
     CGC_PACKAGES="
     binutils-cgc-i386_2.24-10551-cfe-rc8_i386.deb
     cgc2elf_10551-cfe-rc8_i386.deb
     libcgcef0_10551-cfe-rc8_i386.deb
     libcgcdwarf_10551-cfe-rc8_i386.deb
-    readcgcef_10551-cfe-rc8_i386.deb
-    python-defusedxml_10551-cfe-rc8_all.deb
     libcgc_10551-cfe-rc8_i386.deb
-    cgc-network-appliance_10551-cfe-rc8_all.deb
-    cgc-service-launcher_10551-cfe-rc8_i386.deb
-    poll-generator_10551-cfe-rc8_all.deb
-    cb-testing_10551-cfe-rc8_all.deb
     cgc-release-documentation_10560-cfe-rc8_all.deb
-    cgcef-verify_10551-cfe-rc8_all.deb
-    cgc-pov-xml2c_10551-cfe-rc8_i386.deb
-    strace-cgc_4.5.20-10551-cfe-rc8_i386.deb
     libpov_10551-cfe-rc8_i386.deb
     clang-cgc_3.4-10551-cfe-rc8_i386.deb
-    cgc-virtual-competition_10551-cfe-rc8_all.deb
     magic-cgc_10551-cfe-rc8_all.deb
-    services-cgc_10551-cfe-rc8_all.deb
-    linux-image-3.13.11-ckt32-cgc_10551-cfe-rc8_i386.deb
-    linux-libc-dev_10551-cfe-rc8_i386.deb
     "
 
     local CUR_DIR

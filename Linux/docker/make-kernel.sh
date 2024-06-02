@@ -23,6 +23,8 @@
 # Usage: ./make-kernel.sh s2e_include_path UID GID
 #
 
+set -xe
+
 if [ $# -ne 3 ]; then
     echo "Usage: ./make-kernel.sh s2e_include_path uid gid"
     exit 1
@@ -56,7 +58,7 @@ useradd -u $MUID -g s2e s2e
 # Run the rest of the script with the uid/gid provided, otherwise
 # new files will be owned by root.
 exec sudo -u s2e /bin/bash - << EOF
-set -x
+set -xe
 
 export C_INCLUDE_PATH=${1}:${C_INCLUDE_PATH}
 
@@ -70,10 +72,6 @@ fi
 # NOTE: you have to run this inside special docker image (see run-docker.sh)
 TARGET=bindeb-pkg
 VERSION=$(fakeroot make kernelversion)
-if echo \$VERSION | grep -q 3.13.11; then
-    # Older kernel versions use this target for binary only package
-    TARGET=deb-pkg
-fi
 
 JOBS=$(grep -c ^processor /proc/cpuinfo)
 make -j\$JOBS \$TARGET LOCALVERSION=-s2e || echo "Build failed"

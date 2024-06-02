@@ -24,8 +24,6 @@
 
 FROM i386/debian:12.5
 
-MAINTAINER Vitaly Chipounov <vitaly@cyberhaven.com>
-
 RUN                                                                             \
     apt-get update &&                                                           \
     DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends   \
@@ -44,5 +42,14 @@ RUN \
     mkdir systemtap-build && \
     cd systemtap-build && ../systemtap/configure --disable-docs && \
     make -j4 && sudo make install
+
+COPY install-cgc.sh /
+RUN \
+    sudo /install-cgc.sh
+
+COPY run_as.sh /
+RUN touch /etc/decree_version && \
+    mkdir -p /usr/share/cb-testing/ && \
+    touch /usr/share/cb-testing/CGC_Extended_Application.pdf
 
 ENTRYPOINT ["/bin/bash"]
