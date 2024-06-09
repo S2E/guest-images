@@ -88,7 +88,7 @@ install_i386() {
 install_systemtap() {
     git clone https://github.com/S2E/systemtap.git
     cd systemtap
-    git checkout release-4.9
+    git checkout release-5.1
     cd ..
 
     mkdir systemtap-build
