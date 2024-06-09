@@ -1,6 +1,27 @@
 {
   "version": 3,
   "images": {
+    "ubuntu-24.04-x86_64": {
+      "name": "Ubuntu x86_64 image",
+      "image_group": "linux",
+      "url": "",
+      "iso": {
+        "url": "https://releases.ubuntu.com/24.04/ubuntu-24.04-live-server-amd64.iso"
+      },
+      "os": {
+        "name": "ubuntu",
+        "version": "24.04",
+        "arch": "x86_64",
+        "build": "",
+        "binary_formats": ["elf"]
+      },
+      "hw": {
+        "default_disk_size": "8G",
+        "default_snapshot_size": "256M",
+        "nic": "e1000"
+      }
+    },
+
     "ubuntu-22.04-x86_64": {
       "name": "Ubuntu x86_64 image",
       "image_group": "linux",

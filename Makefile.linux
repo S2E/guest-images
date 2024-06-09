@@ -207,7 +207,7 @@ endef
 
 ### Instantiating all build configurations ###
 DEBIAN_IMAGES = debian-12.5-i386 debian-12.5-x86_64
-UBUNTU_IMAGES = ubuntu-22.04-x86_64
+UBUNTU_IMAGES = ubuntu-22.04-x86_64 ubuntu-24.04-x86_64
 LINUX_IMAGES = $(DEBIAN_IMAGES) $(UBUNTU_IMAGES)
 LINUX_ARCHIVES = $(addsuffix .tar.xz,$(addprefix $(OUTDIR)/,$(LINUX_IMAGES)))
 
@@ -239,6 +239,9 @@ $(eval $(call TAKE_SNAPSHOT,debian-12.5-x86_64,))
 
 $(eval $(call BUILD_S2E_IMAGE,ubuntu-22.04-x86_64,,linux-$(LINUX_VERSION)-x86_64))
 $(eval $(call TAKE_SNAPSHOT,ubuntu-22.04-x86_64,))
+
+$(eval $(call BUILD_S2E_IMAGE,ubuntu-24.04-x86_64,,linux-$(LINUX_VERSION)-x86_64))
+$(eval $(call TAKE_SNAPSHOT,ubuntu-24.04-x86_64,))
 
 ### Top level rules ###
 
