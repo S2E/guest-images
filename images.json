@@ -85,6 +85,27 @@
       }
     },
 
+    "debootstrap" : {
+        "name" : "Debootstrap entry (to be used scripts/make-s2e-image.sh only)",
+        "image_group" : "linux",
+        "url" : "",
+        "iso" : {
+            "url" : ""
+        },
+        "os": {
+            "name": "debootstrap",
+            "version": "",
+            "arch": "x86_64",
+            "build": "",
+            "binary_formats" : ["elf"]
+        },
+        "hw": {
+            "default_disk_size": "8G",
+            "default_snapshot_size": "1G",
+            "nic": "e1000"
+        }
+    },
+
     "windows-xpsp3pro-i386": {
       "name": "Windows XP Professional SP3 i386",
       "image_group": "windows",
