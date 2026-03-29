@@ -25,7 +25,7 @@
     "ubuntu-22.04-x86_64": {
       "name": "Ubuntu x86_64 image",
       "image_group": "linux",
-      "url": "https://drive.google.com/open?id=102EgrujJE5Pzlg98qe3twLNIeMz5MkJQ",
+      "url": "",
       "iso": {
         "url": "https://github.com/S2E/guest-images/releases/download/v2.0.0/ubuntu-22.04.4-live-server-amd64.iso"
       },
@@ -46,7 +46,7 @@
     "debian-12.5-i386": {
       "name": "Debian i386 image",
       "image_group": "linux",
-      "url": "https://drive.google.com/open?id=19W96wnV3hMioSB8JmXRkyUbaMGgZ_NNy",
+      "url": "",
       "iso": {
         "url": "https://github.com/S2E/guest-images/releases/download/v2.0.0/debian-12.5.0-i386-netinst.iso"
       },
@@ -67,7 +67,7 @@
     "debian-12.5-x86_64": {
       "name": "Debian x86_64 image",
       "image_group": "linux",
-      "url": "https://drive.google.com/open?id=1SR6N8ZLwRfV2mXQQfvlTmhS2u-N9N_uM",
+      "url": "",
       "iso": {
         "url": "https://github.com/S2E/guest-images/releases/download/v2.0.0/debian-12.5.0-amd64-netinst.iso"
       },
