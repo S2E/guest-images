@@ -253,7 +253,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	@# *** Reboot in TCG mode to install the CPU driver
 	$(call INFO_MSG,[$1] Rebooting in TCG mode...)
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
-	        -enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m 2G \
+	        -accel accel=kvm,kernel-irqchip=split -no-reboot $(GRAPHICS) -m 2G \
 		$(call TO_VAR_NIC,$1) \
 		$(call TO_VAR_CPU,$1) \
 		$(call QEMU_HD,0,$$@) \
@@ -302,7 +302,7 @@ define TEMPLATE_BASE_WINDOWS_IMAGE
 	@# *** Create ready snapshot
 	$(call INFO_MSG,[$1] Creating ready snapshot...)
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
-		-enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m $(call TO_VAR_SNAPSHOT_SIZE,$1) \
+		-accel accel=kvm,kernel-irqchip=split -no-reboot $(GRAPHICS) -m $(call TO_VAR_SNAPSHOT_SIZE,$1) \
 		$(call TO_VAR_NIC,$1) \
 		$(call TO_VAR_CPU,$1) \
 		$(call QEMU_HD_S2E,0,$$<) \
@@ -416,7 +416,7 @@ define TEMPLATE_APPLICATION_SNAPSHOT
 	@# *** Create ready snapshot
 	$(call INFO_MSG,[$1/$2] Creating ready snapshot...)
 	LD_PRELOAD=$(call GETLIBS2E,$1) $(call GETQEMU,$1) \
-		-enable-kvm -no-reboot $(GRAPHICS) $(QEMU_KVM) -m $(call TO_VAR_SNAPSHOT_SIZE,$1) \
+		-accel accel=kvm,kernel-irqchip=split -no-reboot $(GRAPHICS) -m $(call TO_VAR_SNAPSHOT_SIZE,$1) \
 		$(call TO_VAR_NIC,$1) \
 		$(call TO_VAR_CPU,$1) \
 		$(call QEMU_HD_S2E,0,$(OUTDIR)/$1/$2/image.raw.s2e) \
