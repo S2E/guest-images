@@ -49,14 +49,44 @@ install_packages() {
 
 remove_packages() {
     # Preserve environment (-E)
-    DEBIAN_FRONTEND=noninteractive sudo -E apt-get purge -y cloud-init
+    DEBIAN_FRONTEND=noninteractive sudo -E apt-get purge -y $*
 }
 
 remove_ubuntu_packages() {
     NAME=$(dist_name)
     if [ "x$NAME" = "xubuntu" ]; then
-        remove_packages cloud-init
+        # snapd also removes the snaps (e.g., lxd) and their squashfs mounts
+        remove_packages cloud-init snapd
     fi
+}
+
+# Background daemons and timers waste guest memory and may wake up
+# during symbolic execution, where every forked state gets a copy of them.
+# Units that do not exist on a given distribution are masked anyway, which is harmless.
+DISABLED_UNITS="
+    apt-daily.timer apt-daily-upgrade.timer unattended-upgrades.service
+    apport.service apport-autoreport.path apport-autoreport.timer apport-forward.socket
+    cron.service rsyslog.service
+    dpkg-db-backup.timer e2scrub_all.timer fstrim.timer logrotate.timer man-db.timer
+    systemd-tmpfiles-clean.timer systemd-timesyncd.service
+    motd-news.timer update-notifier-download.timer update-notifier-motd.timer
+    fwupd.service fwupd-refresh.timer
+    sysstat.service sysstat-collect.timer sysstat-summary.timer
+    ua-timer.timer ua-reboot-cmds.service ubuntu-advantage.service
+    mdcheck_continue.timer mdcheck_start.timer mdmonitor-oneshot.timer
+    multipathd.service multipathd.socket
+    iscsid.service iscsid.socket open-iscsi.service
+    ModemManager.service networkd-dispatcher.service
+    open-vm-tools.service thermald.service irqbalance.service
+    udisks2.service polkit.service
+    lxd-agent.service lxd-installer.socket
+    pollinate.service secureboot-db.service
+"
+
+# Do this first, so that unattended-upgrades does not hold the dpkg lock
+# while the rest of this script installs packages.
+disable_services() {
+    sudo systemctl mask --now ${DISABLED_UNITS} || true
 }
 
 # Install 32-bit user space for 64-bit kernels
@@ -110,6 +140,8 @@ install_kernel() {
     echo 'GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0"' | sudo tee -a /etc/default/grub
     sudo update-grub
 }
+
+disable_services
 
 sudo apt-get update
 install_packages wget lsb-release
