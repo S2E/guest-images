@@ -1,6 +1,5 @@
 #!/bin/bash
-
-# Copyright (c) 2018, Cyberhaven
+# Copyright (c) 2017, Cyberhaven
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -20,39 +19,31 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# This script allows running a command in the docker image with the given UID/GID.
 #
-# Usage: ./run_as.sh UID GID command args...
+# Usage: ./make-kernel.sh s2e_include_path
+#
+# The script runs as container root, which rootless Podman maps to the calling
+# user, so the build outputs belong to that user.
 #
 
-if [ $# -lt 3 ]; then
-    echo "Usage: $0 uid gid path_to_binary [binary args...]"
+set -xe
+
+if [ $# -ne 1 ]; then
+    echo "Usage: ./make-kernel.sh s2e_include_path"
     exit 1
 fi
 
-MUID="$1"
-shift
+export C_INCLUDE_PATH=${1}:${C_INCLUDE_PATH}
 
-MGID="$1"
-shift
-
-# Verify that the specified group and user ids don't exist locally.
-# If so, delete them. This may happen if the host OS is not Debian-based,
-# where user ids may conflict with those preinstalled in the docker image.
-GROUP=$(getent group $MGID | cut -d ':' -f 1)
-USER=$(getent passwd $MUID | cut -d ':' -f 1)
-
-if [ "x$USER" != "x" ]; then
-  userdel $USER
+if [ ! -e .config ]; then
+    echo "No .config - generating the default config"
+    make defconfig
+else
+    echo "Using existing .config"
 fi
 
-if [ "x$GROUP" != "x" ]; then
-  groupdel $GROUP
-fi
+# NOTE: you have to run this inside the linux-build container image (see run-container.sh)
+TARGET=bindeb-pkg
 
-groupadd -g $MGID s2e
-useradd -u $MUID -g s2e s2e
-
-# Run the rest of the script with the uid/gid provided, otherwise
-# new files will be owned by root.
-exec sudo -u s2e $*
+JOBS=$(grep -c ^processor /proc/cpuinfo)
+make -j$JOBS $TARGET LOCALVERSION=-s2e

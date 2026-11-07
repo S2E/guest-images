@@ -20,9 +20,9 @@
 
 # This is a 64-bit image of debian
 # Use it to compile the kernel
-# docker build -t linux-build-x86_64 -f Dockerfile.x86_64 .
+# podman build -t linux-build-x86_64 -f Dockerfile.x86_64 .
 
-FROM debian:12.5
+FROM docker.io/library/debian:12.5
 
 RUN                                                                             \
     apt-get update &&                                                           \
