@@ -22,9 +22,9 @@
 
 # Runs a command inside a rootless Podman container. The command runs as
 # container root, which is the calling user on the host.
-# Usage: ./run-docker.sh /path/to/guest-images/src /path/to/s2e-linux-kernel image working_dir [COMMAND]
+# Usage: ./run-container.sh /path/to/guest-images/src /path/to/s2e-linux-kernel image working_dir [COMMAND]
 # To build a 32-bit linux package:
-#   ./run-docker.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-i386 ../linux-6.8.2 ./make-kernel.sh $(pwd)/../include
+#   ./run-container.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-i386 ../linux-6.8.2 ./make-kernel.sh $(pwd)/../include
 
 SRC_DIR=$1
 shift

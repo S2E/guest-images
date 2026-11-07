@@ -42,7 +42,7 @@ else
     echo "Using existing .config"
 fi
 
-# NOTE: you have to run this inside the linux-build container image (see run-docker.sh)
+# NOTE: you have to run this inside the linux-build container image (see run-container.sh)
 TARGET=bindeb-pkg
 
 JOBS=$(grep -c ^processor /proc/cpuinfo)
