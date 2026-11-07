@@ -17,7 +17,7 @@ copies images for intermediate build steps and copy-on-write will save you a lot
 ## Installing dependencies
 
 ```
-sudo apt-get install libguestfs-tools genisoimage python-pip python-magic xz-utils docker.io p7zip-full pxz libhivex-bin fuse jigdo-file cloud-image-utils
+sudo apt-get install libguestfs-tools genisoimage python-pip python-magic xz-utils podman uidmap p7zip-full pxz libhivex-bin fuse jigdo-file cloud-image-utils
 sudo apt-get build-dep fakeroot linux-image$(uname -r)
 sudo pip install jinja2
 
@@ -25,9 +25,23 @@ sudo pip install jinja2
 sudo chmod +r /boot/vmlinuz*
 
 # Re-login after running these commands
-sudo usermod -a -G docker $(whoami)
 sudo usermod -a -G kvm $(whoami)
 ```
+
+The kernels are built in rootless Podman containers. Install `podman` and `uidmap` with their recommended packages
+(do not pass `--no-install-recommends`), then log out and log in, so that the user session bus is available.
+
+On Debian 12, Podman uses the slow `vfs` storage driver by default. Add the following to
+`~/.config/containers/storage.conf`, then run `podman system reset`, which deletes all existing Podman images and
+containers:
+
+```toml
+[storage]
+driver = "overlay"
+```
+
+Environments built with Docker are not supported. Delete their build folders, stamps and images, or start from a
+fresh environment.
 
 ## Building S2E
 

@@ -20,10 +20,11 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-# Runs command inside docker image
-# Usage: ./run-docker.sh /path/to/guest-images/src /path/to/s2e-linux-kernel docker-image working_dir [COMMAND]
+# Runs a command inside a rootless Podman container. The command runs as
+# container root, which is the calling user on the host.
+# Usage: ./run-docker.sh /path/to/guest-images/src /path/to/s2e-linux-kernel image working_dir [COMMAND]
 # To build a 32-bit linux package:
-#   ./run-docker.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-32 ../linux-6.8.2 ./make-kernel.sh $(pwd)/../include
+#   ./run-docker.sh /home/user/env/source/guest-images /home/user/env/source/s2e-linux-kernel linux-build-i386 ../linux-6.8.2 ./make-kernel.sh $(pwd)/../include
 
 SRC_DIR=$1
 shift
@@ -31,7 +32,7 @@ shift
 S2E_LINUX_KERNEL=$1
 shift
 
-DOCKER_IMAGE=$1
+IMAGE=$1
 shift
 
 WORKING_DIR="$(cd $1 && echo $(pwd))"
@@ -41,10 +42,10 @@ COMMAND="$(readlink -f $1)"
 shift
 
 echo "Working dir: $WORKING_DIR"
-docker run --rm -i \
+podman run --rm -i \
   -v "$(pwd):$(pwd)" \
   -v "$WORKING_DIR:$WORKING_DIR" -v "$SRC_DIR:$SRC_DIR" \
   -v "$S2E_LINUX_KERNEL:$S2E_LINUX_KERNEL" \
   -w "$WORKING_DIR" \
-  $DOCKER_IMAGE:latest \
+  $IMAGE:latest \
   $COMMAND $*

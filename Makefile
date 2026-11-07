@@ -64,8 +64,8 @@ ifneq (,$(findstring -enable-kvm,$(QEMU_KVM)))
   endif
 endif
 
-ifeq (,$(findstring docker,$(shell groups)))
-  $(error You must be member of the docker group to build images)
+ifneq (true,$(shell podman info --format '{{.Host.Security.Rootless}}' 2>/dev/null))
+  $(error Rootless podman is required to build images. Install podman and uidmap, then log out and log in)
 endif
 
 endif #clean

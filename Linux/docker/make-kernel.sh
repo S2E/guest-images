@@ -20,45 +20,18 @@
 # SOFTWARE.
 
 #
-# Usage: ./make-kernel.sh s2e_include_path UID GID
+# Usage: ./make-kernel.sh s2e_include_path
+#
+# The script runs as container root, which rootless Podman maps to the calling
+# user, so the build outputs belong to that user.
 #
 
 set -xe
 
-if [ $# -ne 3 ]; then
-    echo "Usage: ./make-kernel.sh s2e_include_path uid gid"
+if [ $# -ne 1 ]; then
+    echo "Usage: ./make-kernel.sh s2e_include_path"
     exit 1
 fi
-
-MUID=$2
-MGID=$3
-
-if [ $MUID -eq 0 -o $MGID -eq 0 ]; then
-    echo "Do not run this script as root"
-    exit 1
-fi
-
-# Verify that the specified group and user ids don't exist locally.
-# If so, delete them. This may happen if the host OS is not Debian-based,
-# where user ids may conflict with those preinstalled in the docker image.
-GROUP=$(getent group $MGID | cut -d ':' -f 1)
-USER=$(getent passwd $MUID | cut -d ':' -f 1)
-
-if [ "x$USER" != "x" ]; then
-  userdel $USER
-fi
-
-if [ "x$GROUP" != "x" ]; then
-  groupdel $GROUP
-fi
-
-groupadd -g $MGID s2e
-useradd -u $MUID -g s2e s2e
-
-# Run the rest of the script with the uid/gid provided, otherwise
-# new files will be owned by root.
-exec sudo -u s2e /bin/bash - << EOF
-set -xe
 
 export C_INCLUDE_PATH=${1}:${C_INCLUDE_PATH}
 
@@ -69,17 +42,8 @@ else
     echo "Using existing .config"
 fi
 
-# NOTE: you have to run this inside special docker image (see run-docker.sh)
+# NOTE: you have to run this inside the linux-build container image (see run-docker.sh)
 TARGET=bindeb-pkg
-VERSION=$(fakeroot make kernelversion)
 
 JOBS=$(grep -c ^processor /proc/cpuinfo)
-make -j\$JOBS \$TARGET LOCALVERSION=-s2e || echo "Build failed"
-
-# Restore access to files under version control
-chmod a+rw debian
-
-# Restore access to useful files
-chmod a+rw vmlinux
-
-EOF
+make -j$JOBS $TARGET LOCALVERSION=-s2e
